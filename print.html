@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"> 
+    <title>Mappr Export</title>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="css/arcgis_styles.css"/> 
+	<link rel="stylesheet" href="css/styles.css"/> 
+	<style>
+
+		html, body {
+			background:#ffffff;
+			overflow: visible;
+			height:auto;
+			width:100%;
+			padding:12px;
+		}
+		#map {
+			overflow:hidden;
+			position:relative;
+		}
+		.section {
+			margin-bottom:50px;
+			clear:both;
+		}
+		#legendsContainer {
+			height:auto;
+			border:0 !important;
+		}
+		#footer {
+			background:#ffffff;
+			margin-top:24px;
+		}
+		#disclaimer {
+			float:left;
+		}
+		#logo {
+			float: right;
+			height: 34px;
+			width: 136px;
+		}
+		
+		table {
+			border-spacing: 0 !important;
+			border-collapse: separate;
+			font-size: 14px !important;
+		}
+		
+		table th {
+			padding-left: 12px !important;
+			max-width: 120px;
+			cursor: default !important;
+			font-size: 12px !important;
+			text-align: right;
+			-webkit-hyphens: auto;
+			-moz-hyphens: auto;	
+			hyphens: auto;
+		}
+		
+		table td {
+			padding: 0;
+			vertical-align: middle;
+			text-align: right;
+		}
+		
+		.accordianTextOverflow {
+			width: auto;
+			max-width: auto !important;
+			text-overflow: inherit !important;
+			white-space: normal !important;
+			overflow: visible !important;
+		}
+		
+		.downloadResultDataButton {
+			display:none;
+		}
+		
+		.summaryTable, .summaryRankTable {
+			box-shadow:none !important;
+		}
+		
+	</style>
+	<script>var dojoConfig = { parseOnLoad: true };</script>
+  	<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/"></script>
+  	<script>
+  	var mapObject = null;
+	dojo.require("esri.map");
+	dojo.ready(function() {
+		mapObject = new esri.Map("map");
+		var todaysDate = new Date();
+		dojo.byId("disclaimer").innerHTML = "Generated on " + (todaysDate.getMonth() + 1) + "/" + todaysDate.getDate() + "/" + todaysDate.getFullYear() + " apps.harvestchoice.org/mappr";
+	});
+  	</script>
+  </head>
+	<body class="claro">
+		<div id="title" class="section"></div>
+		<div id="map"></div>
+		<div id="legends" class="section"></div>
+		<div id="tables" class="section"></div>
+		<div id="charts" class="section"></div>
+		<div id="metaData" class="section"></div>
+		<div id="footer" class="section">
+			<div id="disclaimer"></div>
+			<img id="logo" src="images/hc_logo.png" width="136px" height="34px" />
+		</div>
+	</body>
+</html>

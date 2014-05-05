@@ -1,0 +1,2620 @@
+* {
+	margin: 0;
+	padding: 0;
+	outline:none !important;
+}
+
+#executeCropTOPPRCustomAreaButton {
+	margin-top:27px;
+}
+
+.summaryRankTable {
+	float:left;
+	margin-right:24px;
+}
+
+.summaryRankTable table {
+	border-spacing:12px 0px !important;
+}
+
+.summaryRankTableSection {
+	margin-bottom:24px;
+	height:220px;
+	clear:both;
+}
+
+.summaryRankTableTitle {
+	font-size: 15px;
+	margin: 12px 0;
+}
+
+#summarizeDomainThumbContainer {
+	width:100%;
+	height:200px;
+	overflow-y:auto;
+}
+
+.domainThumbnailRow {
+	width:100%;
+	height:100px;
+	margin:24px auto;
+	margin-top:0;
+	clear:both;
+}
+
+.domainThumbnailContainer {
+	width:170px;
+	height:72px;
+	float:left;
+	margin-right:50px;
+	border: 1px solid #fff;
+}
+
+.domainThumbnailImage:hover {
+	border: 1px solid #e1a100;
+}
+
+.domainThumbnailImage {
+	float: left;
+	width: 70px;
+	height: 70px;
+	border: 1px solid #000;
+	cursor:pointer;
+}
+
+.domainThumbnailCaption {
+	float: right;
+	width: 90px;
+	font-size: 13px;
+}
+
+#loadingAppDiv {
+	min-width: 1024px;
+	min-height: 768px;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	background: rgba(0,0,0,0.6);
+	z-index: 99;
+}
+
+html,body {
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	font-family:'PT Sans', sans-serif;
+	background:#f7f7f7;
+}
+
+.ui-resizable-s {
+	cursor: ns-resize;
+	height: 7px;
+	width: 100%;
+	bottom: 0;
+	left: 0;
+}
+
+.nubLabelText {
+	color:#fff;
+	font-size:10px;
+	font-weight:bold;
+	text-align: center;
+}
+
+#optionLabelTextTop {
+	margin-top:1px;
+}
+
+.indicatorMetaDataRow {
+	margin:12px auto;
+}
+
+.indicatorMetaDataTitle {
+	font-weight:bold;
+	margin-right:4px;
+}
+
+.exportOptionsArrow {
+	top: -14px;
+	right: 68px;
+	background-position: -31px 0;
+}
+
+.exportOptions {
+	
+	text-align: left;
+	line-height: 0;
+	width: 149px;
+	height: 120px;
+	background: #fff;
+	position: absolute;
+	z-index: 1;
+	border: 1px solid #dddddd;
+	right: 100px;
+	display:none;
+}
+
+.exportRadioButtonUnselected {
+	width:13px;
+	height:13px;
+	background-image:url('../images/radio_button_unselected.png');
+	float:left;
+	cursor:pointer;
+	margin-top:7px;
+	background-repeat:no-repeat;
+}
+
+.exportLayoutIcon {
+	float:right;
+}
+
+.exportRadioButtonSelected {
+	background-image:url('../images/radio_button_selected.png') !important;
+}
+
+.exportImageTypeLabel {
+	color: #333333;
+	float: left;
+	margin-left: 4px;
+	margin-top: 8px;
+}
+.exportImageTypeLabel, .executeExportButton {
+	font-size:12px;
+	font-family:'Gotham-Medium';
+}
+
+.executeExportButton {
+	width:77px;
+	height:24px;
+	background:#e1a100;
+	text-align:center;
+	color:#fff;
+	margin-left:auto;
+	margin-right:auto;
+	line-height: 24px;
+	cursor: pointer;
+	position:absolute;
+	bottom:10px;
+	left: 26px;
+	right: 26px;
+}
+
+.exportLayoutContainer {
+	height:48px;
+	display:none;
+}
+
+.exportOptionsGroup, .exportGroupTitle  {
+	width:109px;
+	margin-left:auto;
+	margin-right:auto;
+	height:auto;
+}
+
+.exportOptionsGroupColumn {
+	float: left;
+	height: 100%;
+	width: 47px;
+	display: inline;
+	margin-right: 7px;
+}
+
+.exportOptionsContainer {
+	width:100%;
+	height:65px;
+}
+
+.exportGroupTitle {
+	font-size:12px;
+	margin-top: 16px;
+	margin-bottom:13px;
+	color:#000;
+}
+
+.exportOptionsItemRow {
+	width:100%;
+	height:26px;
+}
+
+#resizeWrapperNub {
+	background: #444035;
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	z-index: 100;
+	pointer-events: none;
+	height: 12px;
+	padding: 0px 10px;
+	padding-top: 4px;
+	border-left: 1px solid #444035;
+}
+
+.claro .dijitSelect .dijitArrowButtonInner, .claro .dijitComboBox .dijitArrowButtonInner {
+background-image: url(../images/commonFormArrows.png);
+}
+
+#investmentsIconDiv {
+	display:none;
+}
+.exportButton {
+	width:177px;
+	padding:15px 22px;	
+	font-size: 16px;
+	background: #e1a100;
+	color:#fff;
+	margin-top:20px;
+	text-align:center;
+	cursor:pointer;
+}
+
+.exportTitle {
+	font-size:20px;
+	margin-bottom:20px;
+}
+
+.toolResultAccordianPaneExportButtonImg {
+	float: right;
+	margin-right: 24px;
+	font-size: 12px;
+	font-weight: bold;
+	margin-top: 11px;
+	background: #e1a100;
+	padding: 7px;
+	color: #fff;
+	height:14px;
+}
+
+.toolResultAccordianPaneExportButtonImg:hover {
+	cursor:pointer;
+}
+
+#pdfExportContainer {
+	padding: 12px;
+}
+
+
+a, a:-webkit-any-link {
+	text-underline: none !important;
+	text-decoration:none !important;
+}
+
+.aboutAppAccordianRowContent p {
+	margin-top:12px;
+}
+
+#outOfBoundsMessageDiv {
+	display:none;
+	padding:12px;
+	background:#ffffff;
+	position:absolute;
+	top:50px;
+	left:50px;
+	z-index:1000;
+	width: 340px;
+	border: 1px solid #dfdfdf;
+	box-shadow: 1px 1px 4px #d0cece;
+}
+
+#outOfBoundsMessage {
+	color:#000000;
+	margin-bottom:8px;
+}
+
+#returnToOutOfBoundsButton {
+	color:#e0a000;
+	font-weight:700;
+	font-weight:bold;
+}
+
+#returnToOutOfBoundsButton:hover {
+	cursor:pointer;
+}
+
+#instructionLandingPage {
+	display:none;
+	min-width:1024px;
+	min-height:768px;
+	width:100%;
+	height:100%;
+	position:fixed;
+	background:rgba(0,0,0,0.6);
+	z-index: 1000;
+	font-family:throwMyHandsUpintheAirBold;
+}
+
+#instructionPageExitButton {
+	width:191px;
+	height:94px;
+	background:rgba(0,0,0,0.6);
+	top:0;
+	right:0;
+}
+
+#instructionPageExitImg {
+	position:absolute;
+	top:30px;
+	left:40px;
+}
+
+#closeButtonText {
+	position:absolute;
+	top:43px;
+	left:97px;
+}
+
+#instructionPageExitButton:hover {
+	cursor:pointer;
+}
+
+#step1Div {
+	top: 94px;
+	left: 299px;
+}
+
+#step1Img {
+	top:31px;
+	left:230px;	
+}
+#step2Img {
+	top:233px;
+	left:131px;
+}
+#step3Img {
+	right:2px;
+	top:169px;
+}
+
+#step4Img {
+	bottom:98px;
+	left:50%;
+}
+
+.stepImg {
+	position:absolute;
+}
+
+#step2Div {
+	top: 234px;
+	left: 232px;
+}
+
+#step3Div {
+	top:300px;
+	right:43px;
+}
+
+#step4Div {
+	bottom: 220px;
+	left: 38%;
+}
+
+.instructionDiv {
+	color:#ffffff;
+	font-size:24px;
+	position:absolute;
+}
+
+.summaryTable table {
+	border-spacing: 0 !important;
+}
+
+.summaryRankTable, .summaryTable {
+	border-collapse: separate;
+}
+
+.summaryTable table th, .summaryRankTable table th {
+padding-left: 8px !important;
+max-width: 100px;
+cursor: default !important;
+font-size: 12px !important;
+}
+
+.summaryTable table td, .summaryRankTable table td {
+	padding: 0;
+	vertical-align: middle;
+	text-align: right;
+	font-size:14px;
+}
+
+
+.domainCountryRowSliderGroup table tr {
+	cursor:default !important;
+}
+
+.chartShuffleButton {
+	color:#e0a000;
+	font-size:14px;
+	font-weight:bold;
+}
+.chartShuffleButton:hover {
+	cursor:pointer;
+}
+
+.summaryTable, .summaryRankTable {
+	box-shadow: 1px 1px 5px 1px #c9c9c9;
+	padding: 12px;
+	display:table;
+	font-size:14px;
+}
+
+.summaryTableNoBorder {
+	box-shadow: none !important;
+}
+
+.textWidthHidden {
+	font-size: 14px;
+	font-family: 'PT Sans';
+	position: absolute;
+	opacity: 0;
+	z-index: 1;
+}
+
+textarea { 
+height: 30px;
+max-height:30px;
+width: 421px;
+max-width: 421px;
+resize: none !important;
+box-shadow: 1px 1px 1px #838383;
+font-size:12px;
+font-weight: 700;
+font-weight:bold;
+
+}
+
+.axis path,.axis line {
+	fill: none;
+	stroke: black;
+	shape-rendering: crispEdges;
+}
+
+#coordsDiv {
+	right: 163px;
+	width: 130px;
+	cursor:default;
+}
+
+.mapControlButton {
+	position: absolute;
+	bottom: 12px;
+	z-index: 1;
+	background-color: #454334;
+	color: white;
+	font-size: 12px;
+	height: 30px;
+	line-height: 30px;
+	padding: 0 8px;
+	text-align: center;
+}
+
+#rasterMaskToggleButton {
+	right: 317px;
+	width: 80px;
+	cursor:pointer;
+}
+
+#regionDropDownSelectArrowImg {
+	display:none;
+}
+
+.axis text {
+	font-family: sans-serif;
+	font-size: 12px;
+}
+
+.countryDropDownDiv {
+	margin-bottom: 18px;
+}
+
+.popup {
+	position:absolute;
+	width:100px;
+	height:50px;
+	text-align:center;
+	line-height:50px;
+	font-weight: 700;
+	font-weight:bold;
+	font-size:18px;
+	top:0;
+	right:0;
+	border:1px solid #000;
+}
+
+#logoImg {
+	margin-top: 7px;
+	margin-left:41px;
+}
+
+.activeTool {
+	cursor:crosshair !important;
+}
+
+.activeToolButton {
+	background:#e8e8e8 !important;
+}
+
+.claro .dijitContentPane {
+	padding: 0px !important;
+}
+
+#appWrapper {
+	min-height:768px;
+	min-width:1024px;
+	width:100%;
+	height:100%;
+}
+
+.activeLayerTypeImgIcon {
+	width: 25px;
+	height: 21px;
+	position: absolute;
+	left: -17px;
+}
+
+#wrapper {
+	width:100%;
+	min-width:1024px;
+	height:100%;
+}
+
+#bottomWrapper {
+	width:100%;
+	height:auto;
+}
+
+#header {
+	background:#353328;
+	width:100%;
+	min-width: 1024px;
+	height:48px;
+}
+
+#footer {
+	height:49px !important;
+	width:100%;
+	background:#f7f7f7;
+}
+
+#copyrightDiv {
+	float:left;
+	font-size:11px;
+	color:#383838;
+	margin-left:40px;
+	margin-top:27px;
+}
+
+#HCLogoImg {
+	float:right;
+	margin-right:51px;
+	margin-top:7px;
+	cursor:pointer;
+}
+
+#logo {
+	float: left;
+	height: 48px;
+	line-height: 48px;
+	width: 145px;
+}
+
+#logo:hover {
+	cursor:pointer;
+}
+
+.claro .dijitTooltipDialogPopup {
+	max-width:300px;
+}
+
+#regionMegaDropDownButton {	
+	float: left;
+	margin-left: 12px;
+	width: auto;
+	height: 100%;
+	background: #767563;
+	font-size:18px;
+	color: #fff;
+}
+
+#regionMegaDropDownButton:hover {
+	cursor:pointer;
+}
+
+#regionDropDownArrow {
+	line-height:48px;
+	margin-right:32px;
+	margin-left: 16px;
+	float:right;
+}
+
+#regionDropDownTitle {
+	font-size:18px;
+	line-height:54px;
+	margin-left:32px;
+	float:left;
+}
+
+#headerButtons {
+	float:right;
+	height:100%;
+	width:auto;
+	margin-right:35px;
+}
+
+#exportButton {
+	border-left:1px solid #919191;
+	border-right:1px solid #919191;
+}
+
+#permalinkButton, #tableMakerButton {
+	border-right:1px solid #919191;
+}
+
+.axisLabel {
+	color:#000 !important;
+}
+
+#fullscreenContentDiv, #colorPickerContentDiv, #aboutAppFullScreenContainer {
+	height:100%;
+	width:100%;
+	top:0;
+	left:0;
+	display:none;
+	z-index: 1000;
+}
+
+#colorPickerContentDiv {
+	pointer-events: none;
+	position:absolute;
+}
+
+#fullscreenContentDiv, #aboutAppFullScreenContainer {
+	background:rgba(0,0,0,0.7);
+	position:fixed;
+}
+
+#aboutAppContent {
+	width:708px;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:64px;
+	padding:14px;
+	background:#ffffff;
+	overflow:hidden;
+	box-shadow: 5px 5px 10px #222222;
+}
+
+#exitAboutApp {
+	width:19px;
+	height:18px;
+	width:100%;
+}
+
+#exitAboutAppImg {
+	float:right;
+}
+
+#exitAboutAppImg:hover, .aboutAppAccordianRowButton:hover {
+	cursor:pointer;
+}
+
+#aboutAppAccordian {
+	width:628px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top:14px;
+}
+
+.aboutAppAccordianRowHeader {
+	width:100%;
+	height: 23px;
+	border-top:1px solid #9f9f9f;
+	padding-top: 17px;
+	margin-bottom:14px;
+}
+
+.aboutAppAccordianRowTitle {
+	font-size:17px;
+	color:#e0a000;
+	float:left;
+	line-height:18px;
+}
+
+.aboutAppAccordianRowButton {
+	float:right;
+}
+
+.aboutAppAccordianRowContent {
+	font-size:14px;
+	line-height:21px;
+	color:#6c6b68;	
+	display: none;
+	overflow: hidden;
+	width: 100%;
+	margin-bottom: 22px;
+}
+
+#aboutAppAccordianTitle {
+	font-size:21px;
+	color:#000000;
+	margin-top:7px;
+	margin-bottom:15px;
+	width:300px;
+	float:left;
+}
+
+#feedbackURL, #instructionsButton {
+	float: right;
+	background: #e0a000;
+	color:#ffffff !important;
+	font-size: 14px;
+	padding: 5px 9px;
+	color:#6c6b68;
+	text-decoration:none !important;	
+}
+
+#feedbackURL {
+	margin-left:12px;
+}
+
+#aboutMapprText {
+	height: 380px;
+}
+
+#feedbackURL:hover, #instructionsButton:hover {
+	cursor:pointer;
+}
+
+#analyticsTitle {
+	display:none;
+	font-size: 22px;
+	margin-top: 24px;
+	margin-left: 31px;
+}
+
+#colorPickerDiv {
+	height: 215px;
+	width: 328px;
+	background: #fff;
+	margin-top: 20%;
+	margin-left: auto;
+	margin-right: auto;
+	box-shadow: 1px 1px 5px 1px #c9c9c9;
+	border: 1px solid #dfdfdf;
+	border-radius: 7px;
+	pointer-events: all !important;
+}
+
+#colorPickerButtonsDiv {
+	width: 120px;
+	margin-left: auto;
+	margin-top: 10px;
+	margin-right: 12px;
+}
+
+#colorPickerCancel {
+	float:left;
+}
+
+#colorPickerSubmit {
+	float:right;
+}
+
+.colorPickerButton {
+	height:20px;
+	width:50px;
+	background: #e0a000;
+	text-align: center;
+	color:#fff;
+	font-size:12px;
+	font-weight: bold;
+	line-height:20px;
+}
+
+.colorPickerButton:hover {
+	cursor:pointer;
+}
+
+.claro .dojoxColorPicker {
+	background: #fff;
+	border: none;
+}
+
+#fullscreenContentContainer {
+	margin-top: 72px;
+	width: 465px;
+	padding: 8px;
+	background: #fff;
+	margin-left: auto;
+	margin-right: auto;
+	box-shadow: 1px 1px 1px #838383;
+}
+
+#fullscreenContentContainerCloseButton {
+	float:right;
+	clear:both;
+	width:12px;
+	height:11px;
+	background-image: url(../images/black_exit.png) !important;
+	background-size:contain;
+	background-repeat: repeat-none;
+}
+
+#fullscreenContentContainerCloseButton:hover {
+	cursor:pointer;
+}
+
+.headerButton {
+	width:56px;
+	height:100%;
+	text-align:center;
+	line-height:59px;
+	float:left;
+}
+
+#infoButton {
+	line-height:57px;
+}
+
+.headerButton:hover {
+	cursor:pointer;
+}
+
+#layers {
+	background: #c3c3b6;
+	overflow-x: hidden;
+	overflow-y: auto;
+	width: 99px;
+	height:100%;
+	z-index: 2;
+	cursor:default;
+}
+
+#layerGroupIcons {
+	width:99px;
+	overflow:hidden;
+	height:auto;
+}
+
+.layerGroupIcon {
+	width: 99px;
+	height: 90px;
+	text-align:center;
+	border-top:1px solid #c3c3b6;
+	background:#767563;
+	position:relative;
+}
+
+.layerMenuIconActive {
+	background:#646353;
+}
+
+.layerGroupIcon:hover {
+	cursor: pointer;
+	background:#646353;
+}
+
+.layerGroupIconLabel {
+	font-size:9px;
+	color:#fff;
+	position:absolute;
+	bottom:12px;
+	width: 99px;
+	letter-spacing: 1px;
+}
+
+#layerContainerDiv {
+	clear:both;
+}
+
+#agroecologyIconImg, #farmingSystemsIconImg {
+	margin-top:12px;
+}
+
+#demographicsIconImg {
+	margin-top:17px;
+}
+
+#marketsIconImg,#investmentsIconImg {
+	margin-top:22px;
+}
+
+#institutionsIconImg, #domainsIconImg {
+	margin-top:11px;
+}
+
+.nub {
+	position:absolute;	
+	height:75px;
+	width:52px;
+}
+
+#activeToolNub {
+	width:54px;
+	height:54px;
+	background:#b9b8a6;
+	z-index:1;
+	right:0;
+	text-align:center;
+}
+
+#activeToolImg, #activeToolSlider {
+	position: absolute;
+}
+
+#activeToolSlider {
+	bottom: 4px;
+	left: 12px;
+}
+
+#activeToolSlider:hover, #activeToolCloseButton:hover {
+	cursor:pointer;
+}
+
+#activeToolCloseButton {
+	display:none;
+	position:absolute;
+	width:7px;
+	height:15px;
+	background:#b9b8a6;
+	left: -7px;
+	top: 20px;
+}
+
+#activeToolCloseButtonImg {
+	position:absolute;
+	top: 4px;
+	left: 2px;
+}
+
+.locationToolImg {
+top: 11px;
+left: 21px;
+}
+
+.customAreaToolImg, .domainToolImg {
+top: 13px;
+left: 20px;
+}
+
+.marketToolImg {
+top: 15px;
+left: 16px;
+}
+
+#toolCircleImg {
+	margin-top:8px;
+}
+
+.nubIcon {
+	right:0;
+	z-index:2;
+	background: #767563;
+}
+
+.nubMenu {
+	width:auto;
+	z-index:97;
+	background:#fff;
+	right:52px;
+	border-left: 2px solid #767563;
+}
+
+.nubArrowContainer {
+	right:53px;
+	width:7px;
+	z-index:2;
+	margin-top:12px;
+}
+
+.nubIcon:hover {
+	cursor: pointer !important;
+}
+
+.nubMenuContainer {
+	width:0;
+	height:75px;
+	overflow: hidden;
+	display:none;
+	border-top: 1px solid #dfdfdf;
+	border-bottom: 1px solid #dfdfdf;
+}
+
+#optionsNubImg {
+	margin-top: 11px;
+	margin-left: 15px;
+}
+
+#toolsNubImg {
+	margin-top: 14px;
+	margin-left: 10px;	
+}
+
+#toolsNubContentContainer, #toolsNubContentContainer {
+	display:none;
+}
+
+#optionsNubIcon, #optionsNubMenu, #optionsNubArrowDiv {
+	top:27px;
+}
+
+#toolsNubIcon, #toolsNubMenu, #toolsNubArrowDiv, #activeToolNub {
+	top:120px;
+}
+#optionsNubMenu {
+	z-index:98;
+}
+
+.nubMenuItemTitle {
+font-size: 11px;
+text-align: center;
+}
+
+.optionsMenuItemTitle {
+	line-height:75px;
+}
+
+#domainMenuItemTitle {
+	width: 65px;
+margin-left: 6px;
+}
+
+#marketShedMenuItemTitle {
+	width: 76px;
+}
+
+.nubMenuItemIcon {
+float: left;
+}
+
+.toolsMenuItemTitle {
+width: 96px;
+float: left;
+margin-left: 7px;
+}
+
+.toolsMenuItemTitle, .nubMenuItemIcon {
+	margin-top:25px;
+}
+
+.nubMenuItemButton {
+	background: #fff;
+	height:75px;
+	color: #444035;
+	padding: 0 12px;
+}
+
+.sumLocText {
+width: 153px;
+float: left;
+margin-left: 6px;
+}
+
+#summarizeAreaDiv {
+	border-left: 1px solid #b9baba;
+}
+
+.nubLeftBorder {
+	float:left;
+	width:1px;
+	height:72px;
+	margin-top:2px;
+	background:#b9baba;
+}
+
+.nubMenuItemButtonSelected {
+	background: #bab9a6;
+	color: #fff !important;
+}
+
+.nubMenuItemButton:hover {
+	cursor:pointer !important;
+	background: #e8e8e8;
+}
+
+.nubMenuItem {
+position: relative;
+float: left;
+height: 75px;
+}
+
+.optionsNubMenuItem {
+	width:99px !important;
+}
+
+.menuSubItemButton {
+	height:40px;
+	width:150px;
+	margin-left:auto;
+	margin-right:auto;
+	background:#e1a100;
+	color:#fff;
+	font-size:14px;
+	font-weight: 700;
+	font-weight:bold;
+	line-height:40px;
+	text-align: center;
+	cursor:pointer;
+}
+
+.menuItemContent {
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	padding: 8px 12px;
+}
+
+.downloadResultDataButton {
+background: #e9e8e8;
+text-align: center;
+font-weight: bold;
+margin-top: 12px;
+color: #686866;
+padding: 0px;
+height: 21px;
+line-height: 21px;
+width: 129px;
+float: right;
+cursor: pointer;
+margin-right: 9px;
+font-size: 12px;
+}
+.downloadResultDataButton:hover {
+	background:#d8d8d8;
+}
+
+.resultChart {
+	float:left;
+	margin-right:25px;
+	margin-bottom:25px;
+	box-shadow: 1px 1px 5px 1px #c9c9c9;
+	padding: 12px;
+}
+
+.downloadResultDataButton:hover {
+	cursor:pointer;
+}
+
+.menuItemDownArrow::after {
+	display: block;
+	content: '';
+	width: 0;
+	height: 0;
+	left:57px;
+	position: relative;
+	background: transparent;
+	border-left: 8px solid transparent;
+	border-top: 8px solid #e8e8e8;
+	border-right: 8px solid transparent;
+}
+
+#boundriesButtonContainerArrow {
+	margin-left:100px;
+}
+
+#permalinksButtonContainerArrow {
+	margin-left:200px;
+}
+
+#regionSelectButtonArrow {
+	position: absolute;
+	top:48px;
+	background: #767563;
+}
+.regionSelectButtonArrow {
+	left: 80px;
+}
+.countrySelectButtonArrow {
+	left: 205px;
+}
+
+.lightGrayShadow {
+	-moz-box-shadow: 2px 2px 10px #d0cece;
+-webkit-box-shadow: 2px 2px 10px #d0cece;
+box-shadow: 2px 2px 10px #d0cece;
+}
+
+.optionsNubMenuContainer {
+	width:199px;
+}
+.toolsNubMenuContainer {
+	width:744px;
+}
+
+.nubMenuContainerItem {
+	height:0;
+	display:none;
+	overflow: hidden;
+	background:#fff;
+	border-bottom: 1px solid #dfdfdf;
+	box-shadow: 1px 1px 4px #d0cece;
+	cursor:default;
+}
+
+#permaBox {
+	margin-bottom: 16px;
+}
+.permaBoxTitle {
+margin-bottom: 5px;
+}
+#infoContainer {
+	padding:8px;
+}
+.contentContainer {
+	font-size: 12px;
+	font-weight: 700;
+	font-weight:bold;
+}
+
+#summarizeLocationMessage {
+	margin-left: 8px;
+}
+#summarizeDomainMessage {
+	margin-top: 17px;
+}
+#summarizeMarketShedMessage {
+	margin-top: 14px;
+}
+.errorMessage {
+	color:red;
+	font-size:12px;
+}
+
+#summarizeDomainTopDesc {
+	margin-bottom:12px;
+}
+
+#summarizeDomainBottomDesc {
+	margin-top: 12px;
+	font-size: 12px;
+	color: #777;
+	line-height: 18px;
+}
+
+#marketShedDescription, #summarizeDomainTopDesc, .toolDescription {
+	color:#383838;
+	font-size:14px;
+	line-height: 18px;
+}
+
+#summarizeLocationTitle {
+width: auto;
+font-size: 12px;
+clear: both;
+margin-left: 12px;
+margin-bottom: 10px;
+}
+
+#agMarketFinderLink {
+	color:#e1a100 !important;
+}
+
+#summarizeLocationContainer .menuItemContent {
+	padding:0;
+}
+.summarizeLocDiv {
+width: 182px;
+float: left;
+padding: 8px 8px 2px 8px;
+height: 131px;
+}
+
+#executeSummarizeLocationsButton {
+	margin-top:23px;
+}
+
+.sumLocTitle {
+	color: #383838;
+	font-size: 13px;
+	margin-bottom: 6px;
+	margin-top: -11px;
+}
+
+.sumLocIcon {
+	float: left;
+	margin-top: -13px;
+}
+
+.sumLocButton {
+	width: 80px;
+	background: #e1a100;
+	height: 18px;
+	line-height: 18px;
+	text-align: center;
+	color: #fff;
+	font-size: 11px;
+	margin-top: 9px;
+	font-weight: 700;
+	font-weight:bold;
+	padding: 2px 8px;
+}
+
+#executeSummarizeMarketButton, #executeSummarizeDomainButton  {
+	width: 40px;
+	font-size: 12px;
+	padding: 2px 8px;
+	float:right;
+}
+
+#executeSummarizeDomainButton {
+	display:none;
+}
+
+.sumLocButton:hover {
+	cursor:pointer;
+}
+
+.sumLocDesc {
+	font-size:11px;
+	color:#383838;
+}
+
+#map {
+	width: 100%;
+	height: 100%;
+	z-index: 0;
+	overflow:hidden;
+}
+
+#analytics {
+	background:#f4f4f4;
+	width: 100%;
+	height:auto;
+	min-width: 1024px;
+	overflow-y:auto;
+	border-top: 5px solid #444035;
+	padding-bottom: 14px;
+}
+
+#tutorialAboutText {
+	height:103px;
+}
+
+#contactUsText {
+	height:40px;
+}
+
+#contactUsText a {
+	color:#e0a000 !important;
+}
+
+.toolResultAccordianPane, .accordianResultsContainer {
+	background: #fff;
+	min-width: 960px;
+	margin-left: 32px;
+	margin-right: 32px;
+}
+
+.accordianResultChild {
+	margin-top:28px;
+}
+.accordianResultChildTitle, .accordianResultGroupChildTitle {
+	font-weight: 700;
+	font-weight:bold;
+	font-size:18px;
+	margin-bottom: 12px;
+	color: #848484;
+}
+
+.accordianResultGroupChildTitle {
+	margin-top:24px;
+}
+
+.toolResultAccordianPaneRow {
+	min-width: 903px;
+	margin-left: 26px;
+	margin-right: 26px;
+	height: 49px;
+	cursor:pointer;
+}
+
+.accordianMarginTop {
+	margin-top: 15px;
+	border-radius: 4px !important;	
+}
+
+.boxShadowAllSides {
+	
+	border-radius: 4px 4px 0px 0px;
+	box-shadow: 1px 1px 5px 1px #e5e5e5;
+	border-top: 1px solid #dfdfdf;
+	border-left: 1px solid #dfdfdf;
+	border-right: 1px solid #dfdfdf;
+}
+
+.boxShadowBottomLeftRight {
+	
+	border-radius: 0px 0px 4px 4px;
+	box-shadow: 0px 8px 5px 1px #e5e5e5;
+	border-bottom: 1px solid #dfdfdf;
+	border-left: 1px solid #dfdfdf;
+	border-right: 1px solid #dfdfdf;
+}
+
+.accordianResultsContainer {
+	
+	display:none;
+	overflow-y:auto;
+	margin-bottom:12px;
+	margin-bottom:24px;
+	padding-bottom: 24px;
+	font-size:14px !important;
+}
+
+.accordianResultsChildContainer {
+	border-top: 1px solid #9f9f9f;
+	min-width:841px;
+	margin-left:31px;
+	margin-right:31px;
+}
+
+.toolResultChildAccordianPane {
+	height:56px;
+	background:#fff;
+}
+
+.toolResultAccordianPaneExpandToggleImg {
+float: right;
+margin-top: 20px;
+}
+
+.toolResultAccordianChildPaneExpandToggleImg {
+	float:left;
+	margin-left:10px;
+	margin-top:24px;
+}
+
+.toolResultAccordianPaneRemoveImg:hover, .toolResultAccordianPaneExpandToggleImg:hover, .toolResultAccordianChildPaneExpandToggleImg:hover {
+	cursor:pointer;
+}
+
+.toolResultAccordianPaneTitle {
+color: #383838;
+float: left;
+max-width: 800px;
+width: auto;
+text-overflow: ellipsis;
+white-space: nowrap;
+overflow: hidden;
+max-height: 44px;
+margin-top: 5px;
+}
+
+.toolResultAccordianPaneRemoveImg {
+	float:left;
+	margin-top: 2px;
+}
+
+.accordianHeadlineContainer {
+	float: right;
+	margin-left: 8px;
+}
+
+.accordianHeadlineContainerTop {
+	font-size: 18px;
+	font-weight: 700;
+	font-weight:bold;
+}
+
+.accordianTextOverflow {
+	width: auto;
+	max-width:700px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+/* .accordianMap {
+	height:500px;
+	width:500px;
+} */
+
+.accordianHeadlineContainerBottom {
+	font-size: 15px;
+	font-weight: normal;
+}
+
+.toolResultAccordianChildPaneTitle {
+	color:#383838;
+	font-size:21px;
+	margin-left:8px;
+	float:left;
+	margin-top: 23px;
+}
+
+
+.accordianContainerExpanded {
+	
+	height:150px;
+	overflow-y:auto;
+}
+
+.claro .dijitSplitterHActive, .claro .dijitSplitterVActive, .claro .dijitSplitterH, .claro .dijitSplitterV {
+	height:9px !important;
+	background: #444035 !important;
+}
+
+.dijitSplitterThumb {
+	background:#737068;
+}
+
+.visible {
+	display: block !important;
+	z-index: 10 !important;
+}
+
+.invisible {
+	display: none !important;
+	z-index: 0 !important;
+}
+
+#layerMenuSlideOutDiv {
+	position: absolute;
+	top: 0;
+	left: -243px;
+	background: #fff;
+	height: 100%;
+	width:225px;
+	z-index: 1000;
+	overflow-y: auto;
+	overflow-x: hidden;
+	border-right: 1px solid #aaaaaa;
+	cursor:default;
+}
+
+.layerSlideOut {
+padding: 7px 17px;
+}
+
+#closeLayerMenuDiv {
+	float:right;
+	margin-top:13px;
+	margin-right:14px;
+	height:13px;
+	width:14px;
+}
+
+#closeLayerMenuDiv:hover {
+	cursor:pointer;
+}
+
+.activeSubMenuSelection::after {
+	display: block;
+	content: '';
+	width: 0;
+	height: 0;
+	position: relative;
+	top: -25px;
+	left: 100%;
+	bottom: 0;
+	background: #transparent;
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+	border-right: 10px solid #fff;
+	margin-left: -8px;
+}
+
+#farmingSystemsIconDiv .activeSubMenuSelection::after {
+	top: -29px !important;
+}
+
+.esriSimpleSliderTL {
+	top: 20px;
+	right: 20px;
+}
+
+#activeSelectionLayerList {
+	clear: both;
+	background: #fff;
+}
+
+.boundryRow {
+	margin-top: 16px;
+	height: 18px;
+	width: 177px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.boundryItem {
+	width:88px;
+	float:left;
+}
+.boundryItemRight {
+	float:right !important;
+}
+.boundryCheckboxDiv {
+	float:left;
+}
+.boundryLabel {
+float: left;
+font-size: 11px;
+margin-left: 9px;
+line-height: 16px;
+color: #383838;
+}
+
+.activeLayerDiv {
+	width: 222px;
+	height:44px;
+	margin-left:auto;
+	margin-right:auto;
+	border-bottom:1px solid #dbd9da !important;
+	margin-top:7px;
+	position:relative;
+}
+
+.dojoDndItem {
+	padding:0 !important;
+	position:relative;
+}
+
+.claro table.dojoDndAvatar {
+	border: none;
+	background-color: #fff;
+	-webkit-box-shadow: 0;
+	-moz-box-shadow: 0;
+	box-shadow: 0;
+}
+
+.claro .dojoDndAvatarHeader td {
+	height: 16px !important;
+	width: 16px !important;
+	padding:0 !important;
+}
+
+.dojoDndAvatarHeader span, .dojoDndAvatarItem  {
+	display:none;
+}
+
+.claro.dojoDndMove .dojoDndAvatarCanDrop .dojoDndAvatarHeader {
+	background-position: 0px -35px;
+}
+
+.claro.dojoDndMove .dojoDndAvatarHeader {
+	background-position: 0px -104px;
+}
+
+.claro .dojoDndItemOver {
+	background:none !important;
+	border:0;
+	cursor:default;
+}
+
+.claro .dojoDndItemBefore, .claro .dojoDndItemAfter {
+	border-top: 1px solid #b2b2b2;
+}
+
+.claro .dojoDndItemAfter .dojoDndItemOver {
+	background:none !important;
+	padding: 0 !important;
+}
+
+.claro .dojoDndItemAnchor, .claro .dojoDndItemSelected {
+	background: none !important;
+	padding: 0 !important;
+	border: 0;
+}
+
+
+.activeLayerTitle {
+	float: left;
+	margin-left: 6px;
+	max-width: 175px;
+	width: 119px;
+	font-size: 12px;
+	height: 14px;
+	font-family: 'PT Sans';
+	margin-top: 2px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.activeLayerDragButton {
+	float: left;
+	width: 17px;
+	height: 19px;
+	margin-left: 16px;
+	cursor:pointer;
+}
+
+.selectedLayerOpacityButton {
+	float:right;
+	margin-right:8px;
+	cursor:pointer;
+}
+
+.activeLayerInfoButton {
+	float: right;
+}
+
+.activeLayerDiv .activeLayerInfoButton {
+	margin-right:8px;
+}
+
+.activeLayerDownloadButton {
+	float: right;
+	margin-right: 13px;
+}
+
+.activeLayerDownloadButton:hover {
+	cursor:pointer;
+}
+
+.activeLayerCloseButton {
+	float: right;
+}
+
+.activeLayerCloseButton:hover {
+	cursor:pointer;
+}
+
+.activeLayerSliderContainer {
+	position: absolute;
+	bottom: 0;
+	width: 113px;
+	height: 10px;
+	line-height: 10px;
+	margin-left:34px;
+	margin-bottom: 5px;
+}
+
+.percentDiv {
+	margin-top: -6px;
+	width: 160px;
+	margin-left: -16px;
+	font-size: 10px;
+	font-weight: 700;
+	font-weight:bold;
+	font-family: 'PT Sans';
+}
+
+#clearAllLayers {
+	float: right;
+	margin-right: 14px;
+}
+
+.floatingLayerMenuButton {
+	font-size: 12px;
+	color: #d86c3a;
+	text-decoration: underline;
+	width: auto;
+	cursor: pointer;
+	height: auto;
+	margin: 6px 0;
+}
+
+.floatingLayerHeader {
+	width: 100%;
+	background: #f4f4f4;
+	height: 27px;
+}
+
+#quickSummaryStats {
+	float: left;
+	margin-left: 14px;
+}
+
+#clearAllLayers:hover {
+	cursor:pointer;
+}
+
+#inertLayerSelectionContainer, #activeLayerSelectionContainer {
+	width:100%;
+	clear:both;
+	position:relative;
+}
+
+#inertLayerSelectionContainer {
+	display:none;
+	margin-bottom: 16px;
+	background: #f5f5f5;
+}
+
+#inertLayerSelectionTitle, #activeLayerSelectionTitle {
+	
+	width: 100%;
+	font-size: 12px;
+	margin-left: 27px;
+	display: none;
+	font-weight: bold;
+	color: #e0a000;
+}
+
+#aboutAppAccordianHeader {
+	width:100%;
+	height: 42px;
+}
+
+#feedbackButton {
+	width:100px;
+	float:right;
+	background:#e0a000;
+	color:#ffffff;
+	font-size:14px;
+	padding:0px;
+}
+
+#inertLayerSelectionTitle {
+	padding-top:9px;
+}
+
+.zeroPercent {
+	float: left;
+}
+
+.hundredPercent {
+	float: right;
+}
+
+.legend {
+	margin: 12px;
+	display: inline-block;
+	color:#000;
+	font-size:12px;
+}
+
+.legendTitleElement {
+	margin-bottom: 4px;
+}
+
+#legendsContainer td {
+	text-align: left !important;
+}
+
+.colorSwatch {
+	height: 15px;
+	width: 15px;
+	margin: 5px;
+	float: left;
+}
+
+th {
+	text-align: right;
+}
+
+.legendTitleElementHeader {
+	margin-bottom: 4px;
+	font-weight: 700;
+	font-weight:bold;
+}
+
+#legendsTabContainer {
+	position:absolute;
+	bottom:0;
+	width:auto;
+	height:auto;
+	z-index:1000;	
+	background-color:transparent;
+	background:transparent;
+	pointer-events: none;
+	margin-left:10px;
+	cursor:default;
+}
+
+#legendsContainer {
+	height:0;
+	background:#fff;
+	overflow-y: auto;
+	clear:both;
+	pointer-events: all !important;
+	border-top: 1px solid #dfdfdf;
+	border-right: 1px solid #dfdfdf;
+	border-bottom: 1px solid #dfdfdf;
+}
+
+#legendsButton {
+float: left;
+width: 68px;
+height: 25px;
+background: #767563;
+clear: both;
+pointer-events: visible !important;
+}
+
+#legendButtonTitle {
+line-height: 27px;
+font-size: 10px;
+color: #fff;
+float: left;
+margin-left: 9px;
+}
+
+#legendArrow {
+	float:right;
+	margin-right:7px;
+}
+
+#legendsButton:hover {
+	cursor:pointer;
+}
+
+#mapResetButton {
+position: absolute;
+bottom: 12px;
+right: 82px;
+font-size: 12px;
+text-align: center;
+line-height: 30px;
+color: #fff;
+background: #454334;
+z-index: 1;
+padding: 0 8px;
+}
+
+#mapResetButtonImg {
+	margin-top:6px;
+	margin-left:6px;
+}
+
+#mapResetButton:hover {
+	cursor:pointer;
+}
+
+.esriSimpleSlider {
+
+	border: 0;
+	background-color: #454334;
+	color: #fff;
+	cursor: pointer;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	-o-border-radius: 0;
+	border-radius: 0;
+}
+
+.esriSimpleSliderHorizontal.esriSimpleSliderBR {
+	right:14px !important;
+	bottom:12px !important;
+}
+
+
+/* ============================== MEGA DROP DOWN  ============================== */
+#regionMegaDropDownDiv {
+	width: 100%;
+	min-width: 1024px;
+	height: 0;
+	background: #767563;
+	overflow: hidden;
+	position:relative;
+}
+
+#regionSelectButtons {
+	margin-top: 23px;
+	margin-bottom: 10px;
+	display: inline-table;
+	width:800px;
+	border-bottom: 1px solid #fff;
+}
+
+#regionSelectButtons {
+	margin-left:47px;
+}
+
+.regionSelectButton {
+	width: 123px;
+	height: 26px;
+	background: #767563;
+	color: #fff;
+	font-weight: 700;
+	font-weight:bold;
+	font-size: 14px;
+	opacity:0.7;
+	margin-bottom: 4px;
+}
+
+.regionSelectButton:hover {
+	cursor: pointer;
+}
+
+#regionButton {
+	float: left;
+}
+
+#countryButton {
+	float: left;
+}
+
+#regionDropDownMenuContainer {
+	height: auto;
+	width: auto;
+	margin-left: 72px;
+}
+
+.regionButtonSelected {
+	opacity:1;
+}
+
+.regionChildButtonSelected {
+	color:#e1a100 !important;
+}
+
+.regionGroup {
+	width: 200px;
+	float: left;
+	display: inline;
+}
+
+.regionTitle {
+	float:left;
+	font-weight:700;
+	font-weight:bold;
+	font-size: 12px;
+	color:#e1a100;
+}
+
+.regionChild, .regionTitle {
+	width:200px;
+}
+
+.regionChild {
+	height: 12px;
+	line-height: 18px;
+	display: inline-table;
+}
+
+.regionChildText {
+	max-width:164px;
+	font-size: 12px;
+	color: #fff;	
+	float:left;
+}
+
+.regionChildDeselectButton {
+	float: left;
+	width: 14px;
+	height: 13px;
+	margin-top: 1px;
+	margin-left:12px;
+}
+
+.regionChildDeselectButton:hover {
+	cursor: pointer;
+}
+
+.regionChildText:hover {
+	cursor: pointer;
+	color:#e1a100;
+}
+
+.regionDropDownTitles {
+	height:12px;
+	margin-bottom:12px;
+}
+
+.regionDropDownValues {
+	height:125px;
+	overflow-y:auto;
+}
+
+.dojoxFloatingMinimizeIcon {
+	background: url('../images/layer_close.png') no-repeat;
+	width: 13px;
+	height:12px;
+	margin:8px;
+}
+
+.dojoxFloatingPane {
+	position: absolute;
+	z-index: 10;
+	width: 229px;
+	border:0 !important;
+	-webkit-box-shadow:none !important;
+}
+
+.dojoxFloatingPaneTitle {
+	background: #e0a000;
+	padding:0;
+	border:0;
+	height:28px;
+	line-height:28px;
+	margin-left: 20px !important;
+}
+
+.dojoxFloatingPaneTitle span {
+	color: #fff;
+	margin-left:16px;
+	font-family:'PT Sans';
+	font-weight: 700;
+	font-weight:bold;
+	font-size:12px;
+}
+
+.dojoxDockTitleNode {
+font-size: 10px;
+line-height: 25px;
+}
+
+.dojoxFloatingCloseIcon {
+	display: none;
+}
+
+#floatingSelectedLayersDiv {
+
+	height: 339px;
+	width:260px;
+	background: transparent;
+	overflow-y:auto;	
+	z-index:95 !important;
+	box-shadow: 17px 14px 10px -15px #d0cece !important;
+}
+
+.topLevelZIndex {
+	z-index:100 !important;
+}
+
+#floatingSelectedLayersDiv .dojoxFloatingPaneCanvas {
+	background: #fff;
+	margin-left: 20px;
+	width:239px;
+	height:281px;
+	overflow-y: visible !important;
+	cursor:default;
+}
+
+.dojoxDockRestoreButton {
+	display: none;
+}
+
+.overflowHidden {
+	overflow: hidden !important;
+}
+
+.mapZoomButton {
+	margin: 7px;
+	text-align:center;
+}
+
+.overflowVisible {
+	overflow: visible !important;
+}
+
+#floatingDivDocks {
+position: relative;
+width: 100px !important;
+overflow: hidden;
+margin-top: 12px;
+}
+
+#floatingSelectedLayersDivDock {
+	width:99px !important;
+	text-align:center;
+	position: relative;
+}
+
+.dojoxFloatingPaneFg {
+	-webkit-box-shadow:none !important;
+}
+
+.dojoxDock {
+	display: block;
+	border: 0;
+	position: absolute;
+	top: 0 !important;
+	padding: 0;
+	margin: 0;
+}
+
+.dojoxDockNode {
+	border: 0;
+	height: 25px !important;
+	background: #e1a100 !important;
+	color: #FFF;
+	font-size:10px;
+	font-weight:700;
+	font-weight:bold;
+	width: 100%;
+	padding:0;
+	margin:0;
+	border-radius: 0 !important;
+	-webkit-border-radius: 0 !important;
+	-moz-border-radius: 0 !important;
+}
+
+.dojoxFloatingPaneContent {
+	padding-left: 20px !important;
+	position: relative;
+	left: -20px;
+	background:transparent;
+	height:281px;
+	overflow-y:auto;
+	overflow-x:hidden;
+}
+
+#layerListTypeLegend {
+	height: 30px;
+	width: 240px;
+	background: #454334;
+	margin-left: 20px;
+	position:absolute;
+	z-index: 100;
+	cursor:default;
+}
+
+.tooltipTitle {
+	font-weight:700;
+	font-weight:bold;
+	float: left;
+	margin-right: 8px;
+}
+
+#layerListTypeLegendItemLeft {
+	float:left;
+	margin-left:6px;
+	margin-top: 5px;
+}
+
+.layerListTypeLegendItemLabel {
+	font-size:11px;
+	color:#fff;
+	float:right;
+	margin-left: 3px;
+	margin-top: 2px;
+}
+
+#layerListTypeLegendItemRight {
+	float:right;
+	margin-right:6px;
+	margin-top: 5px;
+}
+
+#basemapsContainer {
+	overflow-y: auto;
+}
+
+.basemapIconRow {
+	display: block;
+	margin-top: 20px;
+	height: 80px;
+}
+
+.basemapIcon {
+	display: inline-table;
+	height:60px;
+	width:50px;
+	float: left;
+	margin-left: 13px;
+}
+
+.basemapImg {
+	height:50px;
+	width:75px;
+}
+
+.basemapLabel {	
+margin-top: 2px;
+font-size: 11px;
+color: #383838;
+line-height: 12px;
+text-align: center;
+}
+
+.basemapImg:hover {
+	cursor: pointer;
+}
+
+.accordianSliderGroup {
+	display: none;
+	overflow: hidden;
+	padding-bottom:4px;
+}
+
+.hidden {
+	display: none !important;
+}
+
+.layerMenuBorderBottom {
+	border-bottom: 1px solid #dbd9da;
+}
+
+.submenuLayerGroupRow {
+	background-color: transparent;
+	cursor: pointer;
+	font-size: 14px;
+	color: #e1a100;
+	height: 17px;
+}
+
+.domainCountryRow {
+	
+border-bottom: 1px solid #dbd9da;
+background-color: transparent;
+cursor: pointer;
+margin-bottom: 10px;
+}
+
+.domainCountryRowZoom {
+margin-bottom: 12px;
+margin-left: 0px;
+font-size: 12px;
+color: #e1a100;
+text-decoration: underline;
+clear: both;
+width: 40px;
+}
+
+.domainCountryRow:hover {
+	cursor:pointer;
+}
+
+
+.domainCountryRowTitle {
+	float:left;	
+	font-size: 14px;
+	color: #e1a100;
+}
+
+.domainCountryRowMenuArrow {
+	float:right;
+	margin-top: 20px;
+}
+
+.topLevelLayerMenuGroup {
+
+}
+
+.topLevelLayerMenuGroupTitle {
+	font-weight:700;
+	font-weight:bold;
+	height: 31px;
+	line-height: 31px;
+}
+
+.childLayerMenuGroup {
+	font-weight: normal;
+	margin-left:auto;
+	margin-right:auto;
+	color:#444035;
+}
+
+.childLayerMenuGroupTitle {
+	height: 28px;
+	line-height: 28px;
+}
+
+.submenuLayerGroupRow:hover {
+	cursor: pointer;
+}
+
+.layerMenuItem {
+padding: 9px 0;
+display: block;
+height: 13px;
+}
+
+.claro .dijitCheckBox, .claro .dijitCheckBoxIcon {
+	margin:0;
+	margin-top: -2px;
+	float: left;
+}
+
+.claro .dijitCheckBox {
+	background: url(../images/unchecked.png) no-repeat !important;
+	background-position:0 !important;
+	border:1px solid #b9b9b9 !important;
+}
+
+.claro .dijitCheckBoxChecked {
+	background: url(../images/checked.png) no-repeat !important;
+	background-position:0 !important;
+}
+
+.layerElementStyle {
+	color:#444035;
+	font-size: 12px;
+	overflow: hidden;
+	float: left;
+	margin-left:6px;
+	max-width: 111px;
+	height: 14px;
+	
+	text-overflow: ellipsis;
+  	white-space:nowrap;
+  	overflow:hidden;
+}
+
+.layerMenuTitle {
+	line-height: 20px;
+	color: white;
+	font-size: 15px;
+}
+
+.menuArrow {
+	float: right;
+	margin-top: 15px;
+}
+
+.loading {
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	margin-left: -68px;
+	margin-top: -99px;
+	width: 146px;
+	height:117px;
+	background-color: #3c3c3c;
+	z-index: 100;
+	-moz-border-radius: 5px;
+	border: 1px solid #000;
+	box-shadow: 1px 1px 5px #5b5b5b;
+	border-radius: 5px;
+	display: none;
+	text-align: center;
+	background-image: url(../images/loading.gif);
+}
+
+.loading .msg {
+	font-size: 12px;
+	color: white;
+	margin-top: 91px;
+}
+
+.dijitSliderBumperH {
+	width: 0;
+	height: 0;
+	border-width:0;
+}
+
+.claro .dijitSliderIncrementIconH, .claro .dijitSliderDecrementIconH {
+	background: none;
+	background-color: transparent;
+	border: 0;
+	width:0;
+	height:0;
+	background-repeat: no-repeat;
+	background-position: 0;
+}
+
+.claro .opacitySliderContainer .dijitSlider {
+	border:0 important;
+	background-color: transparent !important;
+	border-color: transparent !important;
+}
+
+.claro .opacitySliderContainer .dijitSlider .dijitSliderProgressBarH {
+	background-image: none !important;
+	border: 0 !important;
+	background-color: #dfdfdf !important;
+	height: 2px !important;
+}
+
+.claro .opacitySliderContainer .dijitSliderImageHandleH {
+	border: 0 !important;
+	width: 10px !important;
+	height: 10px !important;
+	background-image: url(../images/zoom_ball.png) !important;
+	background-repeat: repeat-x !important;
+	background-position: 0 0 !important;
+	background-color: transparent !important;
+	border-color: transparent !important;
+	outline:none !important;
+	margin-top: -4px;
+}
+
+.claro .opacitySliderContainer .dijitSliderImageHandleH {
+	left:0 !important;
+	top:0 !important;
+	vertical-align: top;
+}
+
+.claro .opacitySliderContainer .dijitSliderProgressBarH, 
+.claro .opacitySliderContainer .dijitSliderLeftBumper, 
+.claro .opacitySliderContainer .dijitSliderRightBumper {
+	background-image:none !important;
+	border:none !important;	
+	margin:0 !important;
+	padding:0 !important;
+	background-color: transparent !important;
+	border-color: transparent !important;
+	background-position: 0 0 !important;
+}
+
+.claro .opacitySliderContainer .dijitSlider .dijitSliderRemainingBarH {
+	background-position: 0 !important;
+	border:0 !important;
+	background-color: #dfdfdf !important;
+	height: 2px !important;
+}
+
+.claro .opacitySliderContainer .dijitSlider .dijitSliderRightBumper {
+	background-image:none !important;
+	border:none !important;	
+	margin:0 !important;
+	padding:0 !important;
+	background-color: transparent !important;
+	border-color: transparent !important;
+	background-position: 0 0 !important;
+}
+
+.claro .dijitTooltipDialogPopup {
+	max-width:300px;
+}
+
+.claro .dijitTooltipContainer {
+	background-color: #fff;
+	background-image: none;
+	background-position: 0;
+	border: 1px solid #aaaaaa;
+	padding: 5px 7px;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+	-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+	color: #444035;
+	font-size:12px;
+}
+
+.claro .dijitTooltipConnector {
+	background-image: url(../images/tooltip.png);
+}
+
+.claro .dijitTextBoxHover {
+	background-color:#e1a100 !important;
+	background-image:none !important;
+}
+
+.claro .dijitSelectMenu .dijitMenuItemHover td, .claro .dijitComboBoxMenu .dijitMenuItemHover {
+	color: #ffffff !important;
+	border-color: #aaaaaa !important;
+	background-color:#e1a100 !important;
+}
+
+.dijitMenuItemSelected {
+	background-color:#e1a100 !important;
+	border-color: #aaaaaa !important;
+	color:#fff;
+}
+.claro .dijitSelect, .claro .dijitSelect .dijitButtonContents, .claro .dijitTextBox, .claro .dijitTextBox .dijitButtonNode {
+	border-color: #aaaaaa !important;
+	-webkit-transition-property: none;
+	-moz-transition-property:none;
+	transition-property:none;
+	-webkit-transition-duration: 0;
+	-moz-transition-duration: 0;
+	transition-duration: 0;
+}
+
+.claro .dijitSelectHover, 
+.claro .dijitSelectHover .dijitButtonContents, 
+.claro .dijitTextBoxHover, 
+.claro .dijitTextBoxHover .dijitButtonNode {
+	background-color: transparent !important;
+	border-color: #aaaaaa !important;
+}
+
+.claro .dijitComboBoxOpenOnClickHover .dijitButtonNode, 
+.claro .dijitComboBox .dijitDownArrowButtonHover,
+.claro .dijitComboBox .dijitButtonNode {
+	background-color: #efefef !important;
+	background-image: none !important;
+	padding:0 !important;
+}
+.claro .dijitMenu {
+	border: 1px solid #aaaaaa !important;
+}
+.claro .dijitSelectHover, .claro .dijitSelectHover .dijitButtonContents, .claro .dijitTextBoxHover, .claro .dijitTextBoxHover .dijitButtonNode {
+	border-color: #aaaaaa !important;
+	-webkit-transition-duration: 0;
+	-moz-transition-duration: 0;
+	transition-duration: 0;
+}
+
+.claro .dijitComboBox .dijitArrowButtonInner {
+	border: 1px solid #fff !important;
+}
+
+.claro .dijitSelect .dijitArrowButtonInner, 
+.claro .dijitComboBox .dijitArrowButtonInner {
+	background-position: 0px 53% !important;
+}
+
+.dijitMenuItemSelected {
+	color:#fff !important;
+}
+.claro .dijitSelectMenu .dijitMenuItemHover td, .claro .dijitSelectMenu .dijitMenuItemSelected td, .claro .dijitMenuItemHover, .claro .dijitMenuItemSelected {
+	background-image:none;
+}
+.claro .dijitSelectMenu .dijitMenuItem td, .claro .dijitComboBoxMenu .dijitMenuItem {
+	border:0;
+}

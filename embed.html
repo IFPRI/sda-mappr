@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"> 
+    <title>Embed</title>
+    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/css/esri.css"/>
+   	<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
+    <style>
+    	html, body {
+			font-family:'PT Sans', sans-serif;
+    		padding:0;
+    		margin:0;
+    		height:100%;
+    		width:100%;
+    	}
+    	#embedMap {
+			position: absolute !important;
+			z-index: 1000 !important;
+			width: 100% !important;
+			height: 100% !important;
+			background-color: #fff !important;
+    	}
+    	
+		.legend {
+			margin: 12px;
+			display: inline-block;
+			color:#000;
+			font-size:12px;
+		}
+		
+		.legendTitleElement {
+			margin-bottom: 4px;
+		}
+		
+		#legendsContainer td {
+			text-align: left !important;
+		}
+		
+		.colorSwatch {
+			height: 15px;
+			width: 15px;
+			margin: 5px;
+			float: left;
+		}
+		
+		th {
+			text-align: left;
+		}
+		
+		.legendTitleElementHeader {
+			margin-bottom: 4px;
+			font-weight: 700;
+		}
+		
+		#legendsTabContainer {
+			display:none;
+			position:absolute;
+			bottom:0;
+			width:auto;
+			height:auto;
+			z-index:1000;	
+			background-color:transparent;
+			background:transparent;
+			pointer-events: none;
+			margin-left:10px;
+		}
+		
+		#legendsContainer {
+			height:0;
+			background:#fff;
+			overflow-y: auto;
+			clear:both;
+			pointer-events: all !important;
+			border-top: 1px solid #dfdfdf;
+			border-right: 1px solid #dfdfdf;
+			border-bottom: 1px solid #dfdfdf;
+		}
+		
+		#legendsButton {
+			float: left;
+			width: 68px;
+			height: 25px;
+			background: #767563;
+			clear: both;
+			pointer-events: visible !important;
+		}
+		
+		#legendButtonTitle {
+			line-height: 27px;
+			font-size: 10px;
+			color: #fff;
+			float: left;
+			margin-left: 9px;
+		}
+		
+		#legendArrow {
+			float:right;
+			margin-right:7px;
+		}
+		
+		#legendsButton:hover {
+			cursor:pointer;
+		}
+		.esriSimpleSlider {
+			border: 0;
+			background-color: #454334;
+			color: #fff;
+			cursor: pointer;
+			-webkit-border-radius: 0;
+			-moz-border-radius: 0;
+			-o-border-radius: 0;
+			border-radius: 0;
+		}
+		
+		.esriSimpleSliderHorizontal.esriSimpleSliderBR {
+			right:14px !important;
+			bottom:12px !important;
+		}
+		.mapZoomButton {
+			margin: 7px;
+			text-align:center;
+		}
+    </style>
+  </head>
+  <body class="claro">
+  	<div id="embedMap"></div>
+ 	<div id="legendsTabContainer">
+  		<div id="legendsButton">
+  			<div id="legendButtonTitle">LEGEND</div>
+  			<div id="legendArrow">
+				<img id="legendArrowImg" height=7 width=11 src="images/legend_up_arrow.png"/>
+			</div>
+  		</div>
+  		<div id="legendsContainer"></div>
+  	</div>
+	<script>var dojoConfig={parseOnLoad:true};</script>
+  	<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/"></script>
+    <script>
+	
+		var serverRootURL = "dev.harvestchoice.org";
+		var AppURL = serverRootURL + "/mappr/";
+		
+		var AppConstants = {
+			"NO_DATA_VALUE":'No Data',
+			"LEGEND_HEIGHT_PX":200,
+			"LEGEND_HEIGHT_DURATION_MS":400,
+			"LayerMenuCategoriesWebServiceURL":"http://"+serverRootURL+"/harvestchoiceapi/0.1/api/categories/",
+			"SelectedRegionFeaturesURL":"http://"+serverRootURL+"/ArcGIS/rest/services/MapServices/USIRServices/MapServer/8",
+			"CountryCollectionsWebServiceURL":"http://"+serverRootURL+"/harvestchoiceapi/0.1/api/countrycollections",
+			"CountryISO3WebServiceURL":"http://"+serverRootURL+"/harvestchoiceapi/0.1/api/countries",
+			"MAP_SERVICE_URL_LIST":[
+			    "http://"+serverRootURL+"/arcgis/rest/services/MapServices/cell_values_1/MapServer/",
+				"http://"+serverRootURL+"/arcgis/rest/services/MapServices/cell_values_2/MapServer/",
+			    "http://"+serverRootURL+"/arcgis/rest/services/MapServices/cell_values_3/MapServer/",
+			   	"http://"+serverRootURL+"/arcgis/rest/services/MapServices/cell_values_4/MapServer/",
+			   	"http://"+serverRootURL+"/arcgis/rest/services/MapServices/cell_values_5/MapServer/",
+				"http://"+serverRootURL+"/arcgis/rest/services/MapServices/cell_values_6/MapServer/"
+			]
+		};
+		
+		var AppGlobals = {
+			"MapServiceLayers":{},
+			"MapServiceLegends":{},
+			"Map":null,
+			"ColumnNames":[],
+			"ISO3s":[],
+			"DMSLayers":{},
+			"LayerIndicatorInfo":{},
+			"ISO3CountryMap":{},
+			"CountryCollectionMap":{}
+		};
+    	
+    	dojo.ready(function() {
+    		
+    		loadPermaLinkArgs();    		
+			initMap();
+			
+			if(parseInt(AppGlobals['PermalinkArgs']['includeLegend']) == 1) {
+				dojo.style(dojo.byId("legendsTabContainer"), "display", "block");
+				initLegend();
+			}
+			
+    		loadMapServiceLayerInfos(AppConstants['MAP_SERVICE_URL_LIST'], function() {
+				dojoXHRGet(AppConstants['LayerMenuCategoriesWebServiceURL'], function(layerMenuJSON) {
+					dojoXHRGet(AppConstants['CountryISO3WebServiceURL'], function(countriesJSON) {
+						dojoXHRGet(AppConstants['CountryCollectionsWebServiceURL'], function(countryCollectionJSON) {
+							
+							AppGlobals['CountryCollectionMap'] = createCountryCollectionMap(countryCollectionJSON);
+							AppGlobals['ISO3CountryMap'] = createISO3CountryMap(countriesJSON);
+							AppGlobals['LayerIndicatorInfo'] = getIndicatorInfoObj(layerMenuJSON);
+							
+			    			loadMapFromPermaLink();
+							loadLayersFromList(AppGlobals['ColumnNames']);
+						});
+					});
+				});
+    		});
+    	});
+		function initMap() {
+			
+    		var extent = new esri.geometry.Extent(
+				-3149613.6179597233, 
+	   			-3371678.693126522, 
+	   			7681207.541933732, 
+	 			2987882.0601984514, 
+				new esri.SpatialReference({wkid:102100})
+			);
+    	
+    		AppGlobals['Map'] = new esri.Map("embedMap", {
+    			"extent": extent,
+    			"basemap":AppGlobals['PermalinkArgs']['basemap'],
+    			"autoResize":true,
+  				"logo":false,
+  				"showAttribution":false,
+    			"wrapAround180":true,
+				"sliderStyle":"small",
+  				"sliderOrientation":"horizontal",
+    			"sliderPosition": "bottom-right",
+    			"smartNavigation":false
+			});
+    		
+			dojo.connect(window, "onresize", function() {		
+				AppGlobals['Map'].reposition();
+				AppGlobals['Map'].resize();
+			});
+			
+			dojo.connect(AppGlobals['Map'], "onLoad", initMapZoomButtons);
+		}
+		
+		function loadPermaLinkArgs() {
+			AppGlobals['PermalinkArgs'] = getQueryStringArgs();
+		}
+		
+		function loadMapFromPermaLink() {
+
+			if(!AppGlobals['PermalinkArgs']) {
+				return;
+			}
+			
+			var columnNames = AppGlobals['PermalinkArgs']['commodity'];
+			if(columnNames) {
+				if(dojo.isArray(columnNames)) {
+					AppGlobals['ColumnNames'] = columnNames;
+				}
+				else {
+					AppGlobals['ColumnNames'].push(columnNames);
+				}	
+			}
+
+			var regionCode = AppGlobals['PermalinkArgs']['region'];
+			if(regionCode) {
+				if(AppGlobals['CountryCollectionMap'][regionCode]) {
+					AppGlobals['ISO3s'] = AppGlobals['CountryCollectionMap'][regionCode];
+				}
+				else if(AppGlobals['ISO3CountryMap'][regionCode]) {
+					AppGlobals['ISO3s'] = [regionCode];
+				}
+				executeGetSelectedFeaturesForMap(AppGlobals['ISO3s']);
+			}
+			else {
+				
+				var x = parseFloat(AppGlobals['PermalinkArgs']['x']);
+				var y = parseFloat(AppGlobals['PermalinkArgs']['y']);
+				var z = parseInt(AppGlobals['PermalinkArgs']['z']);
+				
+				if(x && y && z) {
+					var mapPoint = new esri.geometry.Point(x, y, new esri.SpatialReference({wkid:102100}));
+					AppGlobals['Map'].centerAndZoom(mapPoint, z);
+				}	
+			}
+		}
+		function initLegend() {
+			
+			dojo.connect(dojo.byId("legendsButton"), "onclick", function() {
+				dojo.style(dojo.byId("legendsContainer"), "height") === AppConstants['LEGEND_HEIGHT_PX'] ? closeLegendTab():openLegendTab();
+			});
+		}
+		
+    	function openLegendTab() {
+    		animateLegendContainer(AppConstants['LEGEND_HEIGHT_PX'], "images/legend_down_arrow.png");
+    	}
+
+    	function closeLegendTab() {	
+    		animateLegendContainer(0, "images/legend_up_arrow.png");
+    	}
+    	
+    	function animateLegendContainer(height, arrowImageSrc) {
+    		
+    		animateProperties("legendsContainer", {height:{end:height, units:'px'}}, AppConstants['LEGEND_HEIGHT_DURATION_MS'], function() {
+    			dojo.byId("legendArrowImg").src = arrowImageSrc;
+    		});	
+    	}
+    	
+    	function animateProperties(divID, propObj, duration, callback) {
+
+    		var anim = dojo.animateProperty({
+    			duration:duration,
+    			node:dojo.byId(divID),
+    			properties:propObj
+    		});	
+    		if(callback) {
+    		    dojo.connect(anim, "onEnd", callback);
+    		}
+    		anim.play();
+    	}
+    	
+    	function loadLayersFromList(list) {
+    		
+    		if(list.length === 0) {
+    			return;
+    		}
+    		
+    		var nextItem = list.pop();
+	    	var columnNameParts = nextItem.split(":");
+	    	var columnName = columnNameParts[0];
+	    	var opacity = columnNameParts[1];
+			var mapServiceURL = AppGlobals['MapServiceLayers'][columnName]['mapServiceURL'];
+			
+			loadMapServiceLegends(mapServiceURL, function() {
+				
+		    	var layerLegendInfo = AppGlobals['MapServiceLegends'][columnName];
+		    	var layerId = layerLegendInfo['layerId'];
+		    	var mapServiceURL = AppGlobals['MapServiceLayers'][columnName]['mapServiceURL'];
+		    	AppGlobals['DMSLayers'][columnName] = new esri.layers.ArcGISDynamicMapServiceLayer(mapServiceURL);
+		    	var indicatorObj = AppGlobals['LayerIndicatorInfo'][columnName];
+		    	var label = createIndicatorLabel(indicatorObj)
+		    	
+		    	fireOneTimeConnectEvent(AppGlobals['DMSLayers'][columnName], "onLoad", function() {
+		    		
+		    		AppGlobals['DMSLayers'][columnName].setVisibleLayers([layerId]);
+		    		AppGlobals['DMSLayers'][columnName].setOpacity(opacity);
+		    		
+		    		var layerLegendObj = {
+		    			"name":columnName,
+		    			"id":layerId,
+		    			"mapServiceURL":mapServiceURL,
+		    			"legend":layerLegendInfo['legend'],
+		    			"label":label
+		    		};
+		    		addLegend(layerLegendObj);
+		    		
+		    		dojo.connect(AppGlobals['Map'], "onLayerAdd", function() {
+		    			loadLayersFromList(list);
+		    		});
+		    		AppGlobals['Map'].addLayer(AppGlobals['DMSLayers'][columnName]);
+		    	});	
+			});
+    	}
+    	
+    	function addLegend(layer) {
+			
+    		var legendName = layer['name'];
+    		var layerId = layer['id'];
+    		var layerLegendDivID = legendName + layerId  + "_legend";
+    		var legendHTML = 
+    			'<div id="'+layerLegendDivID+'">' +
+    			'<div class="legendTitleElementHeader">'+layer['label']+'</div>' +
+    			'<table>';
+    			
+    		var legendObjs = layer['legend'];
+    		for(itemObj in legendObjs) {
+    				
+    			var item = legendObjs[itemObj];
+    			var legendColorBoxURL = layer['mapServiceURL'] + layerId + "/images/" + item['url'];
+    			var legendValue = item['label'] == -999 ? AppConstants['NO_DATA_VALUE'] : item['label'];
+    			legendHTML += '<tr valign="middle"><td><img src="'+legendColorBoxURL+'"/></td><td>'+legendValue+'</td></tr>';
+    		}
+    		legendHTML += "</table></div>";
+    			
+    		dojo.place(legendHTML, dojo.byId("legendsContainer"));
+    		dojo.addClass(dojo.byId(layerLegendDivID),"legend");
+    	}
+    	
+    	function loadMapServiceLayerInfos(mapServiceURLList, callback, layerInfoList) {
+
+    		if(!layerInfoList) {
+    			layerInfoList = [];
+    		}
+    		
+    		if(mapServiceURLList.length == 0) {	
+    			
+    			AppGlobals['MapServiceLayers'] = createObjFromArrayOfLayerInfosWithKey(layerInfoList, 'name');
+    			callback();
+    			return;
+    		}
+    		
+    		var url = mapServiceURLList.pop();
+    		dojoXHRGet(url + "?f=json", function(result) {
+    			layerInfoList.push({'mapServiceURL':url, 'layerInfoList':result});
+    	    	loadMapServiceLayerInfos(mapServiceURLList, callback, layerInfoList);
+    	    });	
+    	}
+    	
+	    function getQueryStringArgs() {
+	    	
+	    	var queryString = window.location.search;
+	    	if(queryString.length === 0) {
+	    		return null;
+	    	}
+	    	var query = queryString.substring(queryString.indexOf("?") + 1, queryString.length);
+	    	var queryObject = dojo.queryToObject(query);
+	    	
+	    	return queryObject;
+	    }
+	    
+	    function dojoXHRGet(url, callback) {
+	    	
+	    	dojo.xhrGet({
+	    	    url:url,
+	    	    handleAs:"json",
+	    	    load:function(result) {
+	    	    	callback(result);
+	    	    },
+	    	    error:function(e){}
+	    	});
+	    }
+	    
+	    function createObjFromArrayOfLayerInfosWithKey(layerInfosArray, key) {
+	    	
+	    	obj = {};
+	    	dojo.forEach(layerInfosArray, function(transferObject) {
+	    		
+	    		var layersList = transferObject['layerInfoList']['layers'];
+	    		var mapServiceURL = transferObject['mapServiceURL'];
+	    		
+	    		dojo.forEach(layersList, function(layerObj) {
+	    			layerObj['mapServiceURL'] = mapServiceURL;
+	    			obj[layerObj[key]] = layerObj;
+	    		});
+	    	});
+	    	return obj;
+	    }
+	    
+	    function addLayerToMap(columnNameParts) {
+	    	
+
+	    }
+	    
+	    function loadMapServiceLegends(mapServiceURL, callback) {
+	    	
+	    	dojoXHRGet(mapServiceURL + "legend?f=json", function(result) {
+	    		var layerInfosArray = result['layers'];
+	    		if(layerInfosArray) {
+	    			addLegendFromMapService(layerInfosArray);
+	    			callback();
+	    		}
+	        });
+	    }
+	    function addLegendFromMapService(layerInfosArray) {
+	    	
+	    	dojo.forEach(layerInfosArray, function(layerObj) {
+	    		AppGlobals['MapServiceLegends'][layerObj['layerName']] = layerObj;
+	    	});
+	    }
+	    function fireOneTimeConnectEvent(obj, event, callback) {
+
+	    	var connectHandle = null;
+	    	connectHandle = dojo.connect(obj, event, function() {
+	    		dojo.disconnect(connectHandle);
+	    		callback();
+	    	});
+	    }
+	    function getIndicatorInfoObj(layerMenuJSON) {
+	    	
+	    	var indObj = {};
+	    	dojo.forEach(layerMenuJSON, function(group) {		
+	    		dojo.forEach(group['Subcategories'], function(category) {
+	    			dojo.forEach(category['Aggregates'], function(aggregate) {
+	    				dojo.forEach(aggregate['Indicators'], function(obj) {
+	    					indObj[obj['ColumnName']] = obj;
+	    				});
+	    			});
+	    		});
+	    	});
+	    	return indObj;
+	    }
+	    function createIndicatorLabel(indicatorObj, joinChar) {
+	    	
+	    	if(!joinChar) {
+	    		joinChar = " ";
+	    	}
+	    	
+	    	var year = indicatorObj['Year'];
+	    	year = year ? "("+ year + ")":null;
+	    	
+	    	var unit = indicatorObj['Unit'];
+	    	unit = unit ? "("+ unit + ")":null;
+	    		
+	    	var labelParts = [indicatorObj['MicroLabel']];
+	    	var secondLineParts = "";
+	    	if(year) {
+	    		secondLineParts += year;
+	    	}
+	    	if(unit) {
+	    		secondLineParts += " " + unit;
+	    	}
+	    	if(secondLineParts) {
+	    		labelParts.push(secondLineParts);
+	    	}
+	    	
+	    	return labelParts.join(joinChar);
+	    }
+	    function createISO3CountryMap(countryJSON) {
+	    	
+	    	var obj = {};
+	    	dojo.forEach(countryJSON, function(iso3Obj) {
+	    		obj[iso3Obj['name']] = iso3Obj['label'];
+	    	});
+	    	return obj;
+	    }
+	    function executeGetSelectedFeaturesForMap(iso3List) {
+	    	
+	    	if(!this.selectedFeaturesCache) {
+	    		this.selectedFeaturesCache = {};
+	    	}
+	    	
+	    	var iso3ListKey = iso3List.join("");
+	    	var existingFeatures = this.selectedFeaturesCache[iso3ListKey];
+	    	
+	    	if(existingFeatures) {
+	    		
+	        	symbolizeAndZoomToSelectedAOI(existingFeatures);
+	        	return;
+	    	}
+	    		    	
+	    	var queryTask = esri.tasks.QueryTask(AppConstants['SelectedRegionFeaturesURL']);
+	    	var query = new esri.tasks.Query();
+	    	query.where = createSQLOrClause("ISO", iso3List);
+	        query.outSpatialReference = {wkid:102100};
+	        query.returnGeometry = true;
+	        query.outFields = [""];
+	        
+	        var callback = function(features) {
+	        	
+	        	this.selectedFeaturesCache[iso3ListKey] = features;
+	        	symbolizeAndZoomToSelectedAOI(features);
+	        };
+	        queryTask.execute(query, callback, function(e){});
+	    }
+	    function symbolizeAndZoomToSelectedAOI(featureSet) {
+	    		    	
+	        var features = featureSet.features;
+	        
+	    	var symbol = new esri.symbol.SimpleFillSymbol(
+	    			esri.symbol.SimpleFillSymbol.STYLE_NULL,
+	    			new esri.symbol.SimpleLineSymbol(
+	    				esri.symbol.SimpleLineSymbol.STYLE_SOLID, 
+	    				new dojo.Color("#cb991c"), 1
+	    			), 
+	    			new dojo.Color([125,125,125,0.35])
+	    		);
+	        
+	    	var extent = features[0].geometry.getExtent();
+	        features[0].setSymbol(symbol);
+	        AppGlobals['Map'].graphics.add(features[0]);
+
+	        for(var i=1, il=features.length; i<il; i++) {
+	        	extent = extent.union(features[i].geometry.getExtent());
+	            features[i].setSymbol(symbol);
+	            AppGlobals['Map'].graphics.add(features[i]);
+	        }
+
+	        if(extent) {
+	        	AppGlobals['Map'].setExtent(extent.expand(1.5));
+	        }
+	    }
+	    function createSQLOrClause(columnName, listOfValue) {
+	    	
+	    	var sqlList = [];
+	    	dojo.forEach(listOfValue, function(value) {
+	    		sqlList.push(columnName + " = '" + value + "'");
+	    	});
+	    	return sqlList.join(" OR ");
+	    }
+	    function createCountryCollectionMap(countryCollectionJSON) {
+	    	
+	    	var obj = {};
+	    	dojo.forEach(countryCollectionJSON, function(countryCollectionObj) {
+	    		obj[countryCollectionObj['name']] = countryCollectionObj['ISOs'];
+	    		obj[countryCollectionObj['code']] = countryCollectionObj['ISOs'];
+	    	});
+	    	return obj;
+	    }
+	    function initMapZoomButtons() {
+	    	
+	    	initMapZoomButton(".esriSimpleSliderIncrementButton", "images/zoom_plus.png");
+	    	initMapZoomButton(".esriSimpleSliderDecrementButton", "images/zoom_minus.png");
+	    }
+
+	    function initMapZoomButton(zoomButtonClass, imageSrc) {
+	    	
+	    	var zoomButton = dojo.query(zoomButtonClass)[0];
+	    	zoomButton.innerHTML = "";
+	    	dojo.place('<img class="mapZoomButton" height=17 width=17 src="'+imageSrc+'"/>', zoomButton);
+	    }
+    </script>
+  </body>
+</html>
