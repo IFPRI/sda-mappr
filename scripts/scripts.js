@@ -2156,13 +2156,9 @@ function executeMarketShedTool(mapPoint) {
 	
 	_gaq.push(['_trackEvent', 'Tools', 'Market shed tool executed', "x = " + x + ", " + "y = " + y]);
 	
-	var postArgs = {
-		indicatorIds:indicatorIdsList,
-		wktGeometry:wktGeometry,
-		doMarketAnalysis: true 
-	};
-	
-	dojoXHRPost(AppConstants['CellValuesServiceURL'], postArgs, function(result) {
+	var indicatorArgs = "indicatorIds=" + indicatorIdsList.join("&indicatorIds=");
+	var args = indicatorArgs + "&wktGeometry="+wktGeometry+"&doMarketAnalysis=true";
+	dojoXHRGet(AppConstants['CellValuesServiceURL'] + "?" + args, function(result) {
 		loadMarketShedResults(result, uniqueID, layerObj, accordianTitleTop);
 	});
 }
@@ -3019,12 +3015,9 @@ function retrieveMarketShedTableResults(wktList, indicatorIdsList, resultList, u
 	}
 	
 	var wktGeom = wktList.pop();
-	var postArgs = {
-		"wktGeometry":wktGeom,
-		"indicatorIds":indicatorIdsList
-	};
-
-	dojoXHRPost(AppConstants['CellValuesServiceURL'], postArgs, function(result) {
+	var indicatorArgs = "indicatorIds=" + indicatorIdsList.join("&indicatorIds=");
+	var args = indicatorArgs + "&wktGeometry="+wktGeom;
+	dojoXHRGet(AppConstants['CellValuesServiceURL'] + "?" + args, function(result) {
 		
 		resultList.push(result);
 		retrieveMarketShedTableResults(wktList, indicatorIdsList, resultList, uniqueID, callback);
@@ -3406,7 +3399,7 @@ function executeDomainsTool(domain, isAdminTOPPR) {
 		var domainNamesList = tableResultObj["domainNamesList"];
 		var indicatorChartGroups = createDomainsChartObject(result, uniqueID);
 		
-		var accordianTitleTop = getNextAnalysisTitle() + ": " + isAdminTOPPR ? "TOP RANKINGS FOR " + domain:domain;
+		var accordianTitleTop = getNextAnalysisTitle() + ": " + (isAdminTOPPR ? "TOP RANKINGS FOR " + domain:domain);
 		
 		var uniqueLayerID = uniqueID + domain;
 		var layerObj = {'name':uniqueLayerID, 'id':uniqueID, 'dmsl':getUniqueGraphicsLayer(uniqueLayerID), 'label':domain};
@@ -3445,34 +3438,30 @@ function executeDomainsTool(domain, isAdminTOPPR) {
 		});
 	};
 	
-	var postArgsByCountry = {
-			
-		indicatorIds:indicatorIds,
-		domainIds:domainIdList,
-		countryIds:AppGlobals['RegionMegaDropDown']['ISO3List'],
-		returnGeometry:true
-	};
+	var indicatorArgs = "indicatorIds=" + indicatorIds.join("&indicatorIds=");
+	var domainArgs = "domainIds=" + domainIdList.join("&domainIds=");
+	var countryArgs = "countryIds=" + AppGlobals['RegionMegaDropDown']['ISO3List'].join("&countryIds=");
+	var args = indicatorArgs + "&" + domainArgs + "&" + countryArgs + "&returnGeometry=true";
 	
 	if(AppGlobals['RegionMegaDropDown']["RegionSelected"] && AppGlobals['RegionMegaDropDown']['SelectedRegionName'] !== "Sub-Saharan Africa") {
-		dojoXHRPost(AppConstants['CellValuesServiceURL'], postArgsByCountry, function(countryResults) {
+		dojoXHRGet(AppConstants['CellValuesServiceURL'] + "?" + args, function(countryResults) {
 			callback(countryResults);
 		});
 	}
 	else  {
-		
-		postArgsByCountry['countryIds'] = AppGlobals['ISO3sForSSA'];
-		postArgsByCountry['groupCountry'] = true;
-		postArgsByCountry['returnGeometry'] = false;
+				
+		var indicatorArgs = "indicatorIds=" + indicatorIds.join("&indicatorIds=");
+		var domainArgs = "domainIds=" + domainIdList.join("&domainIds=");
+		var countryArgs = "countryIds=" + AppGlobals['ISO3sForSSA'].join("&countryIds=");
+		var args = indicatorArgs + "&" + domainArgs + "&" + countryArgs + "&returnGeometry=false&groupCountry=true";
 
-		var postArgsAggregated = {
-			indicatorIds:indicatorIds,
-			domainIds:domainIdList,
-			countryIds:[],
-			returnGeometry:true
-		};
-		
-		dojoXHRPost(AppConstants['CellValuesServiceURL'], postArgsByCountry, function(countryResults) {
-			dojoXHRPost(AppConstants['CellValuesServiceURL'], postArgsAggregated, function(aggregatedResults) {
+		dojoXHRGet(AppConstants['CellValuesServiceURL'] + "?" + args, function(countryResults) {
+			
+			var indicatorArgs = "indicatorIds=" + indicatorIds.join("&indicatorIds=");
+			var domainArgs = "domainIds=" + domainIdList.join("&domainIds=");
+			var args = indicatorArgs + "&" + domainArgs + "&" + countryArgs + "&returnGeometry=true";
+			
+			dojoXHRGet(AppConstants['CellValuesServiceURL'] + "?" + args, function(aggregatedResults) {
 				callback(aggregatedResults, countryResults);
 			});
 		});
@@ -4757,14 +4746,11 @@ function executeSummarizeCustomAreaToolMain() {
 		var activeIndicators = getActiveLayers();
 		var indicatorIdsList = getListFromActiveLayers("indicatorId");
 				
-		var postArgs = {
-			"wktGeometry":wktGeom,
-			"indicatorIds":indicatorIdsList
-		};
-		
 		_gaq.push(['_trackEvent', 'Tools', 'Polygon tool executed', wktGeom]);
 		
-		dojoXHRPost(AppConstants['CellValuesServiceURL'], postArgs, function(result) {
+		var indicatorArgs = "indicatorIds=" + indicatorIdsList.join("&indicatorIds=");
+		var args = indicatorArgs + "&wktGeometry="+wktGeom;
+		dojoXHRGet(AppConstants['CellValuesServiceURL'] + "?" + args, function(result) {
 						
 			var indicatorDataList = result['ValueList'];
 			if(indicatorDataList.length === 0) {
@@ -5145,7 +5131,9 @@ function initFloatingLayerMenu() {
 	dojo.place('<div id="'+clearAllButtonId+'" class="floatingLayerMenuButton">Clear All</div>', headerNode);
 	dojo.place('<div id="'+quickSummaryStatsButtonID+'"class="floatingLayerMenuButton">Quick Statistics</div>', headerNode);
 	dojo.connect(dojo.byId(clearAllButtonId), "onclick", clearAllLayers);
-	dojo.connect(dojo.byId(quickSummaryStatsButtonID), "onclick", executeQuickCountryStats);
+	dojo.connect(dojo.byId(quickSummaryStatsButtonID), "onclick", function() {
+		executeQuickCountryStats();
+	});
 	
 	addLayerListHTMLSection("inertLayerSelectionContainer", "inertLayerSelectionTitle", "inertLayerSelectionList", "TOOL RESULT LAYERS", floatingCanvasContentPane);
 	addLayerListHTMLSection("activeLayerSelectionContainer", "activeLayerSelectionTitle", "activeSelectionLayerList", "ACTIVE LAYERS", floatingCanvasContentPane);
