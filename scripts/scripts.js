@@ -121,12 +121,6 @@ var AppConstants = {
 	"D3URL":"http://d3js.org/d3.v3.min.js",
 	"NoDataValue":"No Data",
 	"MapServiceURLList":[
-	    "http://"+serverRootURL+"/arcgis/rest/services/MapServices/cell_values_1/MapServer/",
-	    "http://"+serverRootURL+"/arcgis/rest/services/MapServices/cell_values_2/MapServer/",
-	    "http://"+serverRootURL+"/arcgis/rest/services/MapServices/cell_values_3/MapServer/",
-	    "http://"+serverRootURL+"/arcgis/rest/services/MapServices/cell_values_4/MapServer/",
-	    "http://"+serverRootURL+"/arcgis/rest/services/MapServices/cell_values_5/MapServer/",
-	    "http://"+serverRootURL+"/arcgis/rest/services/MapServices/cell_values_6/MapServer/",
 	    "http://"+serverRootURL+"/arcgis/rest/services/cell5m_socio/MapServer/",
 	    "http://"+serverRootURL+"/arcgis/rest/services/cell5m_main/MapServer/",
 	    "http://"+serverRootURL+"/arcgis/rest/services/cell5m_bio/MapServer/",
@@ -144,7 +138,6 @@ var AppConstants = {
 	"WorldSSAMask":"http://"+serverRootURL+"/ArcGIS/rest/services/MapServices/USIRServices/MapServer/",
 	"WorldSSAMaskOpacity":0.75,
 	"CountryISO3WebServiceURL":HCAPIRootURL + "/countries",
-	"DropprCellValuesServiceURL":HCAPIProdRootURL + "/cellvalues",
 	"CellValuesServiceURL":HCAPIProdRootURL + "/cellvalues",
 	"CountryCollectionsWebServiceURL":HCAPIRootURL + "/countrycollections",
 	"SelectedRegionFeaturesURL":"http://"+serverRootURL+"/arcgis/rest/services/MapServices/USIRServices/MapServer/8",
@@ -162,7 +155,7 @@ var AppConstants = {
 		"SummarizableLayerInfo":"These layers can be aggragated by the tools",
 		"InertLayerInfo":"These layers cannot be used in any tool analysis and are for display only."
 	},
-	'CellValuesTOPPRURL':'http://dev.harvestchoice.org/harvestchoiceapi/0.3/api/toppr'
+	'CellValuesTOPPRURL':HCAPIProdRootURL + "/toppr",
 };
 
 var HCPrintObj = null;
@@ -302,11 +295,10 @@ function initAndShowInstructionsLandingPage() {
 
 function showInstructionsPage() {
 	
-	var landingPageNode = dojo.byId("instructionLandingPage");	
-	dojo.style(landingPageNode, "display", "block");
-	
+	var landingPageNode = dojo.byId("instructionLandingPage");
+	landingPageNode.style("display", "block");
 	dojo.connect(dojo.byId("instructionPageExitButton"), "onclick", function() {
-		dojo.style(landingPageNode, "display", "none");
+		landingPageNode.style("display", "none");
 	});
 }
 
@@ -495,26 +487,17 @@ function loadMapFromPermalinkURL(args) {
 
 function showFullscreenContent(contentId, onShowCallback) {
 	
-	dojo.style(dojo.byId("fullscreenContentDiv"), "display", "block");
-	dojo.forEach(dojo.query(".contentContainer"), function(node) {
-		dojo.style(dojo.byId(node.id), "display", "none");
-	});
-	dojo.style(dojo.byId(contentId), "display", "block");
+	$("#fullscreenContentDiv").show();
+	$(".contentContainer").hide();
+	$("#"+contentId).show();
 	onShowCallback();
-	dojo.connect(dojo.byId("fullscreenContentContainerCloseButton"), "onclick", hideFullscreenContent);
+	$("#fullscreenContentContainerCloseButton").click(hideFullscreenContent);
 }
 
 function hideFullscreenContent() {
 	
-	hideAllContentContainers();
-	dojo.style(dojo.byId("fullscreenContentDiv"), "display", "none");
-}
-
-function hideAllContentContainers() {
-	
-	dojo.forEach(dojo.query(".contentContainer"), function(node) {
-		dojo.style(dojo.byId(node.id), "display", "none");
-	});
+	$(".contentContainer").hide();
+	$("#fullscreenContentDiv").hide();
 }
 
 function setDefaultGeographicSelection() {
@@ -527,28 +510,26 @@ function clickRegion(name) {
 
 function initHeader() {
 	
-	dojo.style(dojo.byId("regionDropDownSelectArrowImg"), "display", "block");
-	dojo.connect(dojo.byId("logo"), "onclick", resetMap);
+	$("#regionDropDownSelectArrowImg").show();
+	$("#logo").click(resetMap);
+	
 	initMegaMenuDropDown();
 	initDropDownMenuButtons();
 	initRegionMenuDropDown();
 	initCountryMenuDropDown();
 		
 	createToolTipDialog("permalinkButtonImg", AppConstants['ToolTipDescriptions']['PermalinkLink']);
-	dojo.connect(dojo.byId("permalinkButtonImg"), "onclick", function() {
+	$("#permalinkButtonImg").click(function() {
 		executeHeaderButtonOnClick(function() {
 			showFullscreenContent("permalinkContainer", loadPermaLinkHTML);
 		});
 	});
-
 	createToolTipDialog("tableMakerButtonImg", AppConstants['ToolTipDescriptions']['TableMakerLink']);
-	dojo.connect(dojo.byId("tableMakerButton"), "onclick", function() {
+	$("#tableMakerButton").click(function() {
 		executeHeaderButtonOnClick(launchTableMakerWithArguments);
-	});	
-	
-	dojo.connect(dojo.byId("exportButtonImg"), "onclick", function(){
-		HCPrintObj.showExportMenu();
 	});
+	$("#exportButtonImg").click(HCPrintObj.showExportMenu);
+
 	initAboutAppSection();
 }
 
@@ -595,9 +576,7 @@ function launchTableMakerWithArguments() {
 	if(indicatorIdArgs.length > 0) {
 		var queryStringArgs = [indicatorIdArgs].join("&");
 		var url = AppConstants['TableMakerURL'] + "?" + queryStringArgs;
-		console.log(url);
 		url = url.replace(/&amp;/g, '&');		
-		console.log(url);
 		window.open(url, "_blank");
 	}
 }
@@ -605,17 +584,18 @@ function launchTableMakerWithArguments() {
 function initAboutAppSection() {
 	
 	createToolTipDialog("infoButtonImg", AppConstants['ToolTipDescriptions']['InfoLink']);
-	dojo.connect(dojo.byId("infoButtonImg"), "onclick", function() {
-		
-		dojo.style(dojo.byId("aboutAppFullScreenContainer"), "display", "block");
+	
+	$("#infoButtonImg").click(function() {
+		$("#aboutAppFullScreenContainer").show();
 		populateFeedbackLink();
-	});	
-	dojo.connect(dojo.byId("exitAboutAppImg"), "onclick", function() {
-		
+	});
+
+	$("#exitAboutAppImg").click(function() {
 		$(".aboutAppAccordianRowContent").slideUp({duration:300});
 		updateAllAboutAccoridanArrows();
-		dojo.style(dojo.byId("aboutAppFullScreenContainer"), "display", "none");
+		$("#aboutAppFullScreenContainer").hide();
 	});
+
 	initAboutAppAccordianRow("aboutAccordianImg", "aboutAppRow");
 	initAboutAppAccordianRow("tutorialAccordianImg", "tutorialAppRow");
 	initAboutAppAccordianRow("contactAccordianImg", "contactAppRow");
@@ -732,8 +712,7 @@ function toggleDivTitleDisplay(titleDivID, divToQuery, onVisibleCallback, onInVi
 }
 
 function initMegaMenuDropDown() {
-		
-	dojo.connect(dojo.byId("regionMegaDropDownButton"), "onclick", function() {
+	$("#regionMegaDropDownButton").click(function() {
 		dojo.style(dojo.byId("regionMegaDropDownDiv"), "height") > 0 ? closeMegaRegionDropDown():openMegaRegionDropDown();
 	});
 }
@@ -1074,7 +1053,6 @@ function initLayerMenu() {
 	addLayerMenuOpenEvent("demographicsIconDiv", "Demographics", layerContainerDivNode);
 	addLayerMenuOpenEvent("farmingSystemsIconDiv", "Farming System", layerContainerDivNode);
 	addLayerMenuOpenEvent("marketsIconDiv", "Markets", layerContainerDivNode);
-	addLayerMenuOpenEvent("domainsIconDiv", "Domains", layerContainerDivNode, true);
 }
 
 function openTopicFromQueryString(layerMenuCategory, topics) {
@@ -1114,7 +1092,7 @@ function replaceSpecialCharactersForHTMLDivID(s) {
 	return s;
 };
 
-function addLayerMenuOpenEvent(layerGroupIconDiv, layerGroupCategoryName, layerContainerDivNode, isDomainDrawer) {
+function addLayerMenuOpenEvent(layerGroupIconDiv, layerGroupCategoryName, layerContainerDivNode) {
 	
 	dojo.connect(dojo.byId(layerGroupIconDiv), "onclick", function(event) {
 				
@@ -1131,7 +1109,7 @@ function addLayerMenuOpenEvent(layerGroupIconDiv, layerGroupCategoryName, layerC
 		if(!dojo.byId(parentDivName)) {
 
 			dojo.place('<div class="layerSlideOut" id="'+parentDivName+'"></div>', layerContainerDivNode);
-			(isDomainDrawer ? createMenuHTMLForDomainCategory:createMenuHTMLForCategory)(layerGroupCategoryName, parentDivName);
+			createMenuHTMLForCategory(layerGroupCategoryName, parentDivName);
 			AppGlobals['LayerMenuHTMLNodes'].push(dojo.byId(parentDivName));
 		}
 		
@@ -1141,70 +1119,6 @@ function addLayerMenuOpenEvent(layerGroupIconDiv, layerGroupCategoryName, layerC
 		toggleLayerHTMLVisibility(dojo.byId(parentDivName));
 		openLayerMenu(layerGroupIconDiv);		
 	});
-}
-
-function createMenuHTMLForDomainCategory(categoryName, parentDivId) {
-	
-	var categoryDivNode = dojo.byId(parentDivId);
-	
-	for(var DomainName in AppGlobals['DomainsInfo']) {
-		
-		(function(){
-			
-			var domainInfo = AppGlobals['DomainsInfo'][DomainName];		
-			var indicatorObj = domainInfo['DomainAreas'][0];
-			var ColumnName = indicatorObj['ColumnName'];
-			
-			if(!AppGlobals['MapServiceLayers'][ColumnName]) {
-				return;
-			}
-			
-			var layerTitle = domainInfo['Name'];
-	
-			var layerNameForID = layerTitle.replace("(","").replace(")", "").replace("-", "").replace(" ", "");
-			var uid = layerNameForID + indicatorObj['Id'];
-			var layerDivID = uid + "_layerMenuDiv";
-			var checkBoxDivID = uid + "_checkBoxDiv";
-			var infoButtonDivID = uid + "_layerMenuInfo";
-			var downloadButtonID = uid + "_layerMenuDownload";
-			
-			var checkBoxWidget = dijit.byId(checkBoxDivID);
-			if(checkBoxWidget) {
-				checkBoxWidget.destroy();
-			}
-			
-			var layerHTML = 
-			'<div class="layerMenuItem">' + 
-				'<div id="'+checkBoxDivID+'"></div>' + 
-				'<div class="layerElementStyle" id="'+layerDivID+'">'+layerTitle+'</div>' + 
-				'<div id="'+infoButtonDivID+'" class="activeLayerInfoButton"><img width=14 height=13 src="images/layer_info.png"/></div>' +
-				'<div id="'+downloadButtonID+'" class="activeLayerDownloadButton"><img width=13 height=13 src="images/icon_download.png"/></div>' +
-			'</div>';
-			dojo.place(layerHTML, categoryDivNode);
-			
-			dojo.connect(dojo.byId(downloadButtonID), "onclick", function() {
-				window.open(AppConstants['LayerDownloadBaseURL'] + ColumnName + ".zip", ColumnName);
-			});
-			
-			
-			var toolTipInnerHTML = createLayerToolTipHTML(indicatorObj, layerTitle);
-			createToolTipDialog(infoButtonDivID, toolTipInnerHTML);
-			createToolTipDialog(layerDivID, layerTitle);
-			createToolTipDialog(downloadButtonID, AppConstants['ToolTipDescriptions']['DownloadLinks']);
-			
-			var checkBoxName = uid + "_checkbox";
-			new dijit.form.CheckBox({
-		        name:checkBoxName,
-		        value:false,
-		        checked:false,
-		        onChange:function(value) {
-		        	if(!AppGlobals['LayerIsLoading']) {
-			        	onLayerCheckboxChange(indicatorObj, value);
-		        	}
-		        }
-		    }, checkBoxDivID);
-		})();
-	}
 }
 
 function removeAllLayerIconActiveSelectionStates() {
@@ -1223,23 +1137,20 @@ function toggleLayerHTMLVisibility(visibleNode) {
 }
 
 function removeAllLayerIconActiveSelections() {
-	
-	dojo.forEach(dojo.query(".activeSubMenuSelection"), function(node) {
-		dojo.removeClass(dojo.byId(node.id), "activeSubMenuSelection");
-	});
+	$(".activeSubMenuSelection").removeClass("activeSubMenuSelection");
 }
 
 function openLayerMenu(layerGroupIconDiv, callback) {
 	
 	removeAllLayerIconActiveSelections();
-	dojo.addClass(dojo.byId(layerGroupIconDiv), "activeSubMenuSelection");
-	animateLayerMenu(0, 255, callback);
+	$("#"+layerGroupIconDiv).addClass("activeSubMenuSelection");	
+	animateLayerMenu(0, 280, callback);
 }
 
 function closeLayerMenu() {
 
 	removeAllLayerIconActiveSelectionStates();
-	animateLayerMenu(-243, 10, function() {
+	animateLayerMenu(-276, 10, function() {
 		removeAllLayerIconActiveSelections();
 	});
 }
@@ -2976,6 +2887,10 @@ function createMarketShedTable(tableDiv, uniqueID) {
 
 function getIndicatorValueForAnalyticDisplay(columnName, value) {
 	
+	if(columnName === "CELL5M") {
+		return parseInt(value);
+	}
+	
 	if(isNaN(parseFloat(value))) {
 		return "No Data";
 	}
@@ -3419,7 +3334,7 @@ function executeDomainsTool(domain, isAdminTOPPR) {
 		onToolResult(uniqueID, accordianTitleTop, accordianTitleBottom, onToolResultCloseFunction, function(tablesDiv, chartsDiv, callback) {
 			
 			if(isAdminTOPPR === true) {
-				createAdminTOPPRDomainsTable(tablesDiv, uniqueID, domainNamesList, tableRows);
+				createAdminTOPPRDomainsTable(tablesDiv, uniqueID, domainNamesList, tableRows, domain);
 				$("#"+chartsDiv).parent().hide();
 				callback(tablesDiv);
 			}
@@ -3468,7 +3383,7 @@ function executeDomainsTool(domain, isAdminTOPPR) {
 	}
 }
 
-function createAdminTOPPRDomainsTable(tablesDivID, uniqueID, domainNamesList, tableRows) {
+function createAdminTOPPRDomainsTable(tablesDivID, uniqueID, domainNamesList, tableRows, domain) {
 
 	var indicatorCodeToValueObjs = {};
 	tableRows.forEach(function(obj) {
@@ -3498,10 +3413,10 @@ function createAdminTOPPRDomainsTable(tablesDivID, uniqueID, domainNamesList, ta
 		rankObjs[k]['top'] = indicatorCodeToValueObjs[k]['values'].slice(0, topN);
 		rankObjs[k]['bottom'] = indicatorCodeToValueObjs[k]['values'].slice(numberOfValues - topN, numberOfValues);
 	}
-	createRankTable(rankObjs, tablesDivID, topN);
+	createRankTable(rankObjs, tablesDivID, topN, domain);
 }
 
-function createRankTable(rankObjs, tablesDivID, topN) {
+function createRankTable(rankObjs, tablesDivID, topN, domain) {
 	
 	for(var indicatorCode in rankObjs) {
 		
@@ -3511,13 +3426,13 @@ function createRankTable(rankObjs, tablesDivID, topN) {
 		var rankTableSectionNode = $('<div>').addClass("summaryRankTableSection").appendTo($("#"+tablesDivID));
 		var label = AppGlobals['Layers'][indicatorCode]['label'];
 		$('<div>').html("Rankings for " + label).addClass("summaryRankTableTitle").appendTo(rankTableSectionNode);
-		createRankTableHTML(rankTableSectionNode, topRanked, "Top " + topN, indicatorCode);
+		createRankTableHTML(rankTableSectionNode, topRanked, "Top " + topN, indicatorCode, domain);
 		bottomRanked.reverse();
-		createRankTableHTML(rankTableSectionNode, bottomRanked, "Bottom " + topN, indicatorCode);
+		createRankTableHTML(rankTableSectionNode, bottomRanked, "Bottom " + topN, indicatorCode, domain);
 	}
 }
 
-function createRankTableHTML(rankTableSectionNode, rankedObjs, label, indicatorCode) {
+function createRankTableHTML(rankTableSectionNode, rankedObjs, label, indicatorCode, domain) {
 	
 	var tableDivWrapperDivID = getUniqueID() + "_tableDivWrapper";
 	var tableDivWrapper = $('<div>').addClass("summaryRankTable").attr('id', tableDivWrapperDivID);
@@ -3526,13 +3441,22 @@ function createRankTableHTML(rankTableSectionNode, rankedObjs, label, indicatorC
 	var tableDiv = 
 	'<table id="'+tableID+'" cellpadding="0" cellspacing="0">' +
 		'<thead>' + 
-			'<tr><th>Rank</th><th>Country</th><th>Value</th></tr>' + 
+			'<tr><th>Rank</th><th>'+domain+'</th><th>Value</th></tr>' + 
 		'</thead>' +
 		'<tbody>';
 	
 	rankedObjs.forEach(function(obj, idx) {
-		var countryName = AppGlobals['ISO3CountryMap'][obj['iso3']];
-		tableDiv += '<tr><td>'+(idx + 1)+'</td><td>'+countryName+'</td><td>'+obj['value']+'</td></tr>';
+		var value = "";
+		if(obj['subNatUnit']) {
+			value = obj['subNatUnit'];
+		}
+		else if(obj['iso3']) {
+			 value = AppGlobals['ISO3CountryMap'][obj['iso3']];
+		}
+		else {
+			value = obj['name'];
+		}
+		tableDiv += '<tr><td>'+(idx + 1)+'</td><td>'+value+'</td><td>'+obj['value']+'</td></tr>';
 	});
 		
 	tableDiv += '</tbody></table>';
@@ -3993,6 +3917,7 @@ function createDomainsTableObject(result, uniqueID, hasCountryResults) {
 	var indicatorColumnIndicies = {};
 	var indicatorColumnNames = getListFromActiveLayers("name");
 	var ISO3ColumnIndex = null;
+	var subNatColumnIndex = null;
 	
 	dojo.forEach(result['ColumnList'], function(obj) {
 		
@@ -4012,8 +3937,12 @@ function createDomainsTableObject(result, uniqueID, hasCountryResults) {
 			domainColumnIndicies[columnName] = columnIndex;
 			domainNamesList.push(columnName);
 		}
+		
 		if(columnName.indexOf("ISO3") !== -1) {
 			ISO3ColumnIndex = columnIndex;
+		}
+		else if(columnName.indexOf("subNatUnit") !== -1) {
+			subNatColumnIndex = columnIndex;
 		}
 	});
 	
@@ -4051,6 +3980,9 @@ function createDomainsTableObject(result, uniqueID, hasCountryResults) {
 			
 			if(ISO3ColumnIndex) {
 				row['iso3'] = obj[ISO3ColumnIndex];
+			}
+			else if(subNatColumnIndex) {
+				row['subNatUnit'] = obj[subNatColumnIndex];
 			}
 			
 			rowObj['indicatorValues'].push(row);
@@ -4214,7 +4146,6 @@ function convertWKTToGeometry(wktString) {
         var wkt = new Wkt.Wkt();
         wkt.read(wktString);
         var polygon = wkt.toObject({spatialReference:{wkid:4326},editable:true});
-        
     	return new esri.geometry.geographicToWebMercator(polygon);    	
     }
 }
@@ -4268,6 +4199,8 @@ function createDomainsTable(tableDiv, uniqueID, domainNamesList, rows, justTable
 	};
 	
 	var colorPickerIDsList = [];
+	
+	var isCountries = domainNamesList.length === 1 && domainNamesList[0] == "ISO3";
 	 
 	var createTableRowsFunc = function() {
 		
@@ -4287,7 +4220,11 @@ function createDomainsTable(tableDiv, uniqueID, domainNamesList, rows, justTable
 			html += '<td id="'+colorSwatchID+'" class="colorSwatch" style="background:'+hexColorString+'"></td>';
 			
 			dojo.forEach(obj['domainValues'], function(domainObj) {
-				html += '<td>'+domainObj['value']+'</td>'; 
+				var value = domainObj['value'];
+				if(isCountries) {
+					value = AppGlobals['ISO3CountryMap'][value];
+				}
+				html += '<td>'+value+'</td>'; 
 			});
 			
 			dojo.forEach(obj['indicatorValues'], function(valueObj) {
@@ -4487,7 +4424,7 @@ function initDomainsDropDown(dropDownValues) {
 		var thumbID = "dt"+ getUniqueID();
 		var thumbHTML = 
 		'<div class="domainThumbnailContainer">' +
-			'<div id="'+thumbID+'" class="domainThumbnailImage"></div>' +
+			'<img id="'+thumbID+'" class="domainThumbnailImage" />' +
 			'<div class="domainThumbnailCaption">'+domain+'</div>' +
 		'</div>';
 		dojo.place(thumbHTML, rowNode);
@@ -4500,6 +4437,9 @@ function initDomainsDropDown(dropDownValues) {
 		dojo.connect(thumbNode, "onmouseout", function() {
 			setDomainsDropDown();
 		});
+		
+		var  imageUrl = "images/"+domain+".png";
+		$("#"+thumbID).attr('src', imageUrl);
 		
 		dojo.connect(thumbNode, "onclick", function() {
 			
@@ -4830,7 +4770,10 @@ function executeSummarizeLocationTool(mapPoint) {
 	
 	_gaq.push(['_trackEvent', 'Tools', 'Droppr tool executed', "x = " + x + ", " + "y = " + y]);
 	
-	dojoXHRPost(AppConstants['DropprCellValuesServiceURL'], {"wktGeometry":"POINT("+x+" "+y+")"}, function(result) {
+	var indicatorIdsList = getListFromActiveLayers("indicatorId");
+	var indicatorArgs = "indicatorIds=" + indicatorIdsList.join("&indicatorIds=");
+	var args = indicatorArgs + "&wktGeometry=POINT("+x+" "+y+")";
+	dojoXHRGet(AppConstants['CellValuesServiceURL'] + "?" + args, function(result) {
 				
 		var indicatorDataList = result['ValueList'];		
 		if(indicatorDataList.length === 0) {
@@ -4847,7 +4790,7 @@ function executeSummarizeLocationTool(mapPoint) {
 				AppGlobals['CustomLocationTool']['MarkerNumberCell5MValueCache'][markerNumber] = {};
 			}
 			var columnName = obj['ColumnName'];
-			var indicatorValue = indicatorDataList[obj['ColumnIndex']];
+			var indicatorValue = indicatorDataList[parseInt(obj['ColumnIndex'])-1];
 			indicatorValue = getIndicatorValueForAnalyticDisplay(columnName, indicatorValue);		
 			AppGlobals['CustomLocationTool']['MarkerNumberCell5MValueCache'][markerNumber][columnName] = indicatorValue;
 		});
@@ -4909,7 +4852,7 @@ function createDropperTable(tableDiv, activeIndicators) {
 		    	'<td>'+markerNumber+'</td>' +
 		    	'<td>'+obj['x']+'</td>' +
 		    	'<td>'+obj['y']+'</td>' +
-		    	'<td>'+parseInt(obj['cell5m'])+'</td>';
+		    	'<td>'+obj['cell5m']+'</td>';
 
 	    	dojo.forEach(activeIndicators, function(indicator) {
 	    		
@@ -5106,7 +5049,7 @@ function initFloatingLayerMenu() {
 	});
 	
 	var legendDivInfo = dojo.position(dojo.byId("legendsButton"));
-	var startX = legendDivInfo.x -120;
+	var startX = legendDivInfo.x - 110;
 	var startY = legendDivInfo.y - 339 - dojo.position(dojo.byId("bottomWrapper")).h - legendDivInfo.h - 10;
 	
 	AppGlobals['ConstrainedFloatingPane'] = new ConstrainedFloatingPane({
@@ -5240,18 +5183,6 @@ function dojoXHRGet(url, callback) {
 	    },
 	    error:onAppError
 	});
-}
-
-function dojoXHRPost(url, params, callback) {
-
-	dojo.xhrPost({
-	    url:url,
-	    postData:dojo.toJson(params),
-	    contentType:"application/json; charset=utf-8",
-	    handleAs:"json",
-	    load:callback,
-	    error:onAppError
-	});	
 }
 
 function onAppError(error, url, lineNumber) {

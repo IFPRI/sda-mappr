@@ -324,10 +324,6 @@
     				<img id="investmentsIconImg" height=33 width=32 src="images/investments.png"/>
     			  	<div class="layerGroupIconLabel">PRODUCTIVITY</div>
     			</div>
-    			<div id="domainsIconDiv" class="layerGroupIcon">
-    				<img id="domainsIconImg" height=37 width=40 src="images/institutions.png"/>
-    			  	<div class="layerGroupIconLabel">DOMAINS</div>
-    			</div>
 	 		</div>
   			<div id="floatingDivDocks">
   			    <div id="floatingSelectedLayersDivDock"></div>
@@ -456,7 +452,7 @@
 			  		<div class="nubMenuItem">
 			  			<div id="summarizeLocationButton" class="nubMenuItemButton">
 	  						<img id="summarizeLocationImg" class="nubMenuItemIcon" height=26 width=28 src="images/summarize_location.png">
-	  						<div class="nubMenuItemTitle toolsMenuItemTitle">SUMMARIZE A CUSTOM AREA</div>
+	  						<div class="nubMenuItemTitle toolsMenuItemTitle">POINT AND AREA SUMMARY</div>
 	  					</div>
 	  					<div id="summarizeLocationContainerArrow"></div>
 			  		</div>
@@ -464,7 +460,7 @@
 			  		<div class="nubMenuItem">			  		 	
 			  		 	<div id="summarizeDomainButton" class="nubMenuItemButton">
 			  		 		<img  class="nubMenuItemIcon" id="summarizeDomainImg" height=26 width=27 src="images/summarize_domain.png">
-	  						<div id="domainMenuItemTitle" class="nubMenuItemTitle toolsMenuItemTitle">SUMMARIZE BY DOMAIN</div>
+	  						<div id="domainMenuItemTitle" class="nubMenuItemTitle toolsMenuItemTitle">DOMAIN SUMMARY</div>
 	  					</div>
  						<div id="summarizeDomainContainerArrow"></div>
 			  		</div>
@@ -472,7 +468,7 @@
 			  		<div class="nubMenuItem">			  		 	
 			  		 	<div id="summarizeMarketButton" class="nubMenuItemButton">
 	  						<img  class="nubMenuItemIcon" id="summarizeMarketImg" height=26 width=34 src="images/summarize_market.png">
-	  						<div id="marketShedMenuItemTitle" class="nubMenuItemTitle toolsMenuItemTitle">SUMMARIZE A MARKET SHED</div>
+	  						<div id="marketShedMenuItemTitle" class="nubMenuItemTitle toolsMenuItemTitle">MARKET SHED SUMMARY</div>
 	  					</div>
  						<div id="summarizeMarketContainerArrow"></div>
 			  		</div>		
@@ -482,7 +478,7 @@
 			  		<div class="nubMenuItem">			  		 	
 			  		 	<div id="summarizeTopAdminButton" class="nubMenuItemButton">
 	  						<img  class="nubMenuItemIcon" id="topAdminImg" height=26 width=34 src="images/summarize_admin.png">
-	  						<div id="topAdminMenuItemTitle" class="nubMenuItemTitle toolsMenuItemTitle">SUMMARIZE BY TOP 5 ADMIN UNITS</div>
+	  						<div id="topAdminMenuItemTitle" class="nubMenuItemTitle toolsMenuItemTitle">TOP 5 AREAS</div>
 	  					</div>
  						<div id="summarizeTopAdminContainerArrow"></div>
 			  		</div>	
@@ -491,7 +487,7 @@
 			  		<div class="nubMenuItem">			  		 	
 			  		 	<div id="summarizeTopCropButton" class="nubMenuItemButton">
 	  						<img  class="nubMenuItemIcon" id="topCropImg" height=26 width=34 src="images/summarize_crop.png">
-	  						<div id="topCropMenuItemTitle" class="nubMenuItemTitle toolsMenuItemTitle">SUMMARIZE BY TOP 5 CROP</div>
+	  						<div id="topCropMenuItemTitle" class="nubMenuItemTitle toolsMenuItemTitle">TOP 5 CROPS</div>
 	  					</div>
  						<div id="summarizeTopCropContainerArrow"></div>
 			  		</div>	
@@ -501,7 +497,7 @@
 			  	<div id="summarizeLocationContainer" class="nubMenuContainerItem toolsNubMenuContainer">
 	  				<div class="menuItemContent">
 	  				
-	  					<div id="summarizeLocationTitle">Please choose one of the two ways to summarize:</div>
+	  					<div id="summarizeLocationTitle">Please choose a point or area summary.</div>
 	  					
 	  					<div id="summarizeLocationDiv" class="summarizeLocDiv">
 	  						<div class="sumLocBlock">
@@ -532,8 +528,7 @@
  				<div id="summarizeDomainContainer" class="nubMenuContainerItem toolsNubMenuContainer">
  					<div class="menuItemContent">
 						<div id="summarizeDomainTopDesc">
-							Select a set of geographical domains from the menu of options below.
-							A table will then appear summarizing your selected indicators grouped by domain class.
+							Select one of the categorical (domain) layers below across which to produce zonal statistics for the selected indicators.
 						</div>
 						<div id="summarizeDomainThumbContainer"></div>
  						<div id="summarizeDomainDropdownDiv">
@@ -547,13 +542,12 @@
  					
  				<div id="summarizeMarketContainer" class="nubMenuContainerItem toolsNubMenuContainer">
  					<div id="marketShedDescription" class="menuItemContent">
- 						<div id="marketShedDesc"> 
-	 						Click on the map to calculate and
-							display travel times from the selected location. Your selected
-							indicators are then summarized by 0-2, 2-4, 4-6, and 6-8 hour
-							travel bands. See the <a id="agMarketFinderLink" target="_blank" href="http://www.marketfinder.info/">AgMarketFinder</a> website to further explore
-							the capabilities of this tool.
- 						</div>
+ 						<div id="marketShedDesc">Select a point on the map from which to
+							generate travel time zones. Zonal statistics are shown for the
+							selected indicators within areas under 2 hours travel time to the
+							nearest market, between 2 to 4 hours, 4 to 6 hours, and 6 to 8
+							hours. Visit the <a id="agMarketFinderLink" target="_blank" href="http://www.marketfinder.info/">AgMarketFinder</a> website to further explore the
+							capabilities of this tool.</div>
 	 					<div id="executeSummarizeMarketButton" class="sumLocButton">GO</div>
 	 					<div id="summarizeMarketShedMessage" class="errorMessage"></div>
 					</div>
@@ -562,7 +556,7 @@
  				
  				 <div id="summarizeTopAdminContainer" class="nubMenuContainerItem toolsNubMenuContainer">
  					<div class="menuItemContent">
- 						<div class="toolDescription">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+ 						<div class="toolDescription">This tool returns the top/bottom 5 countries, or provinces within countries, for each of the selected indicators (over your chosen study area).</div>
 	 					<div id="executeAdminTOPPRButton" class="sumLocButton">GO</div>
 	  					<div id="summarizeTopAdminMessage" class="errorMessage"></div>
 					</div>
@@ -570,7 +564,7 @@
  				
  				<div id="summarizeTopCropContainer" class="nubMenuContainerItem toolsNubMenuContainer">
  					<div class="menuItemContent">
-	  					<div id="summarizeLocationTitle">Please choose one of the two ways to summarize:</div>
+	  					<div id="summarizeLocationTitle">This tool returns the top/bottom 5 commodities ranked by harvested area and production value (over your chosen study area).</div>
 	  					
 	  					<div id="summarizeByAdminUnitDiv" class="summarizeLocDiv">
 	  						<div class="sumLocBlock">

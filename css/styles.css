@@ -19,7 +19,7 @@
 
 .summaryRankTableSection {
 	margin-bottom:24px;
-	height:220px;
+	height:240px;
 	clear:both;
 }
 
@@ -415,6 +415,7 @@ font-size: 12px !important;
 	vertical-align: middle;
 	text-align: right;
 	font-size:14px;
+	padding-left:18px;
 }
 
 
@@ -1551,10 +1552,10 @@ margin-top: 5px;
 #layerMenuSlideOutDiv {
 	position: absolute;
 	top: 0;
-	left: -243px;
+	left: -276px;
 	background: #fff;
 	height: 100%;
-	width:225px;
+	width:275px;
 	z-index: 1000;
 	overflow-y: auto;
 	overflow-x: hidden;
@@ -2401,11 +2402,11 @@ height: 13px;
 
 .layerElementStyle {
 	color:#444035;
-	font-size: 12px;
+	font-size: 11px;
 	overflow: hidden;
 	float: left;
 	margin-left:6px;
-	max-width: 111px;
+	max-width: 165px;
 	height: 14px;
 	
 	text-overflow: ellipsis;
