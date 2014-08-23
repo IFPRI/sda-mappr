@@ -1,0 +1,46 @@
+#contentToggleContainer {
+	background:#767563;	
+}
+
+.level3Label, 
+.levelNLabel, 
+.backToListButton, 
+.layerMenuIconDivSelected, 
+.mapButtonSelected, 
+.mapContextToolButton:hover, 
+.mapContextToolButtonSelected, 
+.mapButton:hover,
+#executeImageExportButton {
+	color:#e1a100 !important;
+}
+
+.backToListArrow {
+	border-right: 5px solid #e1a100 !important;
+}
+
+.basemapRow:hover, .basemapRowSelected {
+	color: #e1a100 !important;
+}
+
+.basemapThumb:hover, .basemapThumbSelected {
+	border: 1px solid #e1a100 !important;
+}
+
+.latestLabel, .layerEntryLatestControl {
+	display:none;
+}
+
+.layerEntryTopControls {
+	width:275px;
+}
+.layerEntryLabel {
+	width:205px;
+}
+
+.mapLayerListEntryOpacitySliderContainer {
+	width:255px;
+}
+
+.mapLayerListEntryOpacitySlider {
+	width:195px;
+}
