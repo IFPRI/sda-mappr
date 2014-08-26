@@ -7,9 +7,9 @@ main();
 
 function main() {
 	
-//	processLayerMenuObject();
+	processLayerMenuObject();
 //	createIndicatorLegendJSONFiles();
-	createIndicatorMetaDataJSONFiles();
+//	createIndicatorMetaDataJSONFiles();
 }
 
 function createIndicatorMetaDataJSONFiles() {
@@ -70,6 +70,13 @@ function processLayerMenuObject() {
                 
 	getASAppConfig(client, function(rows) {
 		var layerMenuJSON = getFormattedLayersObject(rows);
+		layerMenuJSON['category1ToFontIcon'] = {
+    		'Administrative':'',
+    		'Agroecology':'',
+    		'Demographics':'',
+    		'Farming System':'',
+   			'Markets':'',
+    	};
 		writeResultFileToDisk('mappr', layerMenuJSON, function(data) {
 			client.end();
 		});
@@ -87,18 +94,20 @@ function getASAppConfig(client, callback) {
 
 function getFormattedLayersObject(rows) {
 	
+	var updatedRows = [];
 	rows.forEach(function(obj) {
-		obj['isTimeConstantMBTiles'] = true;
-		obj['MBTileEndPointName'] = obj['ln'];
-		obj['g1'] = obj['cat1'];
-		obj['g2'] = obj['cat2'];
-		obj['g3'] = obj['cat3'];
-		delete obj['cat1'];
-		delete obj['cat2'];
-		delete obj['cat3'];
+		var rowObj = {};
+		rowObj['isTimeConstant'] = true;
+		rowObj['MBTilesEndPoint'] = obj['ln'];
+		rowObj['id'] = obj['ln'];
+		rowObj['label'] = obj['ll'];
+		rowObj['g1'] = obj['cat1'];
+		rowObj['g2'] = obj['cat2'];
+		rowObj['g3'] = obj['cat3'];
+		updatedRows.push(rowObj)
 	});
 	
-	return createLayerMenuObject(rows);
+	return createLayerMenuObject(updatedRows);
 }
 
 function createLayerMenuObject(indicatorObjs) {

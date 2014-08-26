@@ -1,6 +1,7 @@
 var HOST = 'localhost:3000';
 var DATA_FOLDER = 'data';
 var DATA = 'mappr';
+//var HOST = '54.191.215.52';
 var RASTER_IDENTIFY_HOST = 'localhost:3001';
 
 var mapController = null;
