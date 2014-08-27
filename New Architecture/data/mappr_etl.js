@@ -3,13 +3,19 @@ var express = require("/Users/D/Documents/githubclones/PGRestAPI/node_modules/ex
 var conString = "postgres://D:''@localhost/World Spatial";
 var fs = require('fs');
 
+var prefix = 'gha_';
+
+//var SSACenter = [-5.222246513227375, 27.773437499999996];
+//var SSAZoom = 4;
+//var SSAMaxZoom = 6;
+
 main();
 
 function main() {
 	
-	processLayerMenuObject();
+//	processLayerMenuObject();
 //	createIndicatorLegendJSONFiles();
-//	createIndicatorMetaDataJSONFiles();
+	createIndicatorMetaDataJSONFiles();
 }
 
 function createIndicatorMetaDataJSONFiles() {
@@ -17,16 +23,15 @@ function createIndicatorMetaDataJSONFiles() {
     var client = new pg.Client(conString);
     client.connect();
    	  
-    client.query("SELECT varcode, vardesc, sources FROM indicator_metadata WHERE isDomain = 'False'", function(error, result) {
+    client.query("SELECT varcode, vardesc, sources FROM indicator_metadata", function(error, result) {
     	result.rows.forEach(function(obj, idx) {
     		var res = {
                	'source':obj['sources'],
                	'description':obj['vardesc']
             };
-            writeResultFileToDisk(obj['varcode'] + "_metadata", res, function() {
-        	   			
-       	   	});	
+            writeResultFileToDisk(obj['varcode'] + "_metadata", res);
     	});
+    	client.end();
     });
 }
 
@@ -35,33 +40,23 @@ function createIndicatorLegendJSONFiles() {
     var client = new pg.Client(conString);
     client.connect();
    	  
-    client.query("SELECT layername, classes, labels, colors FROM hclayerlegends", function(error, result) {
+    client.query("SELECT varcode, classcolors, classbreaks, classlabels FROM indicator_metadata", function(error, result) {
     	result.rows.forEach(function(obj, idx) {
 	    	var result = {
-		   		'lgdcl':obj['classes'],
-		   		'lgdcr':obj['colors'],
-		   		'lgdlb':obj['labels']
+		   		'lgdcl':obj['classbreaks'],
+		   		'lgdcr':obj['classcolors'],
+		   		'lgdlb':obj['classlabels']
 		   	};
-	    	writeResultFileToDisk(obj['layername'] + "_legend", result, function() {
-	    			
-	    	});	
+	    	writeResultFileToDisk(obj['varcode'] + "_legend", result);
     	});
+    	client.end();
     });
 }
 
 function writeResultFileToDisk(fileName, data, callback) {
-	
 	console.log("creating cached result for ", fileName);
-	fs.writeFile('/Users/D/Sites/mappr/web/data/'+fileName+'.json', JSON.stringify(data), function(err) {
-	    if(err) {
-	      console.log(err);
-	    } else {
-	      console.log("JSON saved!", fileName);
-	    }
-	    callback(data);
-	}); 
+	fs.writeFileSync('/Users/D/Sites/mappr/web/data/'+fileName+'.json', JSON.stringify(data));
 }
-
 
 function processLayerMenuObject() {
 	
@@ -69,17 +64,23 @@ function processLayerMenuObject() {
     client.connect();
                 
 	getASAppConfig(client, function(rows) {
+		
 		var layerMenuJSON = getFormattedLayersObject(rows);
 		layerMenuJSON['category1ToFontIcon'] = {
-    		'Administrative':'',
-    		'Agroecology':'',
-    		'Demographics':'',
-    		'Farming System':'',
-   			'Markets':'',
-    	};
-		writeResultFileToDisk('mappr', layerMenuJSON, function(data) {
-			client.end();
-		});
+	    	'Administrative':'',
+	    	'Agroecology':'',
+	   		'Demographics':'',
+	  		'Farming System':'',
+	  		'Markets':'',
+	    };
+
+		var configObj = {};
+		configObj['title'] = 'Ghana MAPPR';
+		configObj['layerMenuConfig'] = layerMenuJSON;
+		configObj['mapConfig'] = {'center':[8.032034155598001, 0.791015625],'zoom':7,'maxZoom':8};
+		
+		writeResultFileToDisk('gha', configObj);
+		client.end();
 	});	
 }
 
@@ -98,7 +99,7 @@ function getFormattedLayersObject(rows) {
 	rows.forEach(function(obj) {
 		var rowObj = {};
 		rowObj['isTimeConstant'] = true;
-		rowObj['MBTilesEndPoint'] = obj['ln'];
+		rowObj['MBTilesEndPoint'] = prefix + obj['ln'];
 		rowObj['id'] = obj['ln'];
 		rowObj['label'] = obj['ll'];
 		rowObj['g1'] = obj['cat1'];

@@ -1,7 +1,7 @@
-var HOST = 'localhost:3000';
+//var HOST = 'localhost:3000';
 var DATA_FOLDER = 'data';
-var DATA = 'mappr';
-//var HOST = '54.191.215.52';
+var DATA = 'gha';
+var HOST = '54.191.215.52';
 var RASTER_IDENTIFY_HOST = 'localhost:3001';
 
 var mapController = null;
@@ -25,7 +25,12 @@ $(window).ready(function() {
 	initHeader();
 	$("#resetMapButton").click(resetMap);
 	
-	executeGETRequest(DATA_FOLDER+"/"+DATA+".json", function(layerMenuObj) {
+	executeGETRequest(DATA_FOLDER+"/"+DATA+".json", function(configObj) {
+		
+		$("#logoText").html(configObj['title']);
+		
+		var mapConfig = configObj['mapConfig'];
+		var layerMenuObj = configObj['layerMenuConfig'];
 		
 		mapSlideOutContainerController = new MapSlideOutContainerController();
 		mapSlideOutContainerController.initSlideOutContainer("basemapsNub", "exitBasemapsButton", "basemaps");
@@ -33,8 +38,12 @@ $(window).ready(function() {
 		
 		layerMenuController = new LayerMenuController(layerMenuObj);
 		indicatorController = new IndicatorController();
-
-		mapController = new MapController({'defaultCenter':[-5.222246513227375, 27.773437499999996], 'defaultZoom':4});
+		
+		mapController = new MapController({
+			'defaultCenter':mapConfig['center'], 
+			'defaultZoom':mapConfig['zoom'], 
+			'maxZoom':mapConfig['maxZoom']
+		});
 		
 		permalinkController = new PermalinkController();
 		basemapPickerController = new BaseMapPickerController({'defaultBasemap':'Esri Topographic'});
