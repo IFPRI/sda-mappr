@@ -9,9 +9,12 @@
 .mapButtonSelected, 
 .mapContextToolButton:hover, 
 .mapContextToolButtonSelected, 
-.mapButton:hover,
-#executeImageExportButton {
+.mapButton:hover {
 	color:#e1a100 !important;
+}
+
+#executeImageExportButton {
+	background:#e1a100 !important;
 }
 
 .backToListArrow {

@@ -21,6 +21,7 @@ LoadingController.show("Loading");
 
 $(window).ready(function() {
 	
+	initChalkboardOverlay();
 	initLayout();
 	initHeader();
 	$("#resetMapButton").click(resetMap);
@@ -99,6 +100,27 @@ function augementControllerWithGlobalBehaviors(controller) {
 	controller.executeCSS3Animation = executeCSS3Animation;
 	controller.executeGETRequest = executeGETRequest;
 }
+
+function initChalkboardOverlay() {
+	
+	var chalkboardWrapper = $(".chalkboardWrapper");
+	var name = 'hideChalkboardCountryMAPPR';  
+	var value = localStorage.getItem(name);
+	if(value) {
+		chalkboardWrapper.hide();
+	}
+	else {
+		chalkboardWrapper.show();
+        localStorage.setItem(name, 1);  
+	}
+	$('.chalkboardCloseButtonWrapper').click(function() {
+		chalkboardWrapper.hide();
+	});
+	$("#helpButton").click( function() {
+		chalkboardWrapper.is(':hidden') ? chalkboardWrapper.show():chalkboardWrapper.hide();
+	});
+}
+
 
 function resetMap() {
 	
@@ -180,17 +202,9 @@ function executeCSS3Animation(node, onAnimationEnd) {
 function executeGETRequest(url, callback) {
 	
 	LoadingController.show("Loading");
-	$.ajax({
-		type:"GET",
-		url:url,
-		dataType:"json",
-		success:function(result) {
-			callback(result);
-			LoadingController.hide();
-		},
-		error:function(jqXHR, textStatus, errorThrown) {
-			console.log(jqXHR, textStatus, errorThrown);
-			LoadingController.hide();
-		}
+	$.getJSON(url, function(result) {
+		callback(result);
+	}).always(function() {
+		LoadingController.hide();
 	});
 }
