@@ -16,11 +16,13 @@ var _gaq = []; // dev purposes only
 
 (function() {
 
-var serverRootURL = "dev.harvestchoice.org";
+var serverRootURL = "apps.harvestchoice.org";
+var mapServiceRootURL = "dev.harvestchoice.org";
+
 var AppURL = serverRootURL + "/mappr/";
 
 var HCAPIRootURL = "http://"+serverRootURL+"/HarvestChoiceApi/0.3/api";
-var HCAPIProdRootURL = "http://dev.harvestchoice.org/HarvestChoiceApi/0.3/api";
+var HCAPIProdRootURL = "http://"+serverRootURL+"/HarvestChoiceApi/0.3/api";
 
 var AppGlobals = {
 
@@ -121,28 +123,28 @@ var AppConstants = {
 	"D3URL":"http://d3js.org/d3.v3.min.js",
 	"NoDataValue":"No Data",
 	"MapServiceURLList":[
-	    "http://"+serverRootURL+"/arcgis/rest/services/cell5m_socio/MapServer/",
-	    "http://"+serverRootURL+"/arcgis/rest/services/cell5m_main/MapServer/",
-	    "http://"+serverRootURL+"/arcgis/rest/services/cell5m_bio/MapServer/",
-	    "http://"+serverRootURL+"/arcgis/rest/services/cell5m_dhs/MapServer/",
-	    "http://"+serverRootURL+"/arcgis/rest/services/spam05_cell5m_h/MapServer/",
-	    "http://"+serverRootURL+"/arcgis/rest/services/spam05_cell5m_v/MapServer/",
-	    "http://"+serverRootURL+"/arcgis/rest/services/spam05_cell5m_p/MapServer/",
-	    "http://"+serverRootURL+"/arcgis/rest/services/spam05_cell5m_y/MapServer/"
+	    "http://"+mapServiceRootURL+"/arcgis/rest/services/cell5m_socio/MapServer/",
+	    "http://"+mapServiceRootURL+"/arcgis/rest/services/cell5m_main/MapServer/",
+	    "http://"+mapServiceRootURL+"/arcgis/rest/services/cell5m_bio/MapServer/",
+	    "http://"+mapServiceRootURL+"/arcgis/rest/services/cell5m_dhs/MapServer/",
+	    "http://"+mapServiceRootURL+"/arcgis/rest/services/spam05_cell5m_h/MapServer/",
+	    "http://"+mapServiceRootURL+"/arcgis/rest/services/spam05_cell5m_v/MapServer/",
+	    "http://"+mapServiceRootURL+"/arcgis/rest/services/spam05_cell5m_p/MapServer/",
+	    "http://"+mapServiceRootURL+"/arcgis/rest/services/spam05_cell5m_y/MapServer/"
 	],
 	"MapServiceNamesForLegendLabel":["cell5m_socio", "cell5m_main", "cell5m_bio", "cell5m_dhs", "spam05_cell5m_h", "spam05_cell5m_v", "spam05_cell5m_p", "spam05_cell5m_y"],
 	"FeedbackBaseURL":"https://harvestchoice.wufoo.com/forms/mappr-feedback/def/field1=",
 	"LayerMenuCategoriesWebServiceURL":HCAPIRootURL + "/categories/",
 	"DomainsServiceURL":HCAPIRootURL + "/domains",
 	"LayerDownloadBaseURL":"http://apps.harvestchoice.org/data_downloads/",
-	"WorldSSAMask":"http://"+serverRootURL+"/ArcGIS/rest/services/MapServices/USIRServices/MapServer/",
+	"WorldSSAMask":"http://"+mapServiceRootURL+"/ArcGIS/rest/services/MapServices/USIRServices/MapServer/",
 	"WorldSSAMaskOpacity":0.75,
 	"CountryISO3WebServiceURL":HCAPIRootURL + "/countries",
 	"CellValuesServiceURL":HCAPIProdRootURL + "/cellvalues",
 	"CountryCollectionsWebServiceURL":HCAPIRootURL + "/countrycollections",
-	"SelectedRegionFeaturesURL":"http://"+serverRootURL+"/arcgis/rest/services/MapServices/USIRServices/MapServer/8",
-	"AdminBoundryMapServiceURL":"http://"+serverRootURL+"/arcgis/rest/services/MapServices/USIRServices/MapServer/",
-	"Cell5MGridMapServiceURL":"http://"+serverRootURL+"/arcgis/rest/services/MapServices/HC_Grid/MapServer",
+	"SelectedRegionFeaturesURL":"http://"+mapServiceRootURL+"/arcgis/rest/services/MapServices/USIRServices/MapServer/8",
+	"AdminBoundryMapServiceURL":"http://"+mapServiceRootURL+"/arcgis/rest/services/MapServices/USIRServices/MapServer/",
+	"Cell5MGridMapServiceURL":"http://"+mapServiceRootURL+"/arcgis/rest/services/MapServices/HC_Grid/MapServer",
 	"CustomAreaServiceURL":"http://"+serverRootURL+"/HarvestChoiceServices/QueryService.asmx/GetPointResultTable",
 	"CSVServiceURL":"http://"+serverRootURL+"/HarvestChoiceServices/csv.ashx",
 	"TableMakerURL":"http://harvestchoice.org/page/tablr/",
@@ -296,9 +298,9 @@ function initAndShowInstructionsLandingPage() {
 function showInstructionsPage() {
 	
 	var landingPageNode = dojo.byId("instructionLandingPage");
-	landingPageNode.style("display", "block");
+	dojo.style(landingPageNode, "display", "block");
 	dojo.connect(dojo.byId("instructionPageExitButton"), "onclick", function() {
-		landingPageNode.style("display", "none");
+		dojo.style(landingPageNode, "display", "none");
 	});
 }
 
@@ -528,7 +530,10 @@ function initHeader() {
 	$("#tableMakerButton").click(function() {
 		executeHeaderButtonOnClick(launchTableMakerWithArguments);
 	});
-	$("#exportButtonImg").click(HCPrintObj.showExportMenu);
+	$("#exportButtonImg").click(function(e) {
+		HCPrintObj.showExportMenu();
+	});
+	
 
 	initAboutAppSection();
 }
@@ -1150,7 +1155,7 @@ function openLayerMenu(layerGroupIconDiv, callback) {
 function closeLayerMenu() {
 
 	removeAllLayerIconActiveSelectionStates();
-	animateLayerMenu(-276, 10, function() {
+	animateLayerMenu(-500, 10, function() {
 		removeAllLayerIconActiveSelections();
 	});
 }
@@ -1332,7 +1337,7 @@ function createIndicatorLabel(indicatorObj, joinChar) {
 
 function loadMapServiceLegends(mapServiceURL, callback) {
 	
-	dojoXHRGet(mapServiceURL + "legend?f=json", function(result) {
+	dojoXHRGet('proxy.ashx?' + mapServiceURL + "legend?f=json", function(result) {
 		var layerInfosArray = result['layers'];
 		if(layerInfosArray) {
 			addLegendFromMapService(layerInfosArray);
@@ -1672,7 +1677,7 @@ function addLegend(layer) {
 
 function getExternalLegendLabels(layer, callback) {
 	
-	var url = "http://dev.harvestchoice.org/mappr/GetLegendLabels.ashx?column_name=" + layer['name'];
+	var url = "http://apps.harvestchoice.org/mappr/GetLegendLabels.ashx?column_name=" + layer['name'];
 	dojoXHRGet(url, function(result) {
 		
 		if(result.Rows && result.Rows[0] && result.Rows[0].classLabels) {
@@ -2300,7 +2305,7 @@ function addMarketShedResultChartRow(uniqueID, columnName, value, hourKey, label
 }
 
 function createChart(chartsDivID, chartTitle, values, yAxisLabel, noPaddingLeft) {
-	
+		
 	var chartID = chartsDivID + getUniqueID() +  "_chart";
 	var chartPlaceholderDivID = chartID + "_div";
 	dojo.place('<div class="resultChart" id="'+chartPlaceholderDivID+'"></div>', dojo.byId(chartsDivID));		
@@ -3155,8 +3160,13 @@ function updateDomainsDropDown() {
 
 function initDomainsDropDownArrays() {
 	
-	var restrictedDomainsForSSA = ['Travel time to 50K pop. centers', 'Provinces within countries', 'Countries', 'Marketsheds 50K'];
-	AppGlobals['DomainDropDownValues'] = getListOfValuesFromGlobalsObject('DomainsInfo');
+	var domainsToExclude = ['2012 Region and District Boundaries', 'AGRA Breadbasket Areas', 'BMGF Strategy Domains'];
+	var restrictedDomainsForSSA = ['Travel time to 50K pop. centers', 'Provinces within countries', 'Marketsheds 50K'];
+	var domains = getListOfValuesFromGlobalsObject('DomainsInfo');
+	domains = domains.filter(function(d){
+		return domainsToExclude.indexOf(d) === -1;
+	});
+	AppGlobals['DomainDropDownValues'] = domains;
 	AppGlobals['RestrictedDomainDropDownValues'] = dojo.filter(AppGlobals['DomainDropDownValues'], function(d) {
 		return restrictedDomainsForSSA.indexOf(d) === -1;
 	});
@@ -3503,8 +3513,8 @@ function executeCropTOPPRForSelectedAdmin(toolName, wktGeometry, onToolClose) {
 		args = "wktGeometry=" + wktGeometry;
 	}
 	else {
-		if(geographicRegionIsSelected(selectedRegionCode)) {
-			args = "GAULRegion="+selectedRegionCode;
+		if(geographicRegionIsSelected(selectedRegionCode)) {			
+			args = "countryName=" + AppGlobals['RegionMegaDropDown']['ISO3List'].join("&countryName=");
 		}
 		else {
 			args = "countryName="+selectedRegionCode;
@@ -4790,7 +4800,7 @@ function executeSummarizeLocationTool(mapPoint) {
 				AppGlobals['CustomLocationTool']['MarkerNumberCell5MValueCache'][markerNumber] = {};
 			}
 			var columnName = obj['ColumnName'];
-			var indicatorValue = indicatorDataList[parseInt(obj['ColumnIndex'])-1];
+			var indicatorValue = indicatorDataList[parseInt(obj['ColumnIndex'])];
 			indicatorValue = getIndicatorValueForAnalyticDisplay(columnName, indicatorValue);		
 			AppGlobals['CustomLocationTool']['MarkerNumberCell5MValueCache'][markerNumber][columnName] = indicatorValue;
 		});
@@ -5022,6 +5032,9 @@ function initCSVDownloadButton(tableId, parentDivID, firstRowValue, toolName) {
 }
 
 function getNumberWithCommas(x) {
+	if(!x) {
+		return "No data";
+	}
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
@@ -5206,7 +5219,7 @@ function loadMapServiceLayerInfos(mapServiceURLList, callback, layerInfoList) {
 	}
 	
 	var url = mapServiceURLList.pop();
-	dojoXHRGet(url + "?f=json", function(result) {
+	dojoXHRGet('proxy.ashx?' + url + "?f=json", function(result) {
 		layerInfoList.push({'mapServiceURL':url, 'layerInfoList':result});
     	loadMapServiceLayerInfos(mapServiceURLList, callback, layerInfoList);
     });	
@@ -5759,7 +5772,7 @@ function HCImageExportController(parentDivID) {
 	self._LayoutOption = "portrait";
 	self._ImageFormat = 'png';
 	self._ImageExportHandle = null;
-	self._UID = "UID" + getUniqueID();
+	self._UID = "UID" + new Date().getMilliseconds();
 	
 	self._ParentDivID = parentDivID;
 	self._ExportOptionsDivID = "exportOptions" + self._UID;
@@ -5793,7 +5806,6 @@ function HCImageExportController(parentDivID) {
 				dojo.disconnect(self._ImageExportHandle);
 				dojo.style(exportOptionsNode, "display", 'none');
 				self.executeResultsLayout(configObj);
-				_gaq.push(['_trackEvent', 'Export', 'Export location', 'results']);
 			});
 		}
 		else {
@@ -5802,7 +5814,6 @@ function HCImageExportController(parentDivID) {
 				dojo.disconnect(self._ImageExportHandle);
 				dojo.style(exportOptionsNode, "display", 'none');
 				self.executeMapAndLegendExport();
-				_gaq.push(['_trackEvent', 'Export', 'Export location', 'map']);
 			});
 		}
 	};
@@ -5894,15 +5905,11 @@ function HCImageExportController(parentDivID) {
 							'<div id="'+self._PNGImageFormatDivID+'" class="exportRadioButtonUnselected exportRadioButtonSelected"></div>' +
 							'<div class="exportImageTypeLabel">png</div>' +
 						'</div>' +
-						'<div class="exportOptionsItemRow">' +
-							'<div id="'+self._JPGImageFormatDivID+'" class="exportRadioButtonUnselected"></div>' +
-							'<div class="exportImageTypeLabel">jpg</div>' +
-						'</div>' +
 					'</div>' +
 					'<div class="exportOptionsGroupColumn">'+
 						'<div class="exportOptionsItemRow">' +
-							'<div id="'+self._PDFImageFormatDivID+'" class="exportRadioButtonUnselected"></div>' +
-							'<div class="exportImageTypeLabel">pdf</div>' +
+							'<div id="'+self._JPGImageFormatDivID+'" class="exportRadioButtonUnselected"></div>' +
+							'<div class="exportImageTypeLabel">jpg</div>' +
 						'</div>' +
 					'</div>' +
 				'</div>' +
@@ -5924,10 +5931,7 @@ function HCImageExportController(parentDivID) {
 		dojo.connect(pngRBNode, "onclick", self._getImageButtonRadioButtonOnClick(pngRBNode, 'png'));
 		
 		var jpgRBNode = dojo.byId(self._JPGImageFormatDivID);
-		dojo.connect(jpgRBNode, "onclick", self._getImageButtonRadioButtonOnClick(jpgRBNode, 'jpg'));
-		
-		var pdfRBNode = dojo.byId(self._PDFImageFormatDivID);
-		dojo.connect(pdfRBNode, "onclick", self._getImageButtonRadioButtonOnClick(pdfRBNode, 'pdf'));
+		dojo.connect(jpgRBNode, "onclick", self._getImageButtonRadioButtonOnClick(jpgRBNode, 'jpg'));		
 	};
 	
 	self._getImageButtonRadioButtonOnClick = function(node, imageFormat) {
@@ -5984,12 +5988,10 @@ function HCImageExportController(parentDivID) {
 	
 	self._executePrintPost = function(codeblock, callback, h, w) {
 		
-		_gaq.push(['_trackEvent', 'Export', 'Export format', self._ImageFormat]);
-		
 		showLoading("Exporting image", "map", "ExportImage");
 		var printPostArgs = {
 				
-			url:'http://dev.harvestchoice.org/mappr/print.html',
+			url:'http://apps.harvestchoice.org/mappr/print.html',
 			imageformat:self._ImageFormat,
 			format:'json',
 			codeblock:codeblock,
