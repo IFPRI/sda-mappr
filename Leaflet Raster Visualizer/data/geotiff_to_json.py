@@ -2,10 +2,11 @@ import os
 import gdal
 import sys
 import json
+import osr
 
-input_raster_directory = r'/Users/D/Desktop/gha_rasters'
+input_raster_directory = 'output/rasters/'
 list_of_rasters = [r for r in os.listdir(input_raster_directory) if r.endswith('tif')]
-output_json_directory =  input_raster_directory
+output_json_directory =   'output/json/'
 
 for tiff_name in list_of_rasters:
     
@@ -13,6 +14,12 @@ for tiff_name in list_of_rasters:
     
     input_raster_fullpath = os.path.join(input_raster_directory, tiff_name)
     raster = gdal.Open(input_raster_fullpath)
+    
+    wgs84 = osr.SpatialReference()
+    wgs84.ImportFromEPSG(4326) 
+    wgs84_wkt = wgs84.ExportToWkt()
+    raster.SetProjection(wgs84_wkt)
+    
     raster_band = raster.GetRasterBand(1)
     raster_transform = raster.GetGeoTransform() #(left_value, delta_x, rotation_x, top_value, rotation_y, delta_y)
     raster_x_origin = raster_transform[0]
