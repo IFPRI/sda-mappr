@@ -1,0 +1,52 @@
+html,body {
+	padding: 0;
+	margin: 0;
+	height: 100%;
+	width: 100%;
+}
+
+#map {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+canvas {
+	image-rendering: crisp-edges;
+	image-rendering: -moz-crisp-edges;
+	image-rendering: -webkit-optimize-contrast;
+	image-rendering: optimize-contrast;
+	-ms-interpolation-mode: nearest-neighbor;
+}
+
+#reclassifyContainer {
+	width: 300px;
+	position: absolute;
+	top: 24px;
+	right: 24px;
+	background: #fff;
+	z-index: 1;
+}
+
+.reclassifyValue {
+	width: 50px;
+	height: 25px;
+	float: left;
+}
+
+#filterButton {
+	cursor: pointer;
+	text-align: center;
+	font-weight: bold;
+}
+
+#slider {
+	z-index: 100;
+	width: 300px;
+	height: 20px;
+	position: absolute;
+	top: 20px;
+	right: 20px;
+}
