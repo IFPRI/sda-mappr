@@ -34,7 +34,7 @@ $(document).ready(function() {
 				'map':map
 			};
 			var rasterCanvasLayer = new L.RasterCanvasLayer(options);
-			rasterCanvasLayer.addTo(map);	
+			rasterCanvasLayer.addTo(map);
 		});
 	});
 });

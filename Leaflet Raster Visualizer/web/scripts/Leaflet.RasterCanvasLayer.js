@@ -1,7 +1,7 @@
 if(typeof(L) !== 'undefined') {
 
 	L.RasterCanvasLayer = L.CanvasLayer.extend({
-
+		
 		options: {
 			
 			renderer:function(){},
@@ -67,27 +67,50 @@ if(typeof(L) !== 'undefined') {
 			var cellSizeForLatAndLon = getCellSizeForGEOPoint(rasterOriginGEO_Y, rasterOriginGEO_X, 0);
 			var cellSizeXPX = cellSizeForLatAndLon[1];
 
+			var data = this.options.data;
 			var y = rasterOriginPX.y;
-			this.options.data.forEach(function(row, idx) {
+			
+			for(var i=0,ll=data.length;i<ll;i++) {
 				
-				var cellSizeForLatAndLon = getCellSizeForGEOPoint(rasterOriginGEO_Y, rasterOriginGEO_X, idx);
-				var cellSizeYPX = cellSizeForLatAndLon[0];
-				
+				var cellSizeYPX = getCellSizeForGEOPoint(rasterOriginGEO_Y, rasterOriginGEO_X, i)[0];				
+				var rows = data[i];
 				var x = rasterOriginPX.x;		
-				row.forEach(function(value) {
-
-					var fillStyle = renderer(value);
+				
+				for(var j=0,rl=rows.length;j<rl;j++) {
+					
+					var fillStyle = renderer(rows[j]);
 					context.strokeWidth = 1.0;
 					context.lineWidth = 1.0;
 					context.fillStyle = fillStyle;
 					context.rect(x, y, cellSizeXPX, cellSizeYPX);
 					context.fillRect(x, y, cellSizeXPX, cellSizeYPX);
-
+					
 					x += cellSizeXPX;
-				});
+				}
 				y += cellSizeYPX;
-			});
+			}
+			
+			
+//			this.options.data.forEach(function(row, idx) {
+//				
+//				var cellSizeForLatAndLon = getCellSizeForGEOPoint(rasterOriginGEO_Y, rasterOriginGEO_X, idx);
+//				var cellSizeYPX = cellSizeForLatAndLon[0];
+//				
+//				var x = rasterOriginPX.x;		
+//				row.forEach(function(value) {
+//
+//					var fillStyle = renderer(value);
+//					context.strokeWidth = 1.0;
+//					context.lineWidth = 1.0;
+//					context.fillStyle = fillStyle;
+//					context.rect(x, y, cellSizeXPX, cellSizeYPX);
+//					context.fillRect(x, y, cellSizeXPX, cellSizeYPX);
+//
+//					x += cellSizeXPX;
+//				});
+//				y += cellSizeYPX;
+//			});
 		}
 
 	});
-} //L defined
+}

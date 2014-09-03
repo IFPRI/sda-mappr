@@ -7,7 +7,7 @@ target_iso3_id = 'GHA'
 target_cell5ms = {}
 with open('data_tables/'+indicator_name+'.csv', 'U') as csv_file:
     rows = [r for r in csv.reader(csv_file) if r[2] == target_iso3_id]
-    for row in rows:
+    for row in rows[1:]:
         target_cell5ms[int(row[1])] = float(row[0])
         
 shapefile = "cell5m/cell5m.shp"
@@ -46,7 +46,7 @@ no_data_value = -9999
 cell_resolution = 0.083333333
 gdal_fullpath = '/Library/Frameworks/GDAL.framework/Versions/1.11/Programs/'
 output_tiff_fullpath = 'output/rasters/' + layer_name + ".tif"
-gdal_command = "gdal_rasterize -a '" + indicator_name + "' -l '" + layer_name + "' -a_nodata "+no_data_value+" -tr "+cell_resolution+" "+cell_resolution+" '" + output_shapefile_fullpath + "' '" + output_tiff_fullpath + "'"        
+gdal_command = "gdal_rasterize -a '" + indicator_name + "' -l '" + layer_name + "' -a_nodata "+str(no_data_value)+" -tr "+str(cell_resolution)+" "+str(cell_resolution)+" '" + output_shapefile_fullpath + "' '" + output_tiff_fullpath + "'"        
 command = gdal_fullpath + gdal_command
 print command
 os.system(command)
