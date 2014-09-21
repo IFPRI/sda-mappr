@@ -47,3 +47,7 @@
 .mapLayerListEntryOpacitySlider {
 	width:195px;
 }
+
+#contentToggleContainer {
+	display:none;
+}

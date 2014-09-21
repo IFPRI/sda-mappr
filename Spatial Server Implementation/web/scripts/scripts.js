@@ -1,7 +1,7 @@
-//var HOST = 'localhost:3000';
+var HOST = 'localhost:3000';
 var DATA_FOLDER = 'data';
 var DATA = 'gha';
-var HOST = '54.191.215.52';
+//var HOST = '54.191.215.52';
 var RASTER_IDENTIFY_HOST = 'localhost:3001';
 
 var mapController = null;
@@ -41,9 +41,7 @@ $(window).ready(function() {
 		indicatorController = new IndicatorController();
 		
 		mapController = new MapController({
-			'defaultCenter':mapConfig['center'], 
-			'defaultZoom':mapConfig['zoom'], 
-			'maxZoom':mapConfig['maxZoom']
+			'defaultBounds':mapConfig['defaultBounds']
 		});
 		
 		permalinkController = new PermalinkController();

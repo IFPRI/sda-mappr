@@ -125,6 +125,7 @@ var AppConstants = {
 	"MapServiceURLList":[
 	    "http://"+mapServiceRootURL+"/arcgis/rest/services/cell5m_socio/MapServer/",
 	    "http://"+mapServiceRootURL+"/arcgis/rest/services/cell5m_main/MapServer/",
+	    "http://"+mapServiceRootURL+"/arcgis/rest/services/cell5m_lstock/MapServer/",
 	    "http://"+mapServiceRootURL+"/arcgis/rest/services/cell5m_bio/MapServer/",
 	    "http://"+mapServiceRootURL+"/arcgis/rest/services/cell5m_dhs/MapServer/",
 	    "http://"+mapServiceRootURL+"/arcgis/rest/services/spam05_cell5m_h/MapServer/",
@@ -132,7 +133,17 @@ var AppConstants = {
 	    "http://"+mapServiceRootURL+"/arcgis/rest/services/spam05_cell5m_p/MapServer/",
 	    "http://"+mapServiceRootURL+"/arcgis/rest/services/spam05_cell5m_y/MapServer/"
 	],
-	"MapServiceNamesForLegendLabel":["cell5m_socio", "cell5m_main", "cell5m_bio", "cell5m_dhs", "spam05_cell5m_h", "spam05_cell5m_v", "spam05_cell5m_p", "spam05_cell5m_y"],
+	"MapServiceNamesForLegendLabel":[
+	    "cell5m_socio", 
+	    "cell5m_main", 
+	    "cell5m_lstock", 
+	    "cell5m_bio", 
+	    "cell5m_dhs", 
+	    "spam05_cell5m_h", 
+	    "spam05_cell5m_v", 
+	    "spam05_cell5m_p", 
+	    "spam05_cell5m_y"
+	],
 	"FeedbackBaseURL":"https://harvestchoice.wufoo.com/forms/mappr-feedback/def/field1=",
 	"LayerMenuCategoriesWebServiceURL":HCAPIRootURL + "/categories/",
 	"DomainsServiceURL":HCAPIRootURL + "/domains",

@@ -9,13 +9,18 @@ var prefix = 'gha_';
 //var SSAZoom = 4;
 //var SSAMaxZoom = 6;
 
+var spatialID = 'GHA';
+var configObj = {};
+configObj['title'] = 'Ghana MAPPR';
+configObj['mapConfig'] = {'defaultBounds':[[11.555380322321783, 4.74609375], [4.23685605976896, -6.50390625]]};
+
 main();
 
 function main() {
 	
-//	processLayerMenuObject();
+	processLayerMenuObject(spatialID, configObj);
 //	createIndicatorLegendJSONFiles();
-	createIndicatorMetaDataJSONFiles();
+//	createIndicatorMetaDataJSONFiles();
 }
 
 function createIndicatorMetaDataJSONFiles() {
@@ -58,7 +63,7 @@ function writeResultFileToDisk(fileName, data, callback) {
 	fs.writeFileSync('/Users/D/Sites/mappr/web/data/'+fileName+'.json', JSON.stringify(data));
 }
 
-function processLayerMenuObject() {
+function processLayerMenuObject(spatialID, configObj) {
 	
     var client = new pg.Client(conString);
     client.connect();
@@ -74,10 +79,7 @@ function processLayerMenuObject() {
 	  		'Markets':'',
 	    };
 
-		var configObj = {};
-		configObj['title'] = 'Ghana MAPPR';
 		configObj['layerMenuConfig'] = layerMenuJSON;
-		configObj['mapConfig'] = {'center':[8.032034155598001, 0.791015625],'zoom':7,'maxZoom':8};
 		
 		writeResultFileToDisk('gha', configObj);
 		client.end();
@@ -91,6 +93,49 @@ function getASAppConfig(client, callback) {
     	result = result ? result.rows:[];
     	callback(result);
     });
+}
+
+function getFormattedLayersObjectForCustomLayers() {
+	
+	var layers = [];
+	var cat1Name = 'Ghana contextual layers';
+	layers.push({'cat1':cat1Name, 'cat2':'Cereal', 'cat3':null, 'ln':'Maize_Farm', 'll':'Maize farm'});
+	layers.push({'cat1':cat1Name, 'cat2':'Cereal', 'cat3':null, 'ln':'Rice_Field', 'll':'Rice field'});
+	layers.push({'cat1':cat1Name, 'cat2':'Cereal', 'cat3':null, 'ln':'Soyabean_Farm', 'll':'Soya Bean farm'});
+	
+	layers.push({'cat1':cat1Name, 'cat2':'Fruit', 'cat3':null, 'ln':'Cashew_Farm', 'll':'Cashew farm'});
+	layers.push({'cat1':cat1Name, 'cat2':'Fruit', 'cat3':null, 'ln':'Citrus_Farm', 'll':'Citrus Farm'});
+	layers.push({'cat1':cat1Name, 'cat2':'Fruit', 'cat3':null, 'ln':'Mango_Farm', 'll':'Mango Farm'});
+	layers.push({'cat1':cat1Name, 'cat2':'Fruit', 'cat3':null, 'ln':'Pinapple_Farm', 'll':'Pinapple farm'});
+	
+	layers.push({'cat1':cat1Name, 'cat2':'Facilities', 'cat3':null, 'ln':'Feeder_Road_Network', 'll':'Feeder Roads'});
+	layers.push({'cat1':cat1Name, 'cat2':'Facilities', 'cat3':null, 'ln':'irrigation_site', 'll':'Irrigation sites'});
+	layers.push({'cat1':cat1Name, 'cat2':'Facilities', 'cat3':null, 'ln':'Mechanisation_Centres', 'll':'Mechanisation centres'});
+	layers.push({'cat1':cat1Name, 'cat2':'Facilities', 'cat3':null, 'ln':'Pack_house', 'll':'Pack Houses'});
+	layers.push({'cat1':cat1Name, 'cat2':'Facilities', 'cat3':null, 'ln':'Tractor_Locations', 'll':'Tractor locations'});
+	
+	layers.push({'cat1':cat1Name, 'cat2':'Commerce', 'cat3':null, 'ln':'agrochemical_shops', 'll':'Agrochemical Shops'});
+	layers.push({'cat1':cat1Name, 'cat2':'Commerce', 'cat3':null, 'ln':'agrochemical_shops', 'll':'Financial Institutions'});
+	layers.push({'cat1':cat1Name, 'cat2':'Commerce', 'cat3':null, 'ln':'Market_Locations', 'll':'Market Locations'});
+	
+	layers.push({'cat1':cat1Name, 'cat2':'Landuse', 'cat3':null, 'ln':'Soil', 'll':'Soil'});
+
+	var rows = [];
+	layers.forEach(function(obj) {
+		var rowObj = {};
+		rowObj['isTimeConstant'] = true;
+		rowObj['MBTilesEndPoint'] = obj['ln'];
+		rowObj['id'] = obj['ln'];
+		rowObj['label'] = obj['ll'];
+		rowObj['g1'] = obj['cat1'];
+		rowObj['g2'] = obj['cat2'];
+		rowObj['g3'] = obj['cat3'];
+		rowObj['noLegend'] = true;
+		rowObj['noMetaData'] = true;
+		rows.push(rowObj)
+	});
+	
+	return rows;
 }
 
 function getFormattedLayersObject(rows) {
@@ -107,6 +152,9 @@ function getFormattedLayersObject(rows) {
 		rowObj['g3'] = obj['cat3'];
 		updatedRows.push(rowObj)
 	});
+	
+	var moreRows = getFormattedLayersObjectForCustomLayers();
+	updatedRows.push.apply(updatedRows, moreRows);
 	
 	return createLayerMenuObject(updatedRows);
 }
