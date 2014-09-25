@@ -6,9 +6,8 @@ $(document).ready(function() {
 	var southWest = L.latLng(4.357365927900159, -6.723632812499999);
 	var bounds = L.latLngBounds(southWest, northEast);	    		
 	map = L.map('map',{
-		crs:L.CRS.EPSG3857
 	}).fitBounds(bounds);
-	L.tileLayer('http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+	L.tileLayer('http://{s}.tiles.mapbox.com/v3/github.map-xgq2svrz/{z}/{x}/{y}.png', {
 		zoom: 7,
 	}).addTo(map);
 	
@@ -46,16 +45,14 @@ function getRasterCellRenderer(options) {
 	var noDataColor = options.noDataColor;
 	var noDataValue = options.noDataValue;
 
-	this.getCanvasStyleObjString = function(color) {
-		return color;
-	};
 	var funcBody = "if(value == '"+noDataValue+"') { return '"+noDataColor+"'; }";
+	funcBody += "else if(value < " + classes[0] + ") { return '"+colors[0]+"'; }";
 	for(var i=0, l=classes.length-1; i<l; i++) {
-		funcBody += "else if(value >= " + classes[i] + " && value < " + classes[i + 1] + ") { return '"+colors[i]+"'; }";
+		funcBody += "else if(value >= " + classes[i] + " && value <= " + classes[i + 1] + ") { return '"+colors[i]+"'; }";
 	}
-	funcBody += "else if(value > " + classes[classes.length-1] + ") { return '"+colors[i]+"'; }";
+	funcBody += "else if(value > " + classes[classes.length-1] + ") { return '"+colors[classes.length-1]+"'; }";
 	funcBody += "else { return '"+noDataColor+"'; }";
-	
+		
 	return new Function('value', funcBody);
 }
 

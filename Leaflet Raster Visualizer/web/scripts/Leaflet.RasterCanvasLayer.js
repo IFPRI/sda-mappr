@@ -11,7 +11,11 @@ if(typeof(L) !== 'undefined') {
 			x_origin:0,
 			y_origin:0,
 			map:null,
-			cellSizeForLat:{}
+			cellSizeForLat:{},
+			fillStyleForValue:{},
+			pixelValueToSimilarCells:[],
+			pixelBBoxes:[],
+			currentPixelsValueSelected:{}
 		},
 
 		initialize:function(options) {
@@ -19,20 +23,83 @@ if(typeof(L) !== 'undefined') {
 			L.CanvasLayer.prototype.initialize.call(this, options);
 			this.getPXPointFromGEOPoint = this.getPXPointFromGEOPoint.bind(this);    
 			this.getCellSizeForGEOPoint = this.getCellSizeForGEOPoint.bind(this);    
-			this.getCellSizeForGEOPoint = this.getCellSizeForGEOPoint.bind(this);    
+			this.getCellSizeForGEOPoint = this.getCellSizeForGEOPoint.bind(this); 
+			this.highlightPixelsWithSameValue = this.highlightPixelsWithSameValue.bind(this); 
+			
+			var map = this.options.map;
+			map.addEventListener('click', this.highlightPixelsWithSameValue, false);
 		},  
+		
+		highlightPixelsWithSameValue:function(e) {
+			
+			var point = e.containerPoint;
+			var px = point.x;
+			var py = point.y;
+			
+			var self = this;
+			
+			var canvas = self.getCanvas();
+			var context = canvas.getContext('2d');
+			context.strokeWidth = 1.0;
+			context.lineWidth = 1.0;
+						
+			this.options.pixelBBoxes.forEach(function(bbox) {
 
+				var x = bbox[1];
+				var y = bbox[2];
+				
+				var cellSizeX = bbox[3];
+				var cellSizeY = bbox[4];
+								
+				var w = x + cellSizeX;
+				var h = y + cellSizeY;
+													
+				if((x <= px && px <= w) && (y <= py && py <= h)) {
+										
+					var value = bbox[0];
+					var highlight = true;
+					if(self.options.currentPixelsValueSelected[value]) {
+						highlight = false;
+						self.options.currentPixelsValueSelected[value] = false;
+					}
+					else {
+						self.options.currentPixelsValueSelected[value] = true;
+					}					
+					
+					self.options.pixelValueToSimilarCells[value].forEach(function(b) {
+						
+						var x2 = b[1];
+						var y2 = b[2];
+						
+						var cellSizeX2 = b[3];
+						var cellSizeY2 = b[4];
+						
+						var fillStyle = highlight ? "yellow":bbox[5];
+						
+						context.rect(x2, y2, cellSizeX2, cellSizeY2);
+						context.fillStyle = fillStyle;
+						context.fillRect(x2, y2, cellSizeX2, cellSizeY2);					
+						context.strokeStyle = fillStyle;
+						context.strokeRect(x2, y2, cellSizeX2, cellSizeY2);
+
+					});
+				}
+			});
+		},
+		
 		getPXPointFromGEOPoint:function(geoY, geoX) {
-
-			var rasterOriginGEO = [geoY, geoX];
-			var rasterOriginMAP = this.options.map.latLngToLayerPoint(rasterOriginGEO);
-			var rasterOriginPX = this.options.map.layerPointToContainerPoint(rasterOriginMAP);
-
-			return rasterOriginPX;
+			return this.options.map.latLngToContainerPoint([geoY, geoX], true);
 		},
 
-		getCellSizeForGEOPoint:function(geoY, geoX, delta) {
+		getCellSizeForGEOPoint:function(geoY, geoX, delta, zoom) {
 			
+			var cellSizeForLat = this.options.cellSizeForLat;
+			
+			var key = [geoY, geoX, delta, zoom].join("-");
+			if(cellSizeForLat[key]) {
+				return cellSizeForLat[key];
+			}
+						
 			var rasterCellHeightGEO = this.options.cell_height;
 			var rasterCellWidthGEO = this.options.cell_width;
 
@@ -46,70 +113,74 @@ if(typeof(L) !== 'undefined') {
 			var rasterCellDeltaPX_2 = this.getPXPointFromGEOPoint(cellHeightDeltaGEO_Y_2, cellWidthDeltaGEO_X_2);
 			var cellSizeYPX = rasterCellDeltaPX_2.y - rasterCellDeltaPX_1.y;
 			var cellSizeXPX = rasterCellDeltaPX_2.x - rasterCellDeltaPX_1.x;
-
-			return [cellSizeYPX, cellSizeXPX];
+			
+			var cellSize = [cellSizeYPX, cellSizeXPX];
+			cellSizeForLat[key] = cellSize;
+			
+			return cellSize;
 		},
 
 		render:function() {
-
+		
 			var canvas = this.getCanvas();
 			canvas.width = canvas.width;
 			var context = canvas.getContext('2d');
+			
+			context.strokeWidth = 1.0;
+			context.lineWidth = 1.0;
 
 			var renderer = this.options.renderer;
+			var fillStyleForValue = this.options.fillStyleForValue;
 			var getPXPointFromGEOPoint = this.getPXPointFromGEOPoint;
 			var getCellSizeForGEOPoint = this.getCellSizeForGEOPoint;
+			
+			this.options.pixelBBoxes = [];
+			this.options.pixelValueToSimilarCells = {};
 
 			var rasterOriginGEO_Y = this.options.y_origin;
 			var rasterOriginGEO_X = this.options.x_origin;
 			var rasterOriginPX = getPXPointFromGEOPoint(rasterOriginGEO_Y, rasterOriginGEO_X);
-			
-			var cellSizeForLatAndLon = getCellSizeForGEOPoint(rasterOriginGEO_Y, rasterOriginGEO_X, 0);
-			var cellSizeXPX = cellSizeForLatAndLon[1];
 
 			var data = this.options.data;
 			var y = rasterOriginPX.y;
 			
+			var zoom = this.options.map.getZoom();
+						
 			for(var i=0,ll=data.length;i<ll;i++) {
 				
-				var cellSizeYPX = getCellSizeForGEOPoint(rasterOriginGEO_Y, rasterOriginGEO_X, i)[0];				
+				var cellSizeForLatAndLon = getCellSizeForGEOPoint(rasterOriginGEO_Y, rasterOriginGEO_X, i, zoom);	
+				var cellSizeYPX = cellSizeForLatAndLon[0];
+				var cellSizeXPX = cellSizeForLatAndLon[1];
+				
 				var rows = data[i];
 				var x = rasterOriginPX.x;		
 				
 				for(var j=0,rl=rows.length;j<rl;j++) {
 					
-					var fillStyle = renderer(rows[j]);
-					context.strokeWidth = 1.0;
-					context.lineWidth = 1.0;
-					context.fillStyle = fillStyle;
+					var value = rows[j];
+					var fillStyle = fillStyleForValue[value] ? fillStyleForValue[value]:renderer(value);
+					fillStyleForValue[value] = fillStyle;
+					fillStyle = this.options.currentPixelsValueSelected[value] ? 'yellow':fillStyle;
+					
 					context.rect(x, y, cellSizeXPX, cellSizeYPX);
-					context.fillRect(x, y, cellSizeXPX, cellSizeYPX);
+					context.fillStyle = fillStyle;
+					context.fillRect(x, y, cellSizeXPX, cellSizeYPX);					
+					context.strokeStyle = fillStyle;
+					context.strokeRect(x, y, cellSizeXPX, cellSizeYPX);
+				
+					var pixelObj = [value, x, y, cellSizeXPX, cellSizeYPX, fillStyle];
+					
+					this.options.pixelBBoxes.push(pixelObj);
+					
+					if(!this.options.pixelValueToSimilarCells[value]) {
+						this.options.pixelValueToSimilarCells[value] = [];
+					}
+					this.options.pixelValueToSimilarCells[value].push(pixelObj);
 					
 					x += cellSizeXPX;
 				}
 				y += cellSizeYPX;
 			}
-			
-			
-//			this.options.data.forEach(function(row, idx) {
-//				
-//				var cellSizeForLatAndLon = getCellSizeForGEOPoint(rasterOriginGEO_Y, rasterOriginGEO_X, idx);
-//				var cellSizeYPX = cellSizeForLatAndLon[0];
-//				
-//				var x = rasterOriginPX.x;		
-//				row.forEach(function(value) {
-//
-//					var fillStyle = renderer(value);
-//					context.strokeWidth = 1.0;
-//					context.lineWidth = 1.0;
-//					context.fillStyle = fillStyle;
-//					context.rect(x, y, cellSizeXPX, cellSizeYPX);
-//					context.fillRect(x, y, cellSizeXPX, cellSizeYPX);
-//
-//					x += cellSizeXPX;
-//				});
-//				y += cellSizeYPX;
-//			});
 		}
 
 	});
