@@ -1,4 +1,4 @@
-from osgeo import ogr
+from osgeo import ogr, osr
 import os
 import csv
 
@@ -36,7 +36,9 @@ for f in features:
     feat = ogr.Feature(defn)
     feat.SetField('cell5m', cell5m_id)
     feat.SetField(indicator_name, indicator_value)
-    feat.SetGeometry(f.GetGeometryRef().Clone())    
+    geom = f.GetGeometryRef().Clone()
+    feat.SetGeometry(geom)
+     
     layer.CreateFeature(feat)
     feat = geom = None
 

@@ -64,7 +64,9 @@ if(typeof(L) !== 'undefined') {
 					}
 					else {
 						self.options.currentPixelsValueSelected[value] = true;
-					}					
+					}				
+					
+					console.log("Value:",value, e.latlng);
 					
 					self.options.pixelValueToSimilarCells[value].forEach(function(b) {
 						

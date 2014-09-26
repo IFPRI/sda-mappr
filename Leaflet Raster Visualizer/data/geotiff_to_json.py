@@ -16,7 +16,7 @@ for tiff_name in list_of_rasters:
     raster = gdal.Open(input_raster_fullpath)
     
     wgs84 = osr.SpatialReference()
-    wgs84.ImportFromEPSG(4326) 
+    wgs84.ImportFromEPSG(3857) 
     wgs84_wkt = wgs84.ExportToWkt()
     raster.SetProjection(wgs84_wkt)
     

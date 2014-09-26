@@ -16,7 +16,7 @@ var _gaq = []; // dev purposes only
 
 (function() {
 
-var serverRootURL = "apps.harvestchoice.org";
+var serverRootURL = "dev.harvestchoice.org";
 var mapServiceRootURL = "dev.harvestchoice.org";
 
 var AppURL = serverRootURL + "/mappr/";
@@ -1067,7 +1067,7 @@ function initLayerMenu() {
 	addLayerMenuOpenEvent("investmentsIconDiv", "Productivity", layerContainerDivNode);
 	addLayerMenuOpenEvent("agroecologyIconDiv", "Agroecology", layerContainerDivNode);
 	addLayerMenuOpenEvent("demographicsIconDiv", "Demographics", layerContainerDivNode);
-	addLayerMenuOpenEvent("farmingSystemsIconDiv", "Farming System", layerContainerDivNode);
+	addLayerMenuOpenEvent("farmingSystemsIconDiv", "Farming Systems", layerContainerDivNode);
 	addLayerMenuOpenEvent("marketsIconDiv", "Markets", layerContainerDivNode);
 }
 
@@ -1688,7 +1688,7 @@ function addLegend(layer) {
 
 function getExternalLegendLabels(layer, callback) {
 	
-	var url = "http://apps.harvestchoice.org/mappr/GetLegendLabels.ashx?column_name=" + layer['name'];
+	var url = "http://" + AppURL + "/GetLegendLabels.ashx?column_name=" + layer['name'];
 	dojoXHRGet(url, function(result) {
 		
 		if(result.Rows && result.Rows[0] && result.Rows[0].classLabels) {
