@@ -30,7 +30,6 @@ var AppGlobals = {
 	"DefaultExtent":null,
 	"DragAndDrop":null,
 	"MapServiceLayers":{},
-	"MapServiceLegends":{},
 	"LayerIndicatorInfo":{},
 	"Layers":{},
 	"InertLayers":{},
@@ -1276,27 +1275,15 @@ function initLayerObjectAndAddToMap(indicatorObj) {
 		initFloatingLayerMenu();
 	}
 
-	var ColumnName = indicatorObj['ColumnName'];
-	var legendNotAddedForLayersMapService = !AppGlobals['MapServiceLegends'][ColumnName];
-
-	if(legendNotAddedForLayersMapService) {
-		loadMapServiceLegends(AppGlobals['MapServiceLayers'][ColumnName]['mapServiceURL'], function() {
-			initLayerMain(indicatorObj);
-		});
-	}
-	else {
-		initLayerMain(indicatorObj);
-	}
+	initLayerMain(indicatorObj);
 }
 
 function initLayerMain(indicatorObj) {
 		
 	var ColumnName = indicatorObj['ColumnName'];
-	var layerLegendInfo = AppGlobals['MapServiceLegends'][ColumnName];
-	var layerId = layerLegendInfo['layerId'];
 	var mapServiceURL = AppGlobals['MapServiceLayers'][ColumnName]['mapServiceURL'];
 	var dmsl = new esri.layers.ArcGISDynamicMapServiceLayer(mapServiceURL);
-	
+	var layerId = AppGlobals['MapServiceLayers'][ColumnName]['id'];
 	fireOneTimeConnectEvent(dmsl, "onLoad", function() {
 				
 		dmsl.setVisibleLayers([layerId]);
@@ -1307,7 +1294,6 @@ function initLayerMain(indicatorObj) {
 			"indicatorId":indicatorObj['Id'],
 			"dmsl":dmsl,
 			"mapServiceURL":mapServiceURL,
-			"legend":layerLegendInfo['legend'],
 			"indicatorInfo":indicatorObj
 		};
 		AppGlobals['Layers'][ColumnName] = layerObj;
@@ -1344,24 +1330,6 @@ function createIndicatorLabel(indicatorObj, joinChar) {
 	}
 	
 	return labelParts.join(joinChar);
-}
-
-function loadMapServiceLegends(mapServiceURL, callback) {
-	
-	dojoXHRGet('proxy.ashx?' + mapServiceURL + "legend?f=json", function(result) {
-		var layerInfosArray = result['layers'];
-		if(layerInfosArray) {
-			addLegendFromMapService(layerInfosArray);
-			callback();
-		}
-    });
-}
-
-function addLegendFromMapService(layerInfosArray) {
-	
-	dojo.forEach(layerInfosArray, function(layerObj) {
-		AppGlobals['MapServiceLegends'][layerObj['layerName']] = layerObj;
-	});
 }
 
 function addLayerToMapProcedure(layer) {
@@ -1665,18 +1633,7 @@ function removeDNDNodeFromSource(layer) {
 
 function addLegend(layer) {
 	
-	var mapServiceURL = layer['mapServiceURL'];
-	var hasExternalLegendClass = false;
-	
-	for(var i=0; i < AppConstants['MapServiceNamesForLegendLabel'].length; i++) {
-		var mapServiceName = AppConstants['MapServiceNamesForLegendLabel'][i];
-		if(mapServiceURL.indexOf(mapServiceName) !== -1) {
-			hasExternalLegendClass = true;
-			break;
-		}
-	}
-	
-	if(hasExternalLegendClass && !layer['hasLegendLabels']) {
+	if(!layer['hasLegendLabels']) {
 		getExternalLegendLabels(layer, function(lyr) {
 			 addLegendMain(lyr);
 		});
@@ -1690,46 +1647,44 @@ function getExternalLegendLabels(layer, callback) {
 	
 	var url = "http://" + AppURL + "/GetLegendLabels.ashx?column_name=" + layer['name'];
 	dojoXHRGet(url, function(result) {
-		
+		layer['legend'] = {colors:[],labels:[]};
 		if(result.Rows && result.Rows[0] && result.Rows[0].classLabels) {
 			
-			var classLabelString = result.Rows[0].classLabels;
-			var classBreaks = classLabelString.split("|");
-			
-			var counter = 0;
-			var legendObjs = layer['legend'];
-			for(itemObj in legendObjs) {
-				legendObjs[itemObj]['label'] = classBreaks[counter];
-				counter++;
-			}		
+			var obj = result.Rows[0];
+			var classColors = obj['classColors'].split("|");
+			var classLabels = obj['classLabels'].split("|");
+			layer['legend'] = {colors:classColors,labels:classLabels};
 			layer['hasLegendLabels'] = true;	
 		}
 		callback(layer);
 	});
 }
 
-function addLegendMain(layer) {
+function addLegendMain(indicatorObj) {
 	
-	var layerId = layer['id'];
-	var mapServiceURL = layer['mapServiceURL'];
-	var layerLegendDivID = layer['name'] + layerId  + "_legend";
-	var legendHTML = 
-	'<div id="'+layerLegendDivID+'">' +
-		'<div class="legendTitleElementHeader">'+layer['label']+'</div>' +
-		'<table>';
+	var legendObject = indicatorObj['legend'];
+	var colors = legendObject['colors'];
+	var labels = legendObject['labels'];
+	var legendContainerNode = $("#legendsContainer");
+	
+	if(colors.length === labels.length) {
 		
-	var legendObjs = layer['legend'];
-	for(itemObj in legendObjs) {
+		var legendID = indicatorObj['name'] + indicatorObj['id']  + "_legend";
+					
+		var indicatorLabel = indicatorObj['label'];
+		var legendNode = $('<div>').attr('id', legendID).addClass("legend").appendTo(legendContainerNode);
+		$('<div>').addClass("legendTitleElementHeader").html(indicatorLabel).appendTo(legendNode);
+		var tableNode = $('<table>').appendTo(legendNode);
+		
+		labels.forEach(function(label, idx) {
 			
-		var item = legendObjs[itemObj];
-		var legendColorBoxURL = mapServiceURL + layerId + "/images/" + item['url'];
-		var legendValue = item['label'] == -999 ? AppConstants['NoDataValue']: item['label'];
-		legendHTML += '<tr valign="middle"><td><img src="'+legendColorBoxURL+'"/></td><td>'+legendValue+'</td></tr>';
+			var legendValue = parseInt(label) == -999 ? AppConstants['NoDataValue']:label;
+			var tr = $('<tr>').attr("valign", "middle");
+			tr.append($('<td>').css({background:colors[idx]}).addClass("legendSwatch"));
+			tr.append($('<td>').html(legendValue).addClass("legendClassLabel"));
+			tableNode.append(tr);
+		});		
 	}
-	legendHTML += "</table></div>";
-		
-	dojo.place(legendHTML, dojo.byId("legendsContainer"));
-	dojo.addClass(dojo.byId(layerLegendDivID),"legend");
 }
 
 function removeLegend(layer) {
@@ -5196,7 +5151,6 @@ function createObjFromArrayOfLayerInfosWithKey(layerInfosArray, key) {
 	});
 	return obj;
 }
-
 function dojoXHRGet(url, callback) {
 	
 	dojo.xhrGet({

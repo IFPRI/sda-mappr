@@ -13,6 +13,14 @@
 	margin-right:24px;
 }
 
+.legendSwatch {
+	border: 1px solid #dfe3eb;
+	width: 20px !important;
+	height: 20px !important;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
 .summaryRankTable table {
 	border-spacing:12px 0px !important;
 }

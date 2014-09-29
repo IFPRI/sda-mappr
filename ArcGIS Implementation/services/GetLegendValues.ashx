@@ -16,10 +16,9 @@ public class GetAWMValues : IHttpHandler
 		string subq = "";
         
         try {
-                	
             context.Response.ContentType = "application/json"; 
 			string column_name = context.Request["column_name"];
-          	subq = "SELECT [classLabels] FROM [HC_DB_WEB_2].[dbo].indicator_metadata WHERE [varCode] = '" + column_name + "'"; 
+          	subq = "SELECT [classLabels], [classColors] FROM [HC_DB_WEB_2].[dbo].indicator_metadata WHERE [varCode] = '" + column_name + "'"; 
 			DataTable dt = SearchDB(subq);
 			JSON j = new JSON();
 			response = j.Serialize(dt);
