@@ -16,7 +16,7 @@ var _gaq = []; // dev purposes only
 
 (function() {
 
-var serverRootURL = "dev.harvestchoice.org";
+var serverRootURL = "apps.harvestchoice.org";
 var mapServiceRootURL = "dev.harvestchoice.org";
 
 var AppURL = serverRootURL + "/mappr/";
@@ -2508,6 +2508,13 @@ function shuffleAndShowChart(chartID, chartPlaceholderDivID, chartPlaceholderCon
 	var totalColumnsForAllGroups = (function() {
 		var totalColumns = 0;
 		dojo.forEach(valuesGroups, function(obj) {
+			if(obj['groupValues'].length === 0) {
+				obj['groupValues'] = [{
+					series: obj['groupLabel'],
+					fillColor:new dojo.Color('transparent'),
+					value:null
+				}];
+			}
 			totalColumns += obj['groupValues'].length;
 		});
 		return totalColumns;
@@ -2717,6 +2724,9 @@ function shuffleAndShowChart(chartID, chartPlaceholderDivID, chartPlaceholderCon
 			return  (i * barHeightWithPadding) + barYOffset;
 	    })
 		.attr("width", function(d) {
+			if(d['value'] === null) {
+				return 0;
+			}
 	    	return x(d['value']);
 	    }).on("click",function(d, i) {	    	
 	    	selectResultComponents(d['uniqueID']);
@@ -2738,6 +2748,9 @@ function shuffleAndShowChart(chartID, chartPlaceholderDivID, chartPlaceholderCon
 			return chartStartYPos + (i * barHeightWithPadding) + barLabelCenterY + labelYOffset;
 	    })
 	    .attr("x", function(d) {
+	    	if(d['value'] === 0) {
+		    	return chartStartXPos + 0 + paddingBetweenBarAndBarValue;
+	    	}
 	    	return chartStartXPos + x(d['value']) + paddingBetweenBarAndBarValue;
 	    })
 	    .attr("fill", "#000")
@@ -3126,7 +3139,7 @@ function updateDomainsDropDown() {
 
 function initDomainsDropDownArrays() {
 	
-	var domainsToExclude = ['2012 Region and District Boundaries', 'AGRA Breadbasket Areas', 'BMGF Strategy Domains'];
+	var domainsToExclude = ['2012 Region and District Boundaries', 'AGRA Breadbasket Areas', 'BMGF Strategy Domains', 'Agro-Ecological Zones (16 Class)'];
 	var restrictedDomainsForSSA = ['Travel time to 50K pop. centers', 'Provinces within countries', 'Marketsheds 50K'];
 	var domains = getListOfValuesFromGlobalsObject('DomainsInfo');
 	domains = domains.filter(function(d){
@@ -3381,10 +3394,12 @@ function createAdminTOPPRDomainsTable(tablesDivID, uniqueID, domainNamesList, ta
 	var topN = 5;
 	var rankObjs = {};
 	for(var k in indicatorCodeToValueObjs) {
-		var numberOfValues = indicatorCodeToValueObjs[k]['values'].length;
-		indicatorCodeToValueObjs[k]['values'].sort(function(o1, o2) {
+		indicatorCodeToValueObjs[k]['values'] = indicatorCodeToValueObjs[k]['values'].filter(function(o){
+			return !isNaN(parseFloat(o['value']));
+		}).sort(function(o1, o2) {
 			return parseFloat(o2['value']) - parseFloat(o1['value']);
 		});
+		var numberOfValues = indicatorCodeToValueObjs[k]['values'].length;
 		rankObjs[k] = {};
 		rankObjs[k]['top'] = indicatorCodeToValueObjs[k]['values'].slice(0, topN);
 		rankObjs[k]['bottom'] = indicatorCodeToValueObjs[k]['values'].slice(numberOfValues - topN, numberOfValues);
@@ -3399,12 +3414,19 @@ function createRankTable(rankObjs, tablesDivID, topN, domain) {
 		var rankObj = rankObjs[indicatorCode];
 		var topRanked = rankObj['top'];
 		var bottomRanked = rankObj['bottom'];
-		var rankTableSectionNode = $('<div>').addClass("summaryRankTableSection").appendTo($("#"+tablesDivID));
+		var rankTableSectionNode = null;
 		var label = AppGlobals['Layers'][indicatorCode]['label'];
-		$('<div>').html("Rankings for " + label).addClass("summaryRankTableTitle").appendTo(rankTableSectionNode);
-		createRankTableHTML(rankTableSectionNode, topRanked, "Top " + topN, indicatorCode, domain);
-		bottomRanked.reverse();
-		createRankTableHTML(rankTableSectionNode, bottomRanked, "Bottom " + topN, indicatorCode, domain);
+		
+		if(topRanked.length > 0) {
+			rankTableSectionNode = $('<div>').addClass("summaryRankTableSection").appendTo($("#"+tablesDivID));
+			$('<div>').html("Rankings for " + label).addClass("summaryRankTableTitle").appendTo(rankTableSectionNode);
+			createRankTableHTML(rankTableSectionNode, topRanked, "Top " + topN, indicatorCode, domain);
+		}
+		
+		if(bottomRanked.length > 0) {
+			bottomRanked.reverse();
+			createRankTableHTML(rankTableSectionNode, bottomRanked, "Bottom " + topN, indicatorCode, domain);	
+		}
 	}
 }
 
