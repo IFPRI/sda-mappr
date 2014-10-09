@@ -7,119 +7,92 @@
     <link href="css/styles.css" rel="stylesheet" type="text/css" />
     <link href="css/mappr.css" rel="stylesheet" type="text/css" />
     <link href="css/fontcustom.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" media="screen" type="text/css" href="css/spectrum.css" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
 </head>
 <body id="body" class="ui-layout-container">
 
-	<div class="chalkboardWrapper">
-		<div class="chalkboardCloseButtonWrapper">
-			<div class="chalkboardCloseButtonImage"></div>
-			<div class="chalkboardCloseButtonLabel">CLOSE</div>
-		</div>
-	</div>
-
 	<header class="ui-layout-north headerFooterTextStyle">
-	
-		<div id="logoText">MAPPR</div>
-	
-		<div id="contentToggleContainer">
-			<div id="toggleMapButton" class="toggleOption toggleItem toggleIcon">			
-				<div class="toggleIcon toggleItem icon-icon_map"></div>
-				<div class="toggleTitle toggleItem">MAP</div>
-			</div>
-			<div id="toggleChartsButton" class="toggleOption toggleItem toggleIcon toggleOptionInActive">
-				<div class="toggleIcon toggleItem icon-icon_charts"></div>
-				<div class="toggleTitle toggleItem">CHARTS</div>
-			</div>
-		</div>
-		
+		<div id="logoText"></div>		
 	</header>
-	<div id="map" class="ui-layout-center translateMapRight animationTransition"></div>
-	<div id="charts" class="translateMapRight animationTransition">
-		<div id="chartsContainer" class="animationTransition">
-			<div class="chartTabButtonContainer">
-				<div id="chartTabButtons"></div>
-				<div id="addChartButton">+</div>
+	
+	<div id="mapPage" class="ui-layout-center">
+
+		<div class="chalkboardWrapper">
+			<div class="chalkboardCloseButtonWrapper">
+				<div class="chalkboardCloseButtonImage"></div>
+				<div class="chalkboardCloseButtonLabel">CLOSE</div>
 			</div>
-			<div id="chartTabContainers"></div>
 		</div>
-	</div>
 	
-	<div id="sourceAndDescContainer" class="metaDataContainer animationTransition"></div>
-	
-	<div id="mapContextToolsContainer" class="animationTransition">
-		<div id="helpButton" class="mapContextToolButton icon-icon_help"></div>	
-		<div id="resetMapButton" class="mapContextToolButton icon-icon_resetMap"></div>	
-		<div id="imageExportButton" class="mapContextToolButton icon-icon_camera"></div>	
-		<div id="permalinkButton" class="mapContextToolButton icon-icon_permalink"></div>
-		<div id="imageExportContainer" class="imageExportContainerClosed animationTransition">
-			<div id="imageExportOptions"></div>
-			<div id="executeImageExportButton">export</div>
+		<div id="map" class="translateMapRight animationTransition"></div>
+				
+		<div id="mapContextToolsContainer" class="animationTransition">
+			<div id="helpButton" class="mapContextToolButton icon-icon_help"></div>	
+			<div id="resetMapButton" class="mapContextToolButton icon-icon_resetMap"></div>	
+			<div id="imageExportButton" class="mapContextToolButton icon-icon_camera"></div>	
+			<div id="permalinkButton" class="mapContextToolButton icon-icon_permalink"></div>
+			<div id="imageExportContainer" class="imageExportContainerClosed animationTransition">
+				<div id="imageExportOptions"></div>
+				<div id="executeImageExportButton">export</div>
+			</div>
 		</div>
-	</div>
-	
-	<div id="permalinkContainer" class="contextToolContainer animationTransition">
-		<div class="permalinktitle">permalink</div>
-		<div id="permalinkCloseButton" class="icon-icon_close"></div>
-		<div class="permalinkSubTitle">Copy the text below to share your map.</div>
-		<textarea id="permalinkTextArea"></textarea>
-	</div>
 		
-	<div id="basemapsNub" class="mapButton mapButtonStyle animationTransition"><div class="verticalCenter mapButtonIcon icon-icon_basemap"></div></div>
-	<div id="basemaps" class="mapContainer animationTransition">
-		<div class="mapContainerHeader">
-			<div class="layerLegendHeaderLeft"><div class="verticalCenter mapContainerCloseButton icon-icon_basemap"></div></div>
-			<div class="layerLegendHeaderLeft">Basemaps</div>
-			<div id="exitBasemapsButton" class="layerLegendHeaderRight"><div class="closeMapContainerButton icon-icon_close"></div></div>
+		<div id="permalinkContainer" class="contextToolContainer animationTransition">
+			<div class="permalinktitle">permalink</div>
+			<div id="permalinkCloseButton" class="icon-icon_close"></div>
+			<div class="permalinkSubTitle">Copy the text below to share your map.</div>
+			<textarea id="permalinkTextArea"></textarea>
 		</div>
-		<div id="basemapsContainer" class="slideOutContainer"></div>
+			
+		<div id="basemapsNub" class="mapButton mapButtonStyle animationTransition"><div class="verticalCenter mapButtonIcon icon-icon_basemap"></div></div>
+		<div id="basemaps" class="mapContainer animationTransition">
+			<div class="mapContainerHeader">
+				<div class="layerLegendHeaderLeft"><div class="verticalCenter mapContainerCloseButton icon-icon_basemap"></div></div>
+				<div class="layerLegendHeaderLeft">Basemaps</div>
+				<div id="exitBasemapsButton" class="layerLegendHeaderRight"><div class="closeMapContainerButton icon-icon_close"></div></div>
+			</div>
+			<div id="basemapsContainer" class="slideOutContainer"></div>
+		</div>
+		
+		<div id="layerLegendNub" class="mapButton mapButtonStyle animationTransition"><div class="verticalCenter mapButtonIcon icon-icon_layers"></div></div>
+		<div id="layerLegends" class="mapContainer animationTransition">
+			<div class="mapContainerHeader">
+				<div class="layerLegendHeaderLeft"><div class="verticalCenter mapContainerCloseButton icon-icon_layers"></div></div>
+				<div class="layerLegendHeaderLeft">Legend</div>
+				<div id="exitLayerLegendButton" class="layerLegendHeaderRight"><div class="closeMapContainerButton icon-icon_close"></div></div>
+			</div>
+			<div id="layerLegendsContainer" class="slideOutContainer"></div>
+		</div>
+			
+		<div id="mapZoomIn" class="mapButton mapButtonStyle animationTransition"><div class="verticalCenter mapButtonZoom icon-icon_zoomIn"></div></div>
+		<div id="mapZoomOut" class="mapButton mapButtonStyle animationTransition"><div class="verticalCenter mapButtonZoom icon-icon_zoomOut"></div></div>
+		
+		<div id="layerMenu" class="translateLayerListRight animationTransition">
+			<div id="layerListIcons"></div>
+			<div id="layerList"></div>
+		</div>	
+		<div id="layerListNub" class="translateLayerListNubRight animationTransition"></div>
+	
 	</div>
 	
-	<div id="layerLegendNub" class="mapButton mapButtonStyle animationTransition"><div class="verticalCenter mapButtonIcon icon-icon_layers"></div></div>
-	<div id="layerLegends" class="mapContainer animationTransition">
-		<div class="mapContainerHeader">
-			<div class="layerLegendHeaderLeft"><div class="verticalCenter mapContainerCloseButton icon-icon_layers"></div></div>
-			<div class="layerLegendHeaderLeft">Legend</div>
-			<div id="exitLayerLegendButton" class="layerLegendHeaderRight"><div class="closeMapContainerButton icon-icon_close"></div></div>
-		</div>
-		<div id="layerLegendsContainer" class="slideOutContainer"></div>
-	</div>
-		
-	<div id="mapZoomIn" class="mapButton mapButtonStyle animationTransition"><div class="verticalCenter mapButtonZoom icon-icon_zoomIn"></div></div>
-	<div id="mapZoomOut" class="mapButton mapButtonStyle animationTransition"><div class="verticalCenter mapButtonZoom icon-icon_zoomOut"></div></div>
 	
-	<div id="layerMenu" class="translateLayerListRight animationTransition">
-		<div id="layerListIcons"></div>
-		<div id="layerList"></div>
-	</div>	
-	<div id="layerListNub" class="translateLayerListNubRight animationTransition"></div>
-		
 	<footer class="ui-layout-south">
 		<div id="socialMediaLinksContainer">
 			<div id="facebookLink" class="icon-Facebook socialMediaLink"></div>
 			<div id="twitterLink" class="icon-twitter socialMediaLink"></div>
 			<div id="blogLink" class="icon-blog socialMediaLink"></div>			
 		</div>
-		<div id="sourceAndDescButton">Source and description</div>
 	</footer>
    
     <script src="scripts/lib/Leaflet/leaflet-0.7.3/leaflet.js"></script>
-    <script src="scripts/lib/vectortile/vectortilelayer.js"></script>
-    <script src="scripts/lib/vectortile/vectortilefeature.js"></script>
-    <script src="scripts/lib/vectortile/vectortile.js"></script>
-    <script src="scripts/lib/vectortile/point.js"></script>
-    <script src="scripts/lib/vectortile/pbf/ieee/ieee.js"></script>
-    <script src="scripts/lib/vectortile/pbf/pbf.js"></script>
     <script src="scripts/lib/jQuery/jQuery-2.1.1.min.js"></script>
-    <script src="scripts/lib/jQuery-Transport/jQueryTransport.js"></script>
-    <script src="scripts/lib/Buffer/browser-buffer.min.js"></script>
-    <script src="scripts/lib/TileLayer.PBF/TileLayer.PBF.js"></script>
-    <script src="scripts/lib/PBFLayer/TileLayer.PBFLayer.js"></script>
-    <script src="scripts/lib/PBFFeature/PBFFeature.js"></script>
 	<script src="scripts/lib/jQuery/jquery-ui.min.js"></script>
 	<script src="scripts/lib/jQuery/jquery.layout-latest.min.js"></script>
+    <script src="scripts/Leaflet.PBFLayer.js"></script>
     <script src="scripts/d3.v3.min.js"></script>
     <script src="scripts/controllers.js"></script>
+	<script src="scripts/spectrum.js"></script>
     <script src="scripts/scripts.js"></script>
 </body>
 </html>

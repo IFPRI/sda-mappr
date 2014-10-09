@@ -13,8 +13,13 @@
 	color:#e1a100 !important;
 }
 
+#mapContextToolsContainer {
+	top:15px;	
+}
+
 #executeImageExportButton {
 	background:#e1a100 !important;
+	color:#ffffff !important;
 }
 
 .backToListArrow {

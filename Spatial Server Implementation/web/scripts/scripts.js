@@ -1,6 +1,5 @@
 var HOST = 'localhost:3000';
 var DATA_FOLDER = 'data';
-var DATA = 'gha';
 //var HOST = '54.191.215.52';
 var RASTER_IDENTIFY_HOST = 'localhost:3001';
 
@@ -15,18 +14,33 @@ var mapSlideOutContainerController = null;
 var layerMenuController = null;
 var indicatorMetaDataController = null;
 var indicatorController = null;
+var timesliderController = null;
 
 var LoadingController = new LoadingSpinnerController("body");
 LoadingController.show("Loading");
 
+function getParameterID(key) {
+	
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++) {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    return vars[key];
+}
+
 $(window).ready(function() {
+	
+	var id = getParameterID('id');
 	
 	initChalkboardOverlay();
 	initLayout();
 	initHeader();
 	$("#resetMapButton").click(resetMap);
 	
-	executeGETRequest(DATA_FOLDER+"/"+DATA+".json", function(configObj) {
+	executeGETRequest(DATA_FOLDER+"/"+id+".json", function(configObj) {
 		
 		$("#logoText").html(configObj['title']);
 		
@@ -50,7 +64,6 @@ $(window).ready(function() {
 		mapLayerListController = new MapLayerListController();
 		mapLegendController = new MapLegendController();
 		imageExportController = new ImageExportController($("body"));
-		indicatorMetaDataController = new IndicatorMetaDataController();
 		
 		augementControllerWithGlobalBehaviors(mapSlideOutContainerController);
 		augementControllerWithGlobalBehaviors(layerMenuController);
@@ -62,7 +75,6 @@ $(window).ready(function() {
 		augementControllerWithGlobalBehaviors(mapLayerListController);
 		augementControllerWithGlobalBehaviors(mapLegendController);
 		augementControllerWithGlobalBehaviors(imageExportController);
-		augementControllerWithGlobalBehaviors(indicatorMetaDataController);
 		
 		indicatorController.addObserver('onIndicatorSelectRequest', layerMenuController);	
 		layerMenuController.addObserver('onLayerSelected', indicatorController);
@@ -83,7 +95,7 @@ $(window).ready(function() {
 		layerMenuController.addObserver('onLayerMenuOpenOrCloseEvent', mapController);
 		layerMenuController.addObserver('onLayerDeSelected', indicatorController);
 		mapLayerListController.addObserver("onClearAllButtonClick", layerMenuController);
-		mapController.addObserver('onMapLoaded', basemapPickerController);
+		mapController.addObserver('onMapLoaded', basemapPickerController);		
 		mapController.addObserver('onMapLoaded', permalinkController);
 		
 		$(window).resize();
@@ -126,7 +138,6 @@ function resetMap() {
 	permalinkController.reset();
 	imageExportController.reset();
 	mapSlideOutContainerController.reset();
-	indicatorMetaDataController.reset();
 	mapController.reset();
 }
 
@@ -154,10 +165,9 @@ function initLayout() {
 		var contentHeight = bodyHeight - extraHeight;
 		var contentWidth = bodyWidth - padding;
 		
-		$(".mapContainer").height(contentHeight).css({top:headerHeight});
-		$("#layerMenu").height(contentHeight).css({top:headerHeight});
-		$("#map").height(contentHeight).css({top:headerHeight});
-		$("#charts").height(contentHeight).css({top:headerHeight});
+		$(".mapContainer").height(contentHeight).css({top:0});
+		$("#layerMenu").height(contentHeight).css({top:0});
+		$("#map").height(contentHeight).css({top:0});
 		
 		mapController.onWindowResize(contentWidth, contentHeight);
 	});
@@ -165,29 +175,7 @@ function initLayout() {
 
 function initHeader() {
 	
-	$(".toggleOption").click(function(e) {
-		var elem = $(e.currentTarget);
-		elem.removeClass("toggleOptionInActive").siblings().addClass("toggleOptionInActive");
-	});
-	var toggleSectionClick = function(func1, func2) {
-		$("#map")[func1]();
-		$(".mapButtonStyle")[func1]();
-		$("#mapContextToolsContainer")[func1]();
-		$("#timesliderContainer")[func1]();
-		$(".mapContainer")[func1]();
-		$("#selectedRegionDropDownContainer")[func1]();
-		mapController.onWindowResize();
-	};
-	$("#toggleChartsButton").click(function() {
-		toggleSectionClick("hide");
-		$("#map").hide();
-		$("#charts").show();
-	});
-	$("#toggleMapButton").click(function() {
-		toggleSectionClick("show");
-		$("#map").show();
-		$("#charts").hide();
-	});
+
 }
 
 function executeCSS3Animation(node, onAnimationEnd) {

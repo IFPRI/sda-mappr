@@ -12,14 +12,14 @@ var prefix = 'gha_';
 var spatialID = 'GHA';
 var configObj = {};
 configObj['title'] = 'Ghana MAPPR';
-configObj['mapConfig'] = {'defaultBounds':[[11.555380322321783, 4.74609375], [4.23685605976896, -6.50390625]]};
+configObj['mapConfig'] = {'defaultBounds':[[14.32825967774278, 13.29345703125], [1.186438639445215, -9.20654296875]]};
 
 main();
 
 function main() {
 	
 	processLayerMenuObject(spatialID, configObj);
-//	createIndicatorLegendJSONFiles();
+	createIndicatorLegendJSONFiles();
 //	createIndicatorMetaDataJSONFiles();
 }
 
@@ -44,13 +44,20 @@ function createIndicatorLegendJSONFiles() {
 	
     var client = new pg.Client(conString);
     client.connect();
+    
+    var createLegendList = function(l) {
+		return l.split("|").filter(function(v){
+			return v != "";
+		});
+    };
    	  
     client.query("SELECT varcode, classcolors, classbreaks, classlabels FROM indicator_metadata", function(error, result) {
     	result.rows.forEach(function(obj, idx) {
-	    	var result = {
-		   		'lgdcl':obj['classbreaks'],
-		   		'lgdcr':obj['classcolors'],
-		   		'lgdlb':obj['classlabels']
+    		var result = {
+		    	"lgdcl":createLegendList(obj['classbreaks'] || ""),
+		    	"lgdcr":createLegendList(obj['classcolors'] || ""),
+		  		"lgdimg":[],
+		   		"lgdlb":createLegendList(obj['classlabels'] || "")
 		   	};
 	    	writeResultFileToDisk(obj['varcode'] + "_legend", result);
     	});
@@ -98,7 +105,7 @@ function getASAppConfig(client, callback) {
 function getFormattedLayersObjectForCustomLayers() {
 	
 	var layers = [];
-	var cat1Name = 'Ghana contextual layers';
+	var cat1Name = 'CERSGIS Ghana layers';
 	layers.push({'cat1':cat1Name, 'cat2':'Cereal', 'cat3':null, 'ln':'Maize_Farm', 'll':'Maize farm'});
 	layers.push({'cat1':cat1Name, 'cat2':'Cereal', 'cat3':null, 'ln':'Rice_Field', 'll':'Rice field'});
 	layers.push({'cat1':cat1Name, 'cat2':'Cereal', 'cat3':null, 'ln':'Soyabean_Farm', 'll':'Soya Bean farm'});
@@ -115,7 +122,7 @@ function getFormattedLayersObjectForCustomLayers() {
 	layers.push({'cat1':cat1Name, 'cat2':'Facilities', 'cat3':null, 'ln':'Tractor_Locations', 'll':'Tractor locations'});
 	
 	layers.push({'cat1':cat1Name, 'cat2':'Commerce', 'cat3':null, 'ln':'agrochemical_shops', 'll':'Agrochemical Shops'});
-	layers.push({'cat1':cat1Name, 'cat2':'Commerce', 'cat3':null, 'ln':'agrochemical_shops', 'll':'Financial Institutions'});
+	layers.push({'cat1':cat1Name, 'cat2':'Commerce', 'cat3':null, 'ln':'financial_institutions', 'll':'Financial Institutions'});
 	layers.push({'cat1':cat1Name, 'cat2':'Commerce', 'cat3':null, 'ln':'Market_Locations', 'll':'Market Locations'});
 	
 	layers.push({'cat1':cat1Name, 'cat2':'Landuse', 'cat3':null, 'ln':'Soil', 'll':'Soil'});
