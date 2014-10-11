@@ -5,14 +5,11 @@ var fs = require('fs');
 
 var prefix = 'gha_';
 
-//var SSACenter = [-5.222246513227375, 27.773437499999996];
-//var SSAZoom = 4;
-//var SSAMaxZoom = 6;
-
 var spatialID = 'GHA';
 var configObj = {};
 configObj['title'] = 'Ghana MAPPR';
-configObj['mapConfig'] = {'defaultBounds':[[14.32825967774278, 13.29345703125], [1.186438639445215, -9.20654296875]]};
+configObj['mapConfig'] = {'defaultBounds':[[11.189179572173774, 7.646484374999999], [4.182072606722745,-4.801025390625]]};
+
 
 main();
 
@@ -20,7 +17,7 @@ function main() {
 	
 	processLayerMenuObject(spatialID, configObj);
 	createIndicatorLegendJSONFiles();
-//	createIndicatorMetaDataJSONFiles();
+	createIndicatorMetaDataJSONFiles();
 }
 
 function createIndicatorMetaDataJSONFiles() {

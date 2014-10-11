@@ -56,3 +56,144 @@
 #contentToggleContainer {
 	display:none;
 }
+
+#layerLegendNub, #basemapsNub {
+	bottom: 15px;
+}
+
+#layerLegendNub {
+	right:90px;
+}
+
+#mapZoomIn {
+	bottom:130px;
+}
+#mapZoomOut {
+	bottom:95px;
+}
+
+#latLonIndicator {
+	left: 110px;
+	bottom: 15px;
+	width: 180px;
+	position: absolute;
+	color: #646464;
+	text-align: center;
+	height: 34px;
+	line-height: 34px;
+	font-size: 14px;
+	z-index: 2;
+	background: #ffffff;
+	border: 1px solid #d4d4d4;
+}
+
+#mapContextToolsContainer, #mapZoomOut, #mapZoomIn, #basemapsNub   {
+	right:50px !important;
+}
+
+#analysisToolsContainer {
+	position:absolute;
+	z-index:1500;
+	background:#fff;
+	right: 0;
+}
+
+.analysisToolsButtonText {
+	transform: rotate(90deg);
+	transform-origin: left top 0;
+	text-transform: uppercase;
+	float: left;
+	height: 100%;
+	position: absolute;
+	top: 40%;
+	left: 32px;
+	width: 200px;
+}
+
+#analysisToolsContainerButton {
+	cursor: pointer;
+	width: 40px;
+	height: 100%;
+	right: 0;
+	top: 0;
+	position: absolute;
+	background: #fff;
+	z-index: 1501;
+	overflow:hidden;
+	border-left: 1px solid #d4d4d4;
+}
+
+.analysisToolsTitle {
+	font-weight: bold;
+	margin-bottom:4px;
+	text-trasform:uppercase;
+}
+
+.analysisToolsDesc {
+	font-size: 14px;
+	width: 100%;
+}
+
+.analysisToolButton {
+	cursor: pointer;
+	width: 100%;
+	height: 50px;
+	border-bottom: 1px solid #d4d4d4;
+	line-height: 50px;
+}
+
+.analysisToolDrawer {
+	display:none;
+	width:200px;
+	padding: 8px;
+}
+
+#analysisToolMenuButtons {
+	display:block;
+}
+
+.analysisToolsExecuteButton {
+	width: 115px;
+	background: #e1a100;
+	height: 18px;
+	line-height: 18px;
+	text-align: center;
+	color: #fff;
+	font-size: 14px;
+	margin-top: 12px;
+	font-weight: bold;
+	padding: 6px 8px;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+
+.pointAndAreaAnalysisSection {
+	height: 200px;
+	margin-top: 18px;
+}
+
+.pointAndAreaAnalysisSectionIcon {
+
+}
+
+.pointAndAreaAnalysisSectionContent {
+	margin-left: 40px;
+	padding-right: 12px;
+}
+
+.pointAndAreaAnalysisTitle {
+	margin-bottom:4px;
+	font-size:15px;
+	text-transform:uppercase;
+}
+
+.analysisToolDesc {
+	font-size: 12px;
+}
+
+.analysisToolBackButton {
+	cursor:pointer;
+	font-size:12px;
+	color:#333;
+	margin-bottom: 4px;
+}

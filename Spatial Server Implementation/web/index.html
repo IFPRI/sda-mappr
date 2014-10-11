@@ -24,6 +24,126 @@
 				<div class="chalkboardCloseButtonLabel">CLOSE</div>
 			</div>
 		</div>
+		
+		<div id="analysisToolsContainerButton">
+			<div class="analysisToolsButtonText">SPATIAL ANALYSIS</div>
+			<div class="analysisToolsButtonArrow"></div>
+		</div>
+		<div id="analysisToolsContainer" class="animationTransition">
+								
+			<div id="analysisToolMenuButtons" class="analysisToolDrawer">
+				<div class="analysisToolsHeader">
+					<div class="analysisToolsTitle">Spatial Analysis</div>
+					<div class="analysisToolsDesc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</div>
+				</div>				
+				<div id="pointAndAreaAnalysisToolButton" class="analysisToolButton">Point and Area Summary</div>
+				<div id="domainToolButton" class="analysisToolButton">Domain Summary</div>
+				<div id="marketShedSummaryToolButton" class="analysisToolButton">Market Shed Summary</div>
+				<div id="topAreasToolButton" class="analysisToolButton">Top 5 Areas</div>
+				<div id="topCropsToolButton" class="analysisToolButton">Top 5 Crops</div>	
+				<div id="homologueToolButton" class="analysisToolButton">Homologue Tool</div>	
+			</div>
+				
+			<div id="pointAndAreaAnalysisToolDrawer" class="analysisToolDrawer">
+				<div class="analysisToolBackButton">Back to list</div>			
+				<div class="analysisToolsHeader">
+					<div class="analysisToolsTitle">POINT AND AREA SUMMARY</div>
+					<div class="analysisToolsDesc">Please choose a point or area summary:</div>
+				</div>
+				<div class="pointAndAreaAnalysisSection">
+					<div class="pointAndAreaAnalysisSectionIcon"></div>
+					<div class="pointAndAreaAnalysisSectionContent">
+						<div class="pointAndAreaAnalysisTitle">summarize by points</div>
+						<div class="analysisToolDesc">Click on any location. A table
+							summarizing your selected indicators for that location will
+							appear. You can compare up to 10 locations.
+						</div>
+						<div class="analysisToolsExecuteButton">drop a point</div>
+					</div>
+				</div>
+				<div class="pointAndAreaAnalysisSection">
+					<div class="pointAndAreaAnalysisSectionIcon"></div>
+					<div class="pointAndAreaAnalysisSectionContent">
+						<div class="pointAndAreaAnalysisTitle">summarize by polygons</div>
+						<div class="analysisToolDesc">Left click to begin drawing
+							your own area and double click to complete. A table summarizing
+							the indicators you previously selected will appear grouped by your
+							custom area.
+						</div>
+						<div class="analysisToolsExecuteButton">drop on map</div>
+					</div>
+				</div>
+			</div>	
+			
+			<div id="marketShedSummaryToolDrawer" class="analysisToolDrawer">
+				<div class="analysisToolBackButton">Back to list</div>			
+				<div class="analysisToolsHeader">
+					<div class="analysisToolsTitle">market shed summary</div>
+					<div class="analysisToolsDesc">Select a point on the map from
+						which to generate travel time zones. Zonal statistics are shown
+						for the selected indicators within areas under 2 hours travel time
+						to the nearest market, between 2 to 4 hours, 4 to 6 hours, and 6
+						to 8 hours. Visit the AgMarketFinder website to further explore
+						the capabilities of this tool.
+					</div>
+					<div class="analysisToolsExecuteButton">go</div>
+				</div>
+			</div>	
+						
+			<div id="domainToolDrawer" class="analysisToolDrawer">
+				<div class="analysisToolBackButton">Back to list</div>			
+				<div class="analysisToolsHeader">
+					<div class="analysisToolsTitle">domain summary</div>
+					<div class="analysisToolsDesc">Select one of the categorical
+						(domain) layers below across which to produce zonal statistics for
+						the selected indicators.
+					</div>
+				</div>
+			</div>
+			
+			<div id="topAreasToolDrawer" class="analysisToolDrawer">
+				<div class="analysisToolBackButton">Back to list</div>			
+				<div class="analysisToolsHeader">
+					<div class="analysisToolsTitle">top 5 areas</div>
+					<div class="analysisToolsDesc">This tool returns the
+						top/bottom 5 countries, or provinces within countries, for each of
+						the selected indicators (over your chosen study area).
+					</div>
+				</div>
+			</div>
+			
+			<div id="topCropsToolDrawer" class="analysisToolDrawer">
+				<div class="analysisToolBackButton">Back to list</div>			
+				<div class="analysisToolsHeader">
+					<div class="analysisToolsTitle">top 5 crops</div>
+					<div class="analysisToolsDesc">This tool returns the top 5
+						commodities ranked by harvested area and production value (over
+						your chosen study area). Production estimates are circa 2005.
+					</div>
+				</div>
+				<div class="pointAndAreaAnalysisSection">
+					<div class="pointAndAreaAnalysisSectionIcon"></div>
+					<div class="pointAndAreaAnalysisSectionContent">
+						<div class="pointAndAreaAnalysisTitle">SUMMARIZE BY REGION SELECTED</div>
+						<div class="analysisToolDesc">Select a study area (region or
+							country) from the top navigation menu and click Go to view the
+							top 5 agricultural commodities produced in this area.
+						</div>
+						<div class="analysisToolsExecuteButton">go</div>
+					</div>
+				</div>
+				<div class="pointAndAreaAnalysisSection">
+					<div class="pointAndAreaAnalysisSectionIcon"></div>
+					<div class="pointAndAreaAnalysisSectionContent">
+						<div class="pointAndAreaAnalysisTitle">summarize by polygons</div>
+						<div class="analysisToolDesc">Draw a polygon on the map to
+							view the top 5 commodities produced over this specific area.
+						</div>
+						<div class="analysisToolsExecuteButton">drop on map</div>
+					</div>
+				</div>
+			</div>									
+		</div>
 	
 		<div id="map" class="translateMapRight animationTransition"></div>
 				
@@ -44,7 +164,10 @@
 			<div class="permalinkSubTitle">Copy the text below to share your map.</div>
 			<textarea id="permalinkTextArea"></textarea>
 		</div>
-			
+		
+		<div id="mapMaskButton"></div>
+		<div id="latLonIndicator"></div>
+					
 		<div id="basemapsNub" class="mapButton mapButtonStyle animationTransition"><div class="verticalCenter mapButtonIcon icon-icon_basemap"></div></div>
 		<div id="basemaps" class="mapContainer animationTransition">
 			<div class="mapContainerHeader">

@@ -1,7 +1,7 @@
 var HOST = 'localhost:3000';
 var DATA_FOLDER = 'data';
 //var HOST = '54.191.215.52';
-var RASTER_IDENTIFY_HOST = 'localhost:3001';
+var RASTER_IDENTIFY_HOST = 'http://'+HOST+':3000/identify';
 
 var mapController = null;
 var mapIdentiftyController = null;
@@ -32,74 +32,84 @@ function getParameterID(key) {
 }
 
 $(window).ready(function() {
-	
-	var id = getParameterID('id');
-	
-	initChalkboardOverlay();
-	initLayout();
-	initHeader();
-	$("#resetMapButton").click(resetMap);
-	
-	executeGETRequest(DATA_FOLDER+"/"+id+".json", function(configObj) {
 		
-		$("#logoText").html(configObj['title']);
+	initLayout(function() {
+				
+		var id = getParameterID('id');
+		initChalkboardOverlay();
+		initHeader();
+		$("#resetMapButton").click(resetMap);
 		
-		var mapConfig = configObj['mapConfig'];
-		var layerMenuObj = configObj['layerMenuConfig'];
-		
-		mapSlideOutContainerController = new MapSlideOutContainerController();
-		mapSlideOutContainerController.initSlideOutContainer("basemapsNub", "exitBasemapsButton", "basemaps");
-		mapSlideOutContainerController.initSlideOutContainer("layerLegendNub", "exitLayerLegendButton", "layerLegends");
-		
-		layerMenuController = new LayerMenuController(layerMenuObj);
-		indicatorController = new IndicatorController();
-		
-		mapController = new MapController({
-			'defaultBounds':mapConfig['defaultBounds']
+		updateUIHeight();
+		$(window).resize(updateUIHeight);
+				
+		executeGETRequest(DATA_FOLDER+"/"+id+".json", function(configObj) {
+			
+			$("#logoText").html(configObj['title']);
+			
+			var mapConfig = configObj['mapConfig'];
+			var layerMenuObj = configObj['layerMenuConfig'];
+			
+			mapSlideOutContainerController = new MapSlideOutContainerController();
+			mapSlideOutContainerController.initSlideOutContainer("basemapsNub", "exitBasemapsButton", "basemaps");
+			mapSlideOutContainerController.initSlideOutContainer("layerLegendNub", "exitLayerLegendButton", "layerLegends");
+			
+			layerMenuController = new LayerMenuController(layerMenuObj);
+			indicatorController = new IndicatorController();
+			
+			mapController = new MapController({
+				'defaultBounds':mapConfig['defaultBounds'],
+				'mapOptions':{
+					'minZoom':2,
+					'maxZoom':8
+				}
+			});
+			
+			initAnalysisToolsDrawer();
+			
+			permalinkController = new PermalinkController();
+			basemapPickerController = new BaseMapPickerController({'defaultBasemap':'Standard OpenStreetMap'});
+			mapIdentiftyController = new MapIdentifyController();
+			mapLayerListController = new MapLayerListController();
+			mapLegendController = new MapLegendController();
+			imageExportController = new ImageExportController($("body"));
+			
+			augementControllerWithGlobalBehaviors(mapSlideOutContainerController);
+			augementControllerWithGlobalBehaviors(layerMenuController);
+			augementControllerWithGlobalBehaviors(indicatorController);
+			augementControllerWithGlobalBehaviors(mapController);
+			augementControllerWithGlobalBehaviors(permalinkController);
+			augementControllerWithGlobalBehaviors(basemapPickerController);
+			augementControllerWithGlobalBehaviors(mapIdentiftyController);
+			augementControllerWithGlobalBehaviors(mapLayerListController);
+			augementControllerWithGlobalBehaviors(mapLegendController);
+			augementControllerWithGlobalBehaviors(imageExportController);
+			
+			indicatorController.addObserver('onIndicatorSelectRequest', layerMenuController);	
+			layerMenuController.addObserver('onLayerSelected', indicatorController);
+			permalinkController.addObserver('onPermalinkLoad', mapController);
+			permalinkController.addObserver('onPermalinkLoad', basemapPickerController);
+			permalinkController.addObserver('onPermalinkLoad', indicatorController);
+			basemapPickerController.addObserver("onBasemapChange", mapController);
+			imageExportController.addObserver('onPermalinkRequest', permalinkController);
+			mapController.addObserver('onMapClick', mapIdentiftyController);
+			mapLayerListController.addObserver('onIndicatorReorder', mapController);
+			permalinkController.addObserver('onPermalinkCreate', mapController);
+			permalinkController.addObserver('onPermalinkCreate', basemapPickerController);
+			permalinkController.addObserver('onPermalinkCreate', indicatorController);	
+			permalinkController.addObserver('onPermalinkShown', imageExportController);
+			mapSlideOutContainerController.addObserver('onMapSlideOutMenuOpen', permalinkController);
+			mapSlideOutContainerController.addObserver('onMapSlideOutMenuClose', permalinkController);
+			imageExportController.addObserver('onImageExportMenuShown', permalinkController);
+			layerMenuController.addObserver('onLayerMenuOpenOrCloseEvent', mapController);
+			layerMenuController.addObserver('onLayerDeSelected', indicatorController);
+			mapLayerListController.addObserver("onClearAllButtonClick", layerMenuController);
+			mapController.addObserver('onMapLoaded', basemapPickerController);		
+			mapController.addObserver('onMapLoaded', permalinkController);
+				
+			LoadingController.hide();
+			updateUIHeight();
 		});
-		
-		permalinkController = new PermalinkController();
-		basemapPickerController = new BaseMapPickerController({'defaultBasemap':'Esri Topographic'});
-		mapIdentiftyController = new MapIdentifyController();
-		mapLayerListController = new MapLayerListController();
-		mapLegendController = new MapLegendController();
-		imageExportController = new ImageExportController($("body"));
-		
-		augementControllerWithGlobalBehaviors(mapSlideOutContainerController);
-		augementControllerWithGlobalBehaviors(layerMenuController);
-		augementControllerWithGlobalBehaviors(indicatorController);
-		augementControllerWithGlobalBehaviors(mapController);
-		augementControllerWithGlobalBehaviors(permalinkController);
-		augementControllerWithGlobalBehaviors(basemapPickerController);
-		augementControllerWithGlobalBehaviors(mapIdentiftyController);
-		augementControllerWithGlobalBehaviors(mapLayerListController);
-		augementControllerWithGlobalBehaviors(mapLegendController);
-		augementControllerWithGlobalBehaviors(imageExportController);
-		
-		indicatorController.addObserver('onIndicatorSelectRequest', layerMenuController);	
-		layerMenuController.addObserver('onLayerSelected', indicatorController);
-		permalinkController.addObserver('onPermalinkLoad', mapController);
-		permalinkController.addObserver('onPermalinkLoad', basemapPickerController);
-		permalinkController.addObserver('onPermalinkLoad', indicatorController);
-		basemapPickerController.addObserver("onBasemapChange", mapController);
-		imageExportController.addObserver('onPermalinkRequest', permalinkController);
-		mapController.addObserver('onMapClick', mapIdentiftyController);
-		mapLayerListController.addObserver('onIndicatorReorder', mapController);
-		permalinkController.addObserver('onPermalinkCreate', mapController);
-		permalinkController.addObserver('onPermalinkCreate', basemapPickerController);
-		permalinkController.addObserver('onPermalinkCreate', indicatorController);	
-		permalinkController.addObserver('onPermalinkShown', imageExportController);
-		mapSlideOutContainerController.addObserver('onMapSlideOutMenuOpen', permalinkController);
-		mapSlideOutContainerController.addObserver('onMapSlideOutMenuClose', permalinkController);
-		imageExportController.addObserver('onImageExportMenuShown', permalinkController);
-		layerMenuController.addObserver('onLayerMenuOpenOrCloseEvent', mapController);
-		layerMenuController.addObserver('onLayerDeSelected', indicatorController);
-		mapLayerListController.addObserver("onClearAllButtonClick", layerMenuController);
-		mapController.addObserver('onMapLoaded', basemapPickerController);		
-		mapController.addObserver('onMapLoaded', permalinkController);
-		
-		$(window).resize();
-		LoadingController.hide();
 	});
 });
 
@@ -131,7 +141,6 @@ function initChalkboardOverlay() {
 	});
 }
 
-
 function resetMap() {
 	
 	layerMenuController.reset();
@@ -141,36 +150,39 @@ function resetMap() {
 	mapController.reset();
 }
 
-function initLayout() {
+function initLayout(callback) {
 	
 	var layout = $('body').layout({
 		applyDefaultStyles:false,
 	    spacing_open:0,
 	    spacing_closed:0,
 	    slidable:false,
-	    togglerLength_closed:0
+	    togglerLength_closed:0,
+	    onload_end:callback
 	});
+	
 	var headerAndFooterHeight = 34;
 	layout.sizePane("north", headerAndFooterHeight);
 	layout.sizePane("south", headerAndFooterHeight);
+}
+
+function updateUIHeight() {
 	
 	var extraHeight = $("footer").height() + $("header").height();
-	var padding = 20;
+	var headerHeight = $("header").height();
+	var bodyWidth = $('body').width();
+	var bodyHeight = $('body').height();
+	var contentHeight = bodyHeight - extraHeight;
+	var contentWidth = bodyWidth;
 	
-	$(window).resize(function() {
-		
-		var bodyWidth = $('body').width();
-		var bodyHeight = $('body').height();
-		var headerHeight = $("header").height();
-		var contentHeight = bodyHeight - extraHeight;
-		var contentWidth = bodyWidth - padding;
-		
-		$(".mapContainer").height(contentHeight).css({top:0});
-		$("#layerMenu").height(contentHeight).css({top:0});
-		$("#map").height(contentHeight).css({top:0});
-		
-		mapController.onWindowResize(contentWidth, contentHeight);
-	});
+	var layerMenuNubWidth = 20;
+	var analysisContainerWidth = contentWidth - $("#layerMenu").width() - layerMenuNubWidth;
+	$("#analysisToolsContainer").height(contentHeight);
+	$("#analysisToolsContainerButton").height(contentHeight);
+	
+	$(".mapContainer").height(contentHeight).css({top:0});
+	$("#layerMenu").height(contentHeight).css({top:0});
+	$("#map").height(contentHeight).css({top:0});
 }
 
 function initHeader() {
@@ -193,4 +205,49 @@ function executeGETRequest(url, callback) {
 	}).always(function() {
 		LoadingController.hide();
 	});
+}
+
+function initAnalysisToolsDrawer() {
+	
+	var drawerIsOpen = false;
+	$("#analysisToolsContainerButton").click(function() {
+		if(drawerIsOpen) {
+			closeAnalysisToolsDrawer();
+			drawerIsOpen = false;
+		}
+		else{
+			drawerIsOpen = true;
+			openAnalysisToolsDrawer();
+		}
+	});
+	closeAnalysisToolsDrawer();
+
+	initAnalysisToolButton('pointAndAreaAnalysisTool');
+	initAnalysisToolButton('domainTool');
+	initAnalysisToolButton('marketShedSummaryTool');
+	initAnalysisToolButton('topCropsTool');
+	initAnalysisToolButton('topAreasTool');
+	initAnalysisToolButton('homoTool');
+	
+	$(".analysisToolBackButton").click(function() {
+		$("#analysisToolMenuButtons").show().siblings(".analysisToolDrawer").hide();
+	});
+}
+
+function initAnalysisToolButton(key) {
+	$("#"+key+"Button").click(function() {
+		$("#"+key+"Drawer").show().siblings(".analysisToolDrawer").hide();
+	});
+}
+
+function openAnalysisToolsDrawer() {
+
+	var analysisToolsContainerNode = $("#analysisToolsContainer");
+	analysisToolsContainerNode.css({right:40});
+}
+
+function closeAnalysisToolsDrawer() {
+	
+	var analysisToolsContainerNode = $("#analysisToolsContainer");
+	analysisToolsContainerNode.css({right:-analysisToolsContainerNode.width()});
 }
