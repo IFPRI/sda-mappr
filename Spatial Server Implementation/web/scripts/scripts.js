@@ -1,7 +1,8 @@
-var HOST = 'localhost:3000';
-var DATA_FOLDER = 'data';
-//var HOST = '54.191.215.52';
-var RASTER_IDENTIFY_HOST = 'http://'+HOST+':3000/identify';
+var IDENTIFY_HOST = 'localhost';
+var HOST = '54.191.215.52:3001';
+var HOST = 'localhost:3001';
+var RASTER_IDENTIFY_HOST = 'http://'+IDENTIFY_HOST+':3000/identify';
+var HC_API_URL = 'http://dev.harvestchoice.org/HarvestChoiceApi/0.3/api/cellvalues';
 
 var mapController = null;
 var mapIdentiftyController = null;
@@ -14,12 +15,15 @@ var mapSlideOutContainerController = null;
 var layerMenuController = null;
 var indicatorMetaDataController = null;
 var indicatorController = null;
-var timesliderController = null;
+
+var timesliderController;
 
 var LoadingController = new LoadingSpinnerController("body");
 LoadingController.show("Loading");
 
 function getParameterID(key) {
+	
+	return 'gha';
 	
     var vars = [], hash;
     var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
@@ -43,7 +47,7 @@ $(window).ready(function() {
 		updateUIHeight();
 		$(window).resize(updateUIHeight);
 				
-		executeGETRequest(DATA_FOLDER+"/"+id+".json", function(configObj) {
+		executeGETRequest("data/"+id+".json", function(configObj) {
 			
 			$("#logoText").html(configObj['title']);
 			
@@ -69,7 +73,7 @@ $(window).ready(function() {
 			
 			permalinkController = new PermalinkController();
 			basemapPickerController = new BaseMapPickerController({'defaultBasemap':'Standard OpenStreetMap'});
-			mapIdentiftyController = new MapIdentifyController();
+			mapIdentiftyController = new HCIdentifyController();
 			mapLayerListController = new MapLayerListController();
 			mapLegendController = new MapLegendController();
 			imageExportController = new ImageExportController($("body"));
@@ -207,6 +211,7 @@ function executeGETRequest(url, callback) {
 	});
 }
 
+
 function initAnalysisToolsDrawer() {
 	
 	var drawerIsOpen = false;
@@ -251,3 +256,83 @@ function closeAnalysisToolsDrawer() {
 	var analysisToolsContainerNode = $("#analysisToolsContainer");
 	analysisToolsContainerNode.css({right:-analysisToolsContainerNode.width()});
 }
+
+function HCIdentifyController() {
+	
+	var self = this;
+	self._Indicators = [];
+
+	this.onIndicatorAdd = function(indicatorObj, indicators) {
+		self._Indicators = indicators;
+	};
+	
+	this.onIndicatorRemove = function(indicatorObj, indicators) {
+		self._Indicators = indicators;
+	};
+	
+	this.onIndicatorReorder = function(indicators) {
+		self._Indicators = indicators;
+	};
+		
+	this.onMapClick = function(e, onMapClickResult) {
+				
+		var identifyLayers = [];
+		var nonIdentifyLayers = [];
+		self._Indicators.forEach(function(obj) {
+			if(obj['isTimeConstant']) {
+				identifyLayers.push(obj);
+			}
+		});
+		
+		var htmls = [];
+		if(identifyLayers.length > 0) {
+			self._executeIdentifyForLayers(e, identifyLayers, htmls, function() {
+				self._showIdentifyInformation(htmls, onMapClickResult);
+			});
+		}
+	};
+	
+	self._getHTMLViewForIdentifyData = function(layerLabel, featureFields) {
+		
+		var html = '<div class="identifyBlock">';
+		html += '<div class="identifyRow"><span class="identifyLabel">Indicator:</span><span>'+layerLabel+'</span></div>';
+		featureFields.forEach(function(fieldInfo) {
+			var fieldName = fieldInfo[0];
+			var value = fieldInfo[1];
+			html += '<div class="identifyRow"><span class="identifyLabel">'+fieldName+':</span><span>'+value+'</span></div>';
+		});
+		html += '</div>';
+		return html;
+	};
+
+	self._executeIdentifyForLayers = function(e, layers, htmls, callback) {
+
+		var y = e.latlng.lat;
+		var x = e.latlng.lng;
+		var indicatorIdsList = layers.map(function(obj) {
+			return obj['indicatorID'];
+		});
+		var indicatorArgs = "indicatorIds=" + indicatorIdsList.join("&indicatorIds=");
+		var args = indicatorArgs + "&wktGeometry=POINT("+x+" "+y+")";
+		var request_url = HC_API_URL + "?" + args;
+		self.executeGETRequest(request_url, function(result) {
+			var columnList = result['ColumnList'];
+			var valueList = result['ValueList'][0];
+			var columNameToIndicatorValueObj = {};
+			columnList.forEach(function(columnObj) {
+				var indicatorName = columnObj['ColumnName'];
+				var indicatorValues = ["Value", valueList[columnObj['ColumnIndex']]]
+				var html = self._getHTMLViewForIdentifyData(indicatorName, indicatorValues);
+				htmls.push(html);
+			});
+			callback(htmls);
+		});
+	};
+
+	self._showIdentifyInformation = function(htmls, onMapClickResult) {
+
+		var result = htmls.length > 0 ? htmls.join("<br>"):"No results";
+		onMapClickResult(result);
+	};
+}
+

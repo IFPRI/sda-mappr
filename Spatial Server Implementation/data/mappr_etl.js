@@ -8,7 +8,8 @@ var prefix = 'gha_';
 var spatialID = 'GHA';
 var configObj = {};
 configObj['title'] = 'Ghana MAPPR';
-configObj['mapConfig'] = {'defaultBounds':[[11.189179572173774, 7.646484374999999], [4.182072606722745,-4.801025390625]]};
+
+configObj['mapConfig'] = {'defaultBounds':[[11.26461221250444, 6.328125], [4.68592950660633,-4.921875]]};
 
 
 main();
@@ -92,7 +93,7 @@ function processLayerMenuObject(spatialID, configObj) {
 
 function getASAppConfig(client, callback) {
 	
-    var query_string = "SELECT vi_id AS i, varlabel AS ll, varcode AS ln, cat1, cat2, cat3 FROM indicator_metadata WHERE published = 'True' AND isDomain = 'False'";
+    var query_string = "SELECT id AS i, varlabel AS ll, varcode AS ln, cat1, cat2, cat3 FROM indicator_metadata WHERE published = 'True' AND isDomain = 'False'";
     client.query(query_string, function(error, result) {
     	result = result ? result.rows:[];
     	callback(result);
@@ -103,26 +104,28 @@ function getFormattedLayersObjectForCustomLayers() {
 	
 	var layers = [];
 	var cat1Name = 'CERSGIS Ghana layers';
-	layers.push({'cat1':cat1Name, 'cat2':'Cereal', 'cat3':null, 'ln':'Maize_Farm', 'll':'Maize farm'});
-	layers.push({'cat1':cat1Name, 'cat2':'Cereal', 'cat3':null, 'ln':'Rice_Field', 'll':'Rice field'});
-	layers.push({'cat1':cat1Name, 'cat2':'Cereal', 'cat3':null, 'ln':'Soyabean_Farm', 'll':'Soya Bean farm'});
+	layers.push({'cat1':cat1Name, 'cat2':'Cereal', 'cat3':null, 'ln':'Maize_Farm', 'll':'Maize farm', 'geomType':'POLYGON'});
+	layers.push({'cat1':cat1Name, 'cat2':'Cereal', 'cat3':null, 'ln':'Rice_Field', 'll':'Rice field', 'geomType':'POLYGON'});
+	layers.push({'cat1':cat1Name, 'cat2':'Cereal', 'cat3':null, 'ln':'Soyabean_Farm', 'll':'Soya Bean farm', 'geomType':'POLYGON'});
 	
-	layers.push({'cat1':cat1Name, 'cat2':'Fruit', 'cat3':null, 'ln':'Cashew_Farm', 'll':'Cashew farm'});
-	layers.push({'cat1':cat1Name, 'cat2':'Fruit', 'cat3':null, 'ln':'Citrus_Farm', 'll':'Citrus Farm'});
-	layers.push({'cat1':cat1Name, 'cat2':'Fruit', 'cat3':null, 'ln':'Mango_Farm', 'll':'Mango Farm'});
-	layers.push({'cat1':cat1Name, 'cat2':'Fruit', 'cat3':null, 'ln':'Pinapple_Farm', 'll':'Pinapple farm'});
+	layers.push({'cat1':cat1Name, 'cat2':'Fruit', 'cat3':null, 'ln':'Cashew_Farm', 'll':'Cashew farm', 'geomType':'POLYGON'});
+	layers.push({'cat1':cat1Name, 'cat2':'Fruit', 'cat3':null, 'ln':'Citrus_Farm', 'll':'Citrus Farm', 'geomType':'POLYGON'});
+	layers.push({'cat1':cat1Name, 'cat2':'Fruit', 'cat3':null, 'ln':'Mango_Farm', 'll':'Mango Farm', 'geomType':'POLYGON'});
+	layers.push({'cat1':cat1Name, 'cat2':'Fruit', 'cat3':null, 'ln':'Pinapple_Farm', 'll':'Pinapple farm', 'geomType':'POLYGON'});
 	
-	layers.push({'cat1':cat1Name, 'cat2':'Facilities', 'cat3':null, 'ln':'Feeder_Road_Network', 'll':'Feeder Roads'});
-	layers.push({'cat1':cat1Name, 'cat2':'Facilities', 'cat3':null, 'ln':'irrigation_site', 'll':'Irrigation sites'});
-	layers.push({'cat1':cat1Name, 'cat2':'Facilities', 'cat3':null, 'ln':'Mechanisation_Centres', 'll':'Mechanisation centres'});
-	layers.push({'cat1':cat1Name, 'cat2':'Facilities', 'cat3':null, 'ln':'Pack_house', 'll':'Pack Houses'});
-	layers.push({'cat1':cat1Name, 'cat2':'Facilities', 'cat3':null, 'ln':'Tractor_Locations', 'll':'Tractor locations'});
+	layers.push({'cat1':cat1Name, 'cat2':'Facilities', 'cat3':null, 'ln':'Feeder_Road_Network', 'll':'Feeder Roads', 'geomType':'LINE'});
+	layers.push({'cat1':cat1Name, 'cat2':'Facilities', 'cat3':null, 'ln':'irrigation_site', 'll':'Irrigation sites', 'geomType':'POINT'});
+	layers.push({'cat1':cat1Name, 'cat2':'Facilities', 'cat3':null, 'ln':'Mechanisation_Centres', 'll':'Mechanisation centres', 'geomType':'POINT'});
+	layers.push({'cat1':cat1Name, 'cat2':'Facilities', 'cat3':null, 'ln':'Pack_house', 'll':'Pack Houses' , 'geomType':'POINT'});
+	layers.push({'cat1':cat1Name, 'cat2':'Facilities', 'cat3':null, 'ln':'Tractor_Locations', 'll':'Tractor locations', 'geomType':'POINT'});
 	
-	layers.push({'cat1':cat1Name, 'cat2':'Commerce', 'cat3':null, 'ln':'agrochemical_shops', 'll':'Agrochemical Shops'});
-	layers.push({'cat1':cat1Name, 'cat2':'Commerce', 'cat3':null, 'ln':'financial_institutions', 'll':'Financial Institutions'});
-	layers.push({'cat1':cat1Name, 'cat2':'Commerce', 'cat3':null, 'ln':'Market_Locations', 'll':'Market Locations'});
+	layers.push({'cat1':cat1Name, 'cat2':'Commerce', 'cat3':null, 'ln':'agrochemical_shops', 'll':'Agrochemical Shops', 'geomType':'POINT'});
+	layers.push({'cat1':cat1Name, 'cat2':'Commerce', 'cat3':null, 'ln':'financial_institutions', 'll':'Financial Institutions', 'geomType':'POINT'});
+	layers.push({'cat1':cat1Name, 'cat2':'Commerce', 'cat3':null, 'ln':'Market_Locations', 'll':'Market Locations', 'geomType':'POINT'});
 	
-	layers.push({'cat1':cat1Name, 'cat2':'Landuse', 'cat3':null, 'ln':'Soil', 'll':'Soil'});
+	layers.push({'cat1':cat1Name, 'cat2':'Landuse', 'cat3':null, 'ln':'Soil', 'll':'Soil', 'geomType':'POLYGON'});
+	
+
 
 	var rows = [];
 	layers.forEach(function(obj) {
@@ -134,6 +137,7 @@ function getFormattedLayersObjectForCustomLayers() {
 		rowObj['g1'] = obj['cat1'];
 		rowObj['g2'] = obj['cat2'];
 		rowObj['g3'] = obj['cat3'];
+		rowObj['geomType'] = obj['geomType'];
 		rowObj['noLegend'] = true;
 		rowObj['noMetaData'] = true;
 		rows.push(rowObj)
@@ -146,14 +150,21 @@ function getFormattedLayersObject(rows) {
 	
 	var updatedRows = [];
 	rows.forEach(function(obj) {
+		
 		var rowObj = {};
 		rowObj['isTimeConstant'] = true;
 		rowObj['MBTilesEndPoint'] = prefix + obj['ln'];
 		rowObj['id'] = obj['ln'];
+		rowObj['indicatorID'] = obj['i'];
 		rowObj['label'] = obj['ll'];
 		rowObj['g1'] = obj['cat1'];
 		rowObj['g2'] = obj['cat2'];
 		rowObj['g3'] = obj['cat3'];
+		
+		if(obj['ll'] === 'Stemrust Prevalence - irr.') {
+			rowObj['isGradientLegend'] = true;
+		}
+		
 		updatedRows.push(rowObj)
 	});
 	
