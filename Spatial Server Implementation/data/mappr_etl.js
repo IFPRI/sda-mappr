@@ -140,6 +140,7 @@ function getFormattedLayersObjectForCustomLayers() {
 		rowObj['geomType'] = obj['geomType'];
 		rowObj['noLegend'] = true;
 		rowObj['noMetaData'] = true;
+		
 		rows.push(rowObj)
 	});
 	
@@ -160,6 +161,7 @@ function getFormattedLayersObject(rows) {
 		rowObj['g1'] = obj['cat1'];
 		rowObj['g2'] = obj['cat2'];
 		rowObj['g3'] = obj['cat3'];
+		rowObj['isCell5MIndicator'] = true;
 		
 		if(obj['ll'] === 'Stemrust Prevalence - irr.') {
 			rowObj['isGradientLegend'] = true;

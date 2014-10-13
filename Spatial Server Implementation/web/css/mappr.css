@@ -96,6 +96,7 @@
 	z-index:1500;
 	background:#fff;
 	right: 0;
+	display:none;
 }
 
 .analysisToolsButtonText {
@@ -117,7 +118,7 @@
 	right: 0;
 	top: 0;
 	position: absolute;
-	background: #fff;
+	background: #f5f6f8;
 	z-index: 1501;
 	overflow:hidden;
 	border-left: 1px solid #d4d4d4;
@@ -126,7 +127,7 @@
 .analysisToolsTitle {
 	font-weight: bold;
 	margin-bottom:4px;
-	text-trasform:uppercase;
+	text-transform:uppercase;
 }
 
 .analysisToolsDesc {
