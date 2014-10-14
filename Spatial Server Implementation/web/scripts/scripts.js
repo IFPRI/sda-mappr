@@ -194,6 +194,7 @@ function updateUIHeight() {
 	$(".mapContainer").height(contentHeight).css({top:0});
 	$("#layerMenu").height(contentHeight).css({top:0});
 	$("#map").height(contentHeight).css({top:0});
+	$("#domainToolDrawer").height(contentHeight);
 }
 
 function executeCSS3Animation(node, onAnimationEnd) {
@@ -220,7 +221,7 @@ function AnalysisToolsDrawerController() {
 	self._DrawerIsOpen = false;
 	self._OpenAndCloseButtonNode = $("#analysisToolsContainerButton");
 	self._DrawerContainerNode = $("#analysisToolsContainer");
-
+		
 	this.reset = function() {
 		self._closeAnalysisToolsDrawer();
 	};
@@ -232,21 +233,14 @@ function AnalysisToolsDrawerController() {
 	}
 
 	self._openAnalysisToolsDrawer = function() {
-		self._toggleContainer("translateMapButtonsLeft", "translateMapButtonsRight");
 		self._DrawerContainerNode.css({right:40});
 		self._DrawerIsOpen = true;
 	};
 
 	self._closeAnalysisToolsDrawer = function() {
-		self._toggleContainer("translateMapButtonsRight", "translateMapButtonsLeft");
 		self._DrawerContainerNode.css({right:-self._DrawerContainerNode.width()});
 		self._DrawerIsOpen = false;
 	};	
-	
-	self._toggleContainer = function(buttonAddClass, buttonRemoveClass) {
-		$(".mapButtonStyle").addClass(buttonAddClass).removeClass(buttonRemoveClass);
-		$("#mapContextToolsContainer").addClass(buttonAddClass).removeClass(buttonRemoveClass);
-	};
 
 	(function init() {
 		
@@ -264,7 +258,7 @@ function AnalysisToolsDrawerController() {
 		self._initAnalysisToolButton('marketShedSummaryTool');
 		self._initAnalysisToolButton('topCropsTool');
 		self._initAnalysisToolButton('topAreasTool');
-		self._initAnalysisToolButton('homoTool');
+		self._initAnalysisToolButton('homologueTool');
 		
 		$(".analysisToolBackButton").click(function() {
 			$("#analysisToolMenuButtons").show().siblings(".analysisToolDrawer").hide();
@@ -272,7 +266,38 @@ function AnalysisToolsDrawerController() {
 		
 		self._closeAnalysisToolsDrawer();
 		self._DrawerContainerNode.show();
+		
+		addDomainThumbnails();
 	})();
+}
+
+function addDomainThumbnails() {
+	
+	var domainThumbnailImages = [];
+	domainThumbnailImages.push({'caption':'Rural Pop. Density (2005)', 'image_url':'images/domain.png'});
+	domainThumbnailImages.push({'caption':'Agro-Ecological Zones (16 Class)', 'image_url':'images/domain.png'});
+	domainThumbnailImages.push({'caption':'Areas served by principal ports', 'image_url':'images/domain.png'});
+	domainThumbnailImages.push({'caption':'BMGF Strategy Domains', 'image_url':'images/domain.png'});
+	domainThumbnailImages.push({'caption':'Rural Pop. Density (2005)', 'image_url':'images/domain.png'});
+	domainThumbnailImages.push({'caption':'Agro-Ecological Zones (16 Class)', 'image_url':'images/domain.png'});
+	domainThumbnailImages.push({'caption':'Areas served by principal ports', 'image_url':'images/domain.png'});
+	domainThumbnailImages.push({'caption':'BMGF Strategy Domains', 'image_url':'images/domain.png'});
+	var mapGalleryThumbParentNode = $("#domainThumbnails");
+	domainThumbnailImages.forEach(function(obj, idx) {
+		
+		var node = $("<div>").addClass("domainThumbnail").appendTo(mapGalleryThumbParentNode);
+		var thumbImageNode = $("<div>").addClass("domainThumbnailImage").css('background-image', 'url(' + obj['image_url'] + ')').appendTo(node);
+		var captionNode = $('<div>').addClass("domainThumbnailCaption verticalCenter").html(obj['caption']);
+		var captionContainerNode = $("<div>").addClass("domainThumbnailCaptionContainer").append(captionNode).appendTo(node);
+		var toggleVisibility = function() {
+			captionContainerNode.toggle();
+		};
+		node.mouseenter(toggleVisibility).mouseleave(toggleVisibility);
+	});
+}
+
+function updateDomainThumbnailContainerHeight() {
+	
 }
 
 function HCIdentifyController() {
@@ -290,10 +315,6 @@ function HCIdentifyController() {
 		self._Indicators = indicators.filter(function(obj) {
 			return obj['isCell5MIndicator'];
 		});
-	};
-	
-	this.onIndicatorReorder = function(indicators) {
-
 	};
 		
 	this.onMapClick = function(e, onMapClickResult) {
@@ -345,21 +366,24 @@ function HCIdentifyController() {
 		var args = indicatorArgs + "&wktGeometry=POINT("+x+" "+y+")";
 		var request_url = HC_API_URL + "?" + args;
 		self._executeGET(request_url, function(result) {
-			var columnList = result['ColumnList'];
-			var valueList = result['ValueList'][0];
-			var columNameToIndicatorValueObj = {};
-			columnList.forEach(function(columnObj) {
-				
-				var indicatorName = columnObj['ColumnName'];
-				if(indicatorIdToLabel[indicatorName]) {
-					indicatorName = indicatorIdToLabel[indicatorName];
-				}
-				var value = valueList[columnObj['ColumnIndex']];
-				var indicatorValues = [["Value", value]]
-				var html = self._getHTMLViewForIdentifyData(indicatorName, indicatorValues);
-				htmls.push(html);
-				self.hideLoading();
-			});
+			
+			if(result) {
+				var columnList = result['ColumnList'];
+				var valueList = result['ValueList'][0];
+				var columNameToIndicatorValueObj = {};
+				columnList.forEach(function(columnObj) {
+					
+					var indicatorName = columnObj['ColumnName'];
+					if(indicatorIdToLabel[indicatorName]) {
+						indicatorName = indicatorIdToLabel[indicatorName];
+					}
+					var value = valueList[columnObj['ColumnIndex']];
+					var indicatorValues = [["Value", value]]
+					var html = self._getHTMLViewForIdentifyData(indicatorName, indicatorValues);
+					htmls.push(html);
+				});	
+			}
+			self.hideLoading();
 			callback(htmls);
 		});
 	};
@@ -370,7 +394,10 @@ function HCIdentifyController() {
 		    type: 'GET',
 		    crossDomain: true,
 		    dataType: 'jsonp',
-		    success: callback 
+		    success: callback,
+		    error:function() {
+		    	callback();
+		    }
 		});
 	};
 
