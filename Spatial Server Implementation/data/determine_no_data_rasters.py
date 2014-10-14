@@ -15,8 +15,8 @@ for tiff_name in list_of_rasters:
     no_data_value = raster_band.GetNoDataValue()
     raster_values = raster_band.ReadAsArray()
     unique_values = numpy.unique(raster_values)
-    has_all_no_data = len(unique_values) == 1 and float(unique_values[0]) == float(no_data_value)
-    
+    has_all_no_data = len(unique_values) == 1 and int(unique_values[0]) == int(no_data_value)
+
     if has_all_no_data:
         list_of_no_data_rasters.append(tiff_name.replace("gha_", '').replace(".tif", ''))
     
@@ -24,3 +24,5 @@ for tiff_name in list_of_rasters:
 
 from pprint import pprint
 pprint(list_of_no_data_rasters)
+
+    
