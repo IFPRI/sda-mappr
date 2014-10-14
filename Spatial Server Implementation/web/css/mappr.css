@@ -192,13 +192,42 @@
 	font-size: 12px;
 }
 
-.analysisToolBackButton {
-	cursor:pointer;
-	font-size:12px;
-	color:#333;
+.analysisToolBackButtonText {
+	cursor: pointer;
+	font-size: 12px;
+	color: #333;
 	margin-bottom: 4px;
+	margin-left: 12px;
 }
 
 .mapContainer {
 	right: -178px;
+}
+
+.analysisToolBackArrow, .analysisDrawerBackArrow {
+	display: block;
+	content: '';
+	width: 0;
+	height: 0;
+	position: relative;
+
+}
+.analysisToolBackArrow {
+	left: 0;
+	top: -17px;
+	border-top: 5px solid transparent;
+	border-right: 5px solid #000;
+	border-bottom: 5px solid transparent;
+}
+.analysisDrawerBackArrow {
+	left: 16px;
+	top: 35%;
+	border-top: 7px solid transparent;
+	border-right: 7px solid #000;
+	border-bottom: 7px solid transparent;
+}
+
+.layerMenuIcon {
+	font-size:18px;	
+	font-weight: bold;
 }

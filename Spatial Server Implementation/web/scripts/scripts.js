@@ -1,4 +1,5 @@
-var IDENTIFY_HOST = 'localhost';
+//var IDENTIFY_HOST = 'localhost';
+var IDENTIFY_HOST = '54.191.215.52';
 var HOST = '54.191.215.52:3001';
 //var HOST = 'localhost:3001';
 var RASTER_IDENTIFY_HOST = 'http://'+IDENTIFY_HOST+':3000/identify';
@@ -72,11 +73,14 @@ $(window).ready(function() {
 			permalinkController = new PermalinkController();
 			basemapPickerController = new BaseMapPickerController({'defaultBasemap':'Standard OpenStreetMap'});
 			hcMapIdentiftyController = new HCIdentifyController();
-			mapIdentiftyController = new MapIdentifyController();
+			mapIdentiftyController = new MapIdentifyController('mappr');
 			mapLayerListController = new MapLayerListController();
 			mapLegendController = new MapLegendController();
 			imageExportController = new ImageExportController($("body"));
 			analysisToolsDrawerController = new AnalysisToolsDrawerController();
+			
+			indicatorController.addOnIndicatorAddHook(hcMapIdentiftyController);
+			indicatorController.addOnIndicatorRemoveHook(hcMapIdentiftyController);
 			
 			augementControllerWithGlobalBehaviors(mapSlideOutContainerController);
 			augementControllerWithGlobalBehaviors(layerMenuController);
@@ -154,6 +158,7 @@ function resetMap() {
 	imageExportController.reset();
 	mapSlideOutContainerController.reset();
 	mapController.reset();
+	analysisToolsDrawerController.reset();
 }
 
 function initLayout(callback) {
@@ -216,6 +221,10 @@ function AnalysisToolsDrawerController() {
 	self._OpenAndCloseButtonNode = $("#analysisToolsContainerButton");
 	self._DrawerContainerNode = $("#analysisToolsContainer");
 
+	this.reset = function() {
+		self._closeAnalysisToolsDrawer();
+	};
+	
 	self._initAnalysisToolButton = function(key) {
 		$("#"+key+"Button").click(function() {
 			$("#"+key+"Drawer").show().siblings(".analysisToolDrawer").hide();
@@ -223,22 +232,29 @@ function AnalysisToolsDrawerController() {
 	}
 
 	self._openAnalysisToolsDrawer = function() {
+		self._toggleContainer("translateMapButtonsLeft", "translateMapButtonsRight");
 		self._DrawerContainerNode.css({right:40});
+		self._DrawerIsOpen = true;
 	};
 
 	self._closeAnalysisToolsDrawer = function() {
+		self._toggleContainer("translateMapButtonsRight", "translateMapButtonsLeft");
 		self._DrawerContainerNode.css({right:-self._DrawerContainerNode.width()});
+		self._DrawerIsOpen = false;
 	};	
 	
+	self._toggleContainer = function(buttonAddClass, buttonRemoveClass) {
+		$(".mapButtonStyle").addClass(buttonAddClass).removeClass(buttonRemoveClass);
+		$("#mapContextToolsContainer").addClass(buttonAddClass).removeClass(buttonRemoveClass);
+	};
+
 	(function init() {
 		
 		self._OpenAndCloseButtonNode.click(function() {
 			if(self._DrawerIsOpen) {
 				self._closeAnalysisToolsDrawer();
-				self._DrawerIsOpen = false;
 			}
 			else{
-				self._DrawerIsOpen = true;
 				self._openAnalysisToolsDrawer();
 			}
 		});
@@ -297,7 +313,7 @@ function HCIdentifyController() {
 			});
 		}
 		else {
-			onMapClickResult("");
+			onMapClickResult([]);
 		}
 	};
 	
@@ -316,9 +332,13 @@ function HCIdentifyController() {
 
 	self._executeIdentifyForLayers = function(e, layers, htmls, callback) {
 
+		self.showLoading("Executing");
+		
 		var y = e.latlng.lat;
 		var x = e.latlng.lng;
+		var indicatorIdToLabel = {};
 		var indicatorIdsList = layers.map(function(obj) {
+			indicatorIdToLabel[obj['id']] = obj['label'];
 			return obj['indicatorID'];
 		});
 		var indicatorArgs = "indicatorIds=" + indicatorIdsList.join("&indicatorIds=");
@@ -329,10 +349,16 @@ function HCIdentifyController() {
 			var valueList = result['ValueList'][0];
 			var columNameToIndicatorValueObj = {};
 			columnList.forEach(function(columnObj) {
+				
 				var indicatorName = columnObj['ColumnName'];
-				var indicatorValues = [["Value", valueList[columnObj['ColumnIndex']]]]
+				if(indicatorIdToLabel[indicatorName]) {
+					indicatorName = indicatorIdToLabel[indicatorName];
+				}
+				var value = valueList[columnObj['ColumnIndex']];
+				var indicatorValues = [["Value", value]]
 				var html = self._getHTMLViewForIdentifyData(indicatorName, indicatorValues);
 				htmls.push(html);
+				self.hideLoading();
 			});
 			callback(htmls);
 		});
@@ -350,7 +376,7 @@ function HCIdentifyController() {
 
 	self._showIdentifyInformation = function(htmls, onMapClickResult) {
 
-		var result = htmls.length > 0 ? htmls.join("<br>"):"No results";
+		var result = htmls.length > 0 ? htmls.join("<br>"):null;
 		onMapClickResult(result);
 	};
 }
