@@ -38,8 +38,6 @@ for tiff_name in list_of_rasters:
     result['y_origin'] = raster_y_origin
     result['cell_width'] = raster_cell_width
     result['cell_height'] = raster_cell_height
-    result['rows'] = raster_shape[0]
-    result['cols'] = raster_shape[1]
 
     result_str = json.dumps(result)
     result_str = result_str.replace(str(no_data_value), '""')

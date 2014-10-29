@@ -11,15 +11,15 @@ $(document).ready(function() {
 		zoom: 7,
 	}).addTo(map);
 	
-	var indicator_code = 'PN05_RUR';
+	var indicator_code = 'bmi';
 	var prefix = 'GHA_';
 	
 	$.getJSON('data/rasters/'+prefix + indicator_code+'.json', function(result) {
 		$.getJSON('data/legends/'+indicator_code+'_legend.json', function(legend) {
 
 			var rendererOptions = {
-				'classes':legend['lgdcl'].split("|"),
-				'colors':legend['lgdcr'].split("|"),
+				'classes':legend['lgdcl'],
+				'colors':legend['lgdcr'],
 				'noDataValue':'',
 				'noDataColor':'transparent'
 			};
@@ -46,9 +46,9 @@ function getRasterCellRenderer(options) {
 	var noDataValue = options.noDataValue;
 
 	var funcBody = "if(value == '"+noDataValue+"') { return '"+noDataColor+"'; }";
-	funcBody += "else if(value < " + classes[0] + ") { return '"+colors[0]+"'; }";
+	funcBody += "else if(value <= " + classes[0] + ") { return '"+colors[0]+"'; }";
 	for(var i=0, l=classes.length-1; i<l; i++) {
-		funcBody += "else if(value >= " + classes[i] + " && value <= " + classes[i + 1] + ") { return '"+colors[i]+"'; }";
+		funcBody += "else if(value > " + classes[i] + " && value <= " + classes[i + 1] + ") { return '"+colors[i]+"'; }";
 	}
 	funcBody += "else if(value > " + classes[classes.length-1] + ") { return '"+colors[classes.length-1]+"'; }";
 	funcBody += "else { return '"+noDataColor+"'; }";

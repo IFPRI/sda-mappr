@@ -1,14 +1,26 @@
 from osgeo import ogr, osr
-import os
-import csv
+import os, sys
+import csv, codecs
 
-indicator_name = 'PN05_RUR'
+
+def getCell5MIdsForISO3(iso3):    
+    rows = [r for r in csv.reader(codecs.open('data_tables/iso3.txt', 'rU', 'utf-16'))]
+    obj = {}
+    for r in rows[1:]: 
+        if r[1] == iso3:
+            obj[int(r[0])] = 1
+    return obj
+        
+indicator_name = 'bmi'
 target_iso3_id = 'GHA'
 target_cell5ms = {}
-with open('data_tables/'+indicator_name+'.csv', 'U') as csv_file:
-    rows = [r for r in csv.reader(csv_file) if r[2] == target_iso3_id]
+cell5m_ids_for_iso3 = getCell5MIdsForISO3('GHA')
+with open('data_tables/'+indicator_name+'.txt', 'U') as csv_file:
+    rows = [r for r in csv.reader(csv_file)]
     for row in rows[1:]:
-        target_cell5ms[int(row[1])] = float(row[0])
+        cell5m_id = int(row[0])
+        if cell5m_id in cell5m_ids_for_iso3:
+            target_cell5ms[cell5m_id] = float(row[1])
         
 shapefile = "cell5m/cell5m.shp"
 driver = ogr.GetDriverByName("ESRI Shapefile")

@@ -13,7 +13,7 @@ if(typeof(L) !== 'undefined') {
 			map:null,
 			cellSizeForLat:{},
 			fillStyleForValue:{},
-			pixelValueToSimilarCells:[],
+			pixelValueToSimilarCells:{},
 			pixelBBoxes:[],
 			currentPixelsValueSelected:{}
 		},
@@ -28,16 +28,16 @@ if(typeof(L) !== 'undefined') {
 			
 			var map = this.options.map;
 			map.addEventListener('click', this.highlightPixelsWithSameValue, false);
-		},  
+		},
 		
 		highlightPixelsWithSameValue:function(e) {
+			
+			var self = this;
 			
 			var point = e.containerPoint;
 			var px = point.x;
 			var py = point.y;
-			
-			var self = this;
-			
+					
 			var canvas = self.getCanvas();
 			var context = canvas.getContext('2d');
 			context.strokeWidth = 1.0;
@@ -55,36 +55,17 @@ if(typeof(L) !== 'undefined') {
 				var h = y + cellSizeY;
 													
 				if((x <= px && px <= w) && (y <= py && py <= h)) {
-										
 					var value = bbox[0];
-					var highlight = true;
 					if(self.options.currentPixelsValueSelected[value]) {
-						highlight = false;
 						self.options.currentPixelsValueSelected[value] = false;
 					}
 					else {
+						self.options.currentPixelsValueSelected = {};
 						self.options.currentPixelsValueSelected[value] = true;
-					}				
-					
-					console.log("Value:",value, e.latlng);
-					
-					self.options.pixelValueToSimilarCells[value].forEach(function(b) {
-						
-						var x2 = b[1];
-						var y2 = b[2];
-						
-						var cellSizeX2 = b[3];
-						var cellSizeY2 = b[4];
-						
-						var fillStyle = highlight ? "yellow":bbox[5];
-						
-						context.rect(x2, y2, cellSizeX2, cellSizeY2);
-						context.fillStyle = fillStyle;
-						context.fillRect(x2, y2, cellSizeX2, cellSizeY2);					
-						context.strokeStyle = fillStyle;
-						context.strokeRect(x2, y2, cellSizeX2, cellSizeY2);
-
-					});
+						var html = "<div>Pixel value: "+value+"</div>";
+				        L.popup().setLatLng([e.latlng.lat, e.latlng.lng]).setContent(html).openOn(self.options.map);
+					}
+					self.render();
 				}
 			});
 		},
