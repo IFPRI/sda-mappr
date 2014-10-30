@@ -3,13 +3,29 @@
 	<head>
 		<link rel="stylesheet" href="styles/leaflet.css">
 		<link rel="stylesheet" href="styles/styles.css">
+		<link rel="stylesheet" href="styles/jquery.nouislider.css">
 	</head>
 	<body>
 		<div id="map"></div>
-		<div id="controls"></div>
+		
+		<div id="layerList"></div>
+		
+		<div id="controls">
+			<div id="rangeSliderControls">
+				<div id="rangeSliderLabels">
+					<input id="minValue"/>
+					<input id="maxValue"/>
+				</div>
+				<div id="rangeSliderContainer">
+					<div id="rangeSlider"></div>
+				</div>
+			</div>
+			<div id="classCheckboxes"></div>
+		</div>
 		<script src="scripts/jQuery-2.1.1.min.js"></script>
 		<script src="scripts/leaflet.js"></script>
 		<script src="scripts/Leaflet.CanvasLayer.js"></script>
+		<script src="scripts/jquery.nouislider.js"></script>
 		<script src="scripts/Leaflet.RasterCanvasLayer.js"></script>
 		<script src="scripts/scripts.js"></script>
 	</body>

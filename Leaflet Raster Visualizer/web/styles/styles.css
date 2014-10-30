@@ -21,32 +21,101 @@ canvas {
 	-ms-interpolation-mode: nearest-neighbor;
 }
 
-#reclassifyContainer {
+#controls {
 	width: 300px;
 	position: absolute;
 	top: 24px;
 	right: 24px;
 	background: #fff;
 	z-index: 1;
+	padding: 12px;
+	border: 1px solid;
+	display:none;
 }
 
-.reclassifyValue {
-	width: 50px;
-	height: 25px;
-	float: left;
+#rangeSlider {
+	width:270px;
+	margin:0 auto;
+	height:20px;
+	position:relative;
+	margin-top:12px;
 }
 
-#filterButton {
-	cursor: pointer;
-	text-align: center;
-	font-weight: bold;
-}
-
-#slider {
-	z-index: 100;
-	width: 300px;
+#rangeSliderLabels {
 	height: 20px;
+	font-size: 14px;
+	margin: 0 auto;
+}
+
+#minValue {
+	float:left;
+}
+#maxValue {
+	float:right;
+}
+
+.classRow {
+	margin: 12px 0;
+	clear: both;
+	height: 15px;
+}
+
+.checkBoxSelected:before {
+	color: black;
+	content: "";
 	position: absolute;
-	top: 20px;
-	right: 20px;
+	top: 0;
+	left: 5px;
+	width: 3px;
+	height: 11px;
+	border-width: 0 2px 2px 0;
+	border-style: solid;
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
+.radioButtonSelected:before {
+	content: "";
+	position: absolute;
+	background: #000;
+	height: 7px;
+	width: 7px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	top: 3px;
+	left: 3px;
+}
+
+.legendSwatch, .classCheckbox {
+	height:15px;
+	width:15px;
+	border:1px solid #000;
+	float:left;
+	position: relative;
+}
+
+.legendSwatch {
+	margin-left: 14px;
+}
+
+.classCheckbox {
+	cursor:pointer;
+}
+.classLabel {
+	float:left;
+	margin-left:12px;
+}
+
+#layerList {
+	position: absolute;
+	top: 24px;
+	left: 48px;
+	background: #fff;
+	z-index: 1;
+	padding: 12px;
+	border: 1px solid;
 }

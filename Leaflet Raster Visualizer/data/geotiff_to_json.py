@@ -3,15 +3,20 @@ import gdal
 import sys
 import json
 import osr
+import numpy
 
 input_raster_directory = 'output/rasters/'
 list_of_rasters = [r for r in os.listdir(input_raster_directory) if r.endswith('tif')]
 output_json_directory =   'output/json/'
 
+categorizedRasters = ['gha_AEZ5_CLAS.tif']
+
 for tiff_name in list_of_rasters:
     
     print "processing...",tiff_name
     
+    isCategorizedRaster = tiff_name in categorizedRasters   
+
     input_raster_fullpath = os.path.join(input_raster_directory, tiff_name)
     raster = gdal.Open(input_raster_fullpath)
     
@@ -29,18 +34,36 @@ for tiff_name in list_of_rasters:
     
     raster_values_array = raster_band.ReadAsArray()
     raster_shape = raster_values_array.shape;
-    raster_values_array = raster_values_array.tolist()
+    raster_values_array_list = raster_values_array.tolist()
     no_data_value = raster_band.GetNoDataValue()
-        
+
     result = {}
-    result['data'] = raster_values_array
+    result['data'] = raster_values_array_list
     result['x_origin'] = raster_x_origin
     result['y_origin'] = raster_y_origin
     result['cell_width'] = raster_cell_width
     result['cell_height'] = raster_cell_height
+    result['isCategorized'] = isCategorizedRaster
+            
+    result_str = ""
 
-    result_str = json.dumps(result)
-    result_str = result_str.replace(str(no_data_value), '""')
+    if isCategorizedRaster:
+        
+        result_str = json.dumps(result)
+        result_str = result_str.replace(str(int(no_data_value)), '""')
+        
+    else:
+        
+        raster_values_array = raster_values_array[numpy.where(raster_values_array > no_data_value)]
+        min_value = numpy.min(raster_values_array)
+        max_value = numpy.max(raster_values_array)
+                
+        result['min_value'] = min_value
+        result['max_value'] = max_value
+        
+        result_str = json.dumps(result)
+        result_str = result_str.replace(str(no_data_value), '""')
+                                        
     output_json_fullpath = os.path.join(output_json_directory, tiff_name.split(".tif")[0] + ".json")
     
     with open(output_json_fullpath, 'wb') as json_file:        

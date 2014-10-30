@@ -15,7 +15,8 @@ if(typeof(L) !== 'undefined') {
 			fillStyleForValue:{},
 			pixelValueToSimilarCells:{},
 			pixelBBoxes:[],
-			currentPixelsValueSelected:{}
+			currentPixelsValueSelected:{},
+			onClick:function(){}
 		},
 
 		initialize:function(options) {
@@ -25,9 +26,10 @@ if(typeof(L) !== 'undefined') {
 			this.getCellSizeForGEOPoint = this.getCellSizeForGEOPoint.bind(this);    
 			this.getCellSizeForGEOPoint = this.getCellSizeForGEOPoint.bind(this); 
 			this.highlightPixelsWithSameValue = this.highlightPixelsWithSameValue.bind(this); 
-			
-			var map = this.options.map;
-			map.addEventListener('click', this.highlightPixelsWithSameValue, false);
+			this.setValueRange = this.setValueRange.bind(this); 
+			this.options.fillStyleForValue = {};
+			this.options.currentPixelsValueSelected = {};
+			this.setContinuousMode();
 		},
 		
 		highlightPixelsWithSameValue:function(e) {
@@ -62,8 +64,8 @@ if(typeof(L) !== 'undefined') {
 					else {
 						self.options.currentPixelsValueSelected = {};
 						self.options.currentPixelsValueSelected[value] = true;
-						var html = "<div>Pixel value: "+value+"</div>";
-				        L.popup().setLatLng([e.latlng.lat, e.latlng.lng]).setContent(html).openOn(self.options.map);
+						e.pixelValue = value;
+						self.options.onClick(e);
 					}
 					self.render();
 				}
@@ -102,6 +104,28 @@ if(typeof(L) !== 'undefined') {
 			
 			return cellSize;
 		},
+		
+		setContinuousMode:function(minValue, maxValue) {
+			this.canDraw = function(value) {
+				return value >= minValue && value <= maxValue;
+			};
+		},
+		setValueRange:function(min, max) {
+			this.setContinuousMode(min, max);
+			this.render();
+		},
+		setClassifiedMode:function(activeClassValues) {
+			var valueChecker = {};
+			activeClassValues.forEach(function(classValue) {valueChecker[classValue] = 1;});
+			this.canDraw = function(value) {
+				return valueChecker[value] !== undefined;
+			};
+		},
+		setActiveClassValues:function(activeClassValues) {
+			this.setClassifiedMode(activeClassValues);
+			this.render();
+		},
+		canDraw:function(value) {},
 
 		render:function() {
 		
@@ -128,43 +152,52 @@ if(typeof(L) !== 'undefined') {
 			var y = rasterOriginPX.y;
 			
 			var zoom = this.options.map.getZoom();
+			var canDraw = this.canDraw;
 						
 			for(var i=0,ll=data.length;i<ll;i++) {
 				
 				var cellSizeForLatAndLon = getCellSizeForGEOPoint(rasterOriginGEO_Y, rasterOriginGEO_X, i, zoom);	
 				var cellSizeYPX = cellSizeForLatAndLon[0];
 				var cellSizeXPX = cellSizeForLatAndLon[1];
-				
+	
 				var rows = data[i];
 				var x = rasterOriginPX.x;		
 				
 				for(var j=0,rl=rows.length;j<rl;j++) {
 					
 					var value = rows[j];
-					var fillStyle = fillStyleForValue[value] ? fillStyleForValue[value]:renderer(value);
-					fillStyleForValue[value] = fillStyle;
-					fillStyle = this.options.currentPixelsValueSelected[value] ? 'yellow':fillStyle;
 					
-					context.rect(x, y, cellSizeXPX, cellSizeYPX);
-					context.fillStyle = fillStyle;
-					context.fillRect(x, y, cellSizeXPX, cellSizeYPX);					
-					context.strokeStyle = fillStyle;
-					context.strokeRect(x, y, cellSizeXPX, cellSizeYPX);
-				
-					var pixelObj = [value, x, y, cellSizeXPX, cellSizeYPX, fillStyle];
+					if(canDraw(value)) {
+						
+						var fillStyle = "";
+						if(fillStyleForValue[value]) {
+							fillStyle = fillStyleForValue[value];
+						}
+						else {
+							fillStyle = renderer(value);
+						}
+						
+						fillStyleForValue[value] = fillStyle;
+						fillStyle = this.options.currentPixelsValueSelected[value] ? 'yellow':fillStyle;
+						
+						context.rect(x, y, cellSizeXPX, cellSizeYPX);
+						context.fillStyle = fillStyle;
+						context.fillRect(x, y, cellSizeXPX, cellSizeYPX);					
+						context.strokeStyle = fillStyle;
+						context.strokeRect(x, y, cellSizeXPX, cellSizeYPX);
 					
-					this.options.pixelBBoxes.push(pixelObj);
-					
-					if(!this.options.pixelValueToSimilarCells[value]) {
-						this.options.pixelValueToSimilarCells[value] = [];
+						var pixelObj = [value, x, y, cellSizeXPX, cellSizeYPX, fillStyle];
+						
+						this.options.pixelBBoxes.push(pixelObj);
+						if(!this.options.pixelValueToSimilarCells[value]) {
+							this.options.pixelValueToSimilarCells[value] = [];
+						}
+						this.options.pixelValueToSimilarCells[value].push(pixelObj);						
 					}
-					this.options.pixelValueToSimilarCells[value].push(pixelObj);
-					
-					x += cellSizeXPX;
+					x += cellSizeXPX;	
 				}
 				y += cellSizeYPX;
 			}
 		}
-
 	});
 }
