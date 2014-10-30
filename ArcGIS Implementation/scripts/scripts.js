@@ -16,7 +16,7 @@ var _gaq = []; // dev purposes only
 
 (function() {
 
-var serverRootURL = "apps.harvestchoice.org";
+var serverRootURL = "dev.harvestchoice.org";
 var mapServiceRootURL = "dev.harvestchoice.org";
 
 var AppURL = serverRootURL + "/mappr/";
@@ -146,7 +146,7 @@ var AppConstants = {
 	"FeedbackBaseURL":"https://harvestchoice.wufoo.com/forms/mappr-feedback/def/field1=",
 	"LayerMenuCategoriesWebServiceURL":HCAPIRootURL + "/categories/",
 	"DomainsServiceURL":HCAPIRootURL + "/domains",
-	"LayerDownloadBaseURL":"http://apps.harvestchoice.org/data_downloads/",
+	"LayerDownloadBaseURL":"http://harvestchoice.org/data/",
 	"WorldSSAMask":"http://"+mapServiceRootURL+"/ArcGIS/rest/services/MapServices/USIRServices/MapServer/",
 	"WorldSSAMaskOpacity":0.75,
 	"CountryISO3WebServiceURL":HCAPIRootURL + "/countries",
@@ -1228,7 +1228,7 @@ function createMenuHTMLForCategory(categoryName, parentDivId) {
 				dojo.place(layerHTML, aggregateNode);
 				
 				dojo.connect(dojo.byId(downloadButtonID), "onclick", function() {
-					window.open(AppConstants['LayerDownloadBaseURL'] + ColumnName + ".zip", ColumnName);
+					window.open(AppConstants['LayerDownloadBaseURL'] + ColumnName.toLowerCase(), ColumnName);
 				});
 				
 				var toolTipInnerHTML =  createLayerToolTipHTML(indicatorObj, layerTitle);
@@ -2977,21 +2977,44 @@ function addBoundryItemCheckbox(checkboxID, checkBoxDiv, boundryKey, boundryMapS
 
 function addBoundryToMap(boundryKey, mapServiceURL, index) {
 	
-	if(!AppGlobals['BoundryLayerGlobals']['Layers'][boundryKey]) {
+	AppGlobals['BoundryLayerGlobals']['Layers'][boundryKey] = new esri.layers.ArcGISDynamicMapServiceLayer(mapServiceURL);
+	
+	fireOneTimeConnectEvent(AppGlobals['BoundryLayerGlobals']['Layers'][boundryKey], "onLoad", function() {
 		
-		AppGlobals['BoundryLayerGlobals']['Layers'][boundryKey] = new esri.layers.ArcGISDynamicMapServiceLayer(mapServiceURL);
-		
-		fireOneTimeConnectEvent(AppGlobals['BoundryLayerGlobals']['Layers'][boundryKey], "onLoad", function() {
-			
-			if(index !== null) {
-				AppGlobals['BoundryLayerGlobals']['Layers'][boundryKey].setVisibleLayers([index]);
+		if(index !== null) {
+			AppGlobals['BoundryLayerGlobals']['Layers'][boundryKey].setVisibleLayers([index]);
+
+			if(boundryKey !== "cell5mGrid") {
+				var layerDefinitions = [];
+				layerDefinitions[index] = getADM0WhereClauseForBoundaryLayer();
+				AppGlobals['BoundryLayerGlobals']['Layers'][boundryKey].setLayerDefinitions(layerDefinitions);	
 			}
-			addBoundryToMapProcedure(boundryKey);
-		});		
-	}
-	else {
+		}
 		addBoundryToMapProcedure(boundryKey);
-	}
+	});		
+}
+
+var iso3ToCorrectCountryNameMap = {
+	'CMR':"Cameroon",
+	'CIV':'Ivory Coast',
+	'TZA':'United Republic of Tanzania',
+	'COD':'Democratic Republic of the Congo',
+	'COG':'Congo'
+};
+
+function getADM0WhereClauseForBoundaryLayer() {
+
+	var query = "ADM0_NAME IN (";
+	var singleQuoteValues = AppGlobals['RegionMegaDropDown']['ISO3List'].filter(function(iso3) {
+		return AppGlobals['ISO3CountryMap'][iso3];
+	});
+	singleQuoteValues = singleQuoteValues.map(function(iso3) {		
+		var countryName = iso3ToCorrectCountryNameMap[iso3] ? iso3ToCorrectCountryNameMap[iso3] : AppGlobals['ISO3CountryMap'][iso3];
+		return "\'" + countryName.replace(/'/g, "\'\'") +  "\'";
+	});
+	query += singleQuoteValues.join(",");
+	query += ")";
+	return query;
 }
 
 function addBoundryToMapProcedure(adminBoundry) {
@@ -3342,9 +3365,14 @@ function executeDomainsTool(domain, isAdminTOPPR) {
 		});
 	};
 	
+	var adminUnitColumn = "countryIds";
+	if(domain === "2008 Region and District Boundaries") {
+		adminUnitColumn = "regionNames";
+	}
+	
 	var indicatorArgs = "indicatorIds=" + indicatorIds.join("&indicatorIds=");
 	var domainArgs = "domainIds=" + domainIdList.join("&domainIds=");
-	var countryArgs = "countryIds=" + AppGlobals['RegionMegaDropDown']['ISO3List'].join("&countryIds=");
+	var countryArgs = adminUnitColumn + "=" + AppGlobals['RegionMegaDropDown']['ISO3List'].join("&"+adminUnitColumn+"=");
 	var args = indicatorArgs + "&" + domainArgs + "&" + countryArgs + "&returnGeometry=true";
 	
 	if(AppGlobals['RegionMegaDropDown']["RegionSelected"] && AppGlobals['RegionMegaDropDown']['SelectedRegionName'] !== "Sub-Saharan Africa") {
@@ -3356,7 +3384,7 @@ function executeDomainsTool(domain, isAdminTOPPR) {
 				
 		var indicatorArgs = "indicatorIds=" + indicatorIds.join("&indicatorIds=");
 		var domainArgs = "domainIds=" + domainIdList.join("&domainIds=");
-		var countryArgs = "countryIds=" + AppGlobals['ISO3sForSSA'].join("&countryIds=");
+		var countryArgs = adminUnitColumn + "=" + AppGlobals['ISO3sForSSA'].join("&"+adminUnitColumn+"=");
 		var args = indicatorArgs + "&" + domainArgs + "&" + countryArgs + "&returnGeometry=false&groupCountry=true";
 
 		dojoXHRGet(AppConstants['CellValuesServiceURL'] + "?" + args, function(countryResults) {
