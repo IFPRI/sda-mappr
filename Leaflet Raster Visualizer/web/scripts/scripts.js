@@ -1,6 +1,28 @@
 
 var map;
 
+function unPackData(packedData) {
+	
+    var data = [];
+    packedData.forEach(function(row) {
+    	var newRow = [];
+    	row.forEach(function(v) {
+    		if(v === "" || !isNaN(v)) {
+    			newRow.push(v);
+    		}
+    		else if(v['c']) {
+    			var count = v['c'];
+    			var value = v['v'];
+    			for(var i=0;i<count;i++) {
+        			newRow.push(value);
+    			}
+    		}
+    	});
+    	data.push(newRow);
+    });
+    return data;
+}
+
 function loadLayer(layerObj, callback) {
 	
 	var prefix = layerObj['prefix'];
@@ -32,9 +54,11 @@ function loadLayer(layerObj, callback) {
 			else {
 				cellRenderer = getRasterCellRenderer(rendererOptions);
 			}
+			
+			var data = unPackData(result['data']);
 			var options = {
 				'renderer':cellRenderer,
-				'data':result['data'],
+				'data':data,
 				'cell_height':parseFloat(result['cell_height']),
 				'cell_width':parseFloat(result['cell_width']),
 				'x_origin':parseFloat(result['x_origin']),
@@ -238,6 +262,3 @@ function getCategorizedRasterCellRenderer(options) {
 		
 	return new Function('value', funcBody);
 }
-
-
-
