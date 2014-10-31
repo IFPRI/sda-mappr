@@ -30,6 +30,7 @@ if(typeof(L) !== 'undefined') {
 			this.options.fillStyleForValue = {};
 			this.options.currentPixelsValueSelected = {};
 			this.setContinuousMode();
+			this.preProcessValues();
 		},
 		
 		highlightPixelsWithSameValue:function(e) {
@@ -132,28 +133,30 @@ if(typeof(L) !== 'undefined') {
 			var canvas = this.getCanvas();
 			canvas.width = canvas.width;
 			var context = canvas.getContext('2d');
-			
-			context.strokeWidth = 1.0;
-			context.lineWidth = 1.0;
 
-			var renderer = this.options.renderer;
-			var fillStyleForValue = this.options.fillStyleForValue;
+			var options = this.options;
+			
+			var fillStyleForValue = options.fillStyleForValue;
 			var getPXPointFromGEOPoint = this.getPXPointFromGEOPoint;
 			var getCellSizeForGEOPoint = this.getCellSizeForGEOPoint;
 			
 			this.options.pixelBBoxes = [];
 			this.options.pixelValueToSimilarCells = {};
 
-			var rasterOriginGEO_Y = this.options.y_origin;
-			var rasterOriginGEO_X = this.options.x_origin;
+			var rasterOriginGEO_Y = options.y_origin;
+			var rasterOriginGEO_X = options.x_origin;
 			var rasterOriginPX = getPXPointFromGEOPoint(rasterOriginGEO_Y, rasterOriginGEO_X);
 
-			var data = this.options.data;
+			var data = options.data;
 			var y = rasterOriginPX.y;
 			
-			var zoom = this.options.map.getZoom();
+			var zoom = options.map.getZoom();
 			var canDraw = this.canDraw;
-						
+			
+			var currentPixelsValueSelected = options.currentPixelsValueSelected;
+			var pixelValueToSimilarCells = options.pixelValueToSimilarCells;
+			var pixelBBoxes = options.pixelBBoxes;			
+			
 			for(var i=0,ll=data.length;i<ll;i++) {
 				
 				var cellSizeForLatAndLon = getCellSizeForGEOPoint(rasterOriginGEO_Y, rasterOriginGEO_X, i, zoom);	
@@ -169,16 +172,8 @@ if(typeof(L) !== 'undefined') {
 					
 					if(canDraw(value)) {
 						
-						var fillStyle = "";
-						if(fillStyleForValue[value]) {
-							fillStyle = fillStyleForValue[value];
-						}
-						else {
-							fillStyle = renderer(value);
-						}
-						
-						fillStyleForValue[value] = fillStyle;
-						fillStyle = this.options.currentPixelsValueSelected[value] ? 'yellow':fillStyle;
+						var fillStyle = fillStyleForValue[value];
+						fillStyle = currentPixelsValueSelected[value] ? 'yellow':fillStyle;
 						
 						context.rect(x, y, cellSizeXPX, cellSizeYPX);
 						context.fillStyle = fillStyle;
@@ -187,16 +182,42 @@ if(typeof(L) !== 'undefined') {
 						context.strokeRect(x, y, cellSizeXPX, cellSizeYPX);
 					
 						var pixelObj = [value, x, y, cellSizeXPX, cellSizeYPX, fillStyle];
+						pixelBBoxes.push(pixelObj);
 						
-						this.options.pixelBBoxes.push(pixelObj);
-						if(!this.options.pixelValueToSimilarCells[value]) {
-							this.options.pixelValueToSimilarCells[value] = [];
+						if(!pixelValueToSimilarCells[value]) {
+							pixelValueToSimilarCells[value] = [];
 						}
-						this.options.pixelValueToSimilarCells[value].push(pixelObj);						
+						pixelValueToSimilarCells[value].push(pixelObj);						
 					}
 					x += cellSizeXPX;	
 				}
 				y += cellSizeYPX;
+			}
+		},
+		preProcessValues:function() {
+	
+			var options = this.options;
+			var data = options.data;
+			var renderer = options.renderer;
+			var fillStyleForValue = options.fillStyleForValue;
+		
+			for(var i=0,ll=data.length;i<ll;i++) {
+				
+				var rows = data[i];
+				
+				for(var j=0,rl=rows.length;j<rl;j++) {
+					
+					var value = rows[j];
+					
+					var fillStyle = "";
+					if(fillStyleForValue[value]) {
+						fillStyle = fillStyleForValue[value];
+					}
+					else {
+						fillStyle = renderer(value);
+					}
+					fillStyleForValue[value] = fillStyle;
+				}
 			}
 		}
 	});

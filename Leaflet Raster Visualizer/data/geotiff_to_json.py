@@ -9,7 +9,7 @@ input_raster_directory = 'output/rasters/'
 list_of_rasters = [r for r in os.listdir(input_raster_directory) if r.endswith('tif')]
 output_json_directory =   'output/json/'
 
-categorizedRasters = ['gha_AEZ5_CLAS.tif']
+categorizedRasters = []
 
 for tiff_name in list_of_rasters:
     

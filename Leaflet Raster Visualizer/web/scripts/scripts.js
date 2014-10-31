@@ -186,15 +186,14 @@ $(document).ready(function() {
 		zoom: 7,
 	}).addTo(map);
 	
-	var prefix = 'GHA_';
 	var layerListNode = $("#layerList");
 	var controlsNode = $("#controls");
 	
 	var layers = [];
-	layers.push({prefix:prefix, indicator_code:'TT_50K', label:'Travel time (50K)'});
-	layers.push({prefix:prefix, indicator_code:'AEZ5_CLAS', label:'AEZ-5 Class'});
-	layers.push({prefix:prefix, indicator_code:'BMI', label:'Body Mass Index'});
-	layers.push({prefix:prefix, indicator_code:'PN05_RUR', label:'Rural Population 2005'});
+	layers.push({prefix:'KEN_', indicator_code:'TT_50K', label:'Travel time (50K)'});
+	layers.push({prefix:'GHA_', indicator_code:'AEZ5_CLAS', label:'AEZ-5 Class'});
+	layers.push({prefix:'KEN_', indicator_code:'BMI', label:'Body Mass Index'});
+	layers.push({prefix:'KEN_', indicator_code:'PN05_RUR', label:'Rural Population 2005'});
 
 	layers.forEach(function(layerObj) {
 		
