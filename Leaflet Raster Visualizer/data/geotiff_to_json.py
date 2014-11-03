@@ -37,31 +37,31 @@ for tiff_name in list_of_rasters:
     raster_values_array_list = raster_values_array.tolist()
     no_data_value = raster_band.GetNoDataValue()
     
-    optimized_raster_values_array = []
-    for row in raster_values_array_list:
-        
-        num_similar_values = 0
-        previous_value = row[0]
-        new_row = []
-        
-        for value in row:
-            
-            if value == previous_value:
-                num_similar_values += 1
-                
-            else:
-                
-                if num_similar_values > 1:
-                    new_row.append({"c":num_similar_values, "v":previous_value})
-                    
-                new_row.append(value)
-                previous_value = value
-                num_similar_values = 0
-                
-        optimized_raster_values_array.append(new_row)
+#     optimized_raster_values_array = []
+#     for row in raster_values_array_list:
+#         
+#         num_similar_values = 0
+#         previous_value = row[0]
+#         new_row = []
+#         
+#         for value in row:
+#             
+#             if value == previous_value:
+#                 num_similar_values += 1
+#                 
+#             else:
+#                 
+#                 if num_similar_values > 1:
+#                     new_row.append({"c":num_similar_values, "v":previous_value})
+#                     
+#                 new_row.append(value)
+#                 previous_value = value
+#                 num_similar_values = 0
+#                 
+#         optimized_raster_values_array.append(new_row)
                  
     result = {}
-    result['data'] = optimized_raster_values_array
+    result['data'] = raster_values_array_list
     result['x_origin'] = raster_x_origin
     result['y_origin'] = raster_y_origin
     result['cell_width'] = raster_cell_width

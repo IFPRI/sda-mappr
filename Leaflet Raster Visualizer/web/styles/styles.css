@@ -119,3 +119,27 @@ canvas {
 	padding: 12px;
 	border: 1px solid;
 }
+
+#domainAnalysis {
+	padding: 14px 4px;
+}
+
+#domainValue {
+	margin-left: 12px;
+	font-weight:bold;
+}
+
+#analysisTitle {
+	margin-bottom:12px;
+}
+
+.noUi-connect {
+	background: #e1a100 !important;
+}
+
+#runDomainButton {
+	background: #e1a100;
+	padding: 6px 22px;
+	color: #fff;
+	cursor: pointer;
+}

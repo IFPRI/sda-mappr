@@ -12,7 +12,7 @@ def getCell5MIdsForISO3(iso3):
     return obj
         
 indicator_names = ['PN05_RUR', 'BMI', 'TT_50K']
-target_iso3_id = 'KEN'
+target_iso3_id = 'GHA'
 
 for indicator_name in indicator_names:
     

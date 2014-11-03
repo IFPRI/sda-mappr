@@ -23,6 +23,18 @@ function unPackData(packedData) {
     return data;
 }
 
+function addCommas(nStr) {
+    nStr += '';
+    x = nStr.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    return x1 + x2;
+}
+
 function loadLayer(layerObj, callback) {
 	
 	var prefix = layerObj['prefix'];
@@ -55,7 +67,25 @@ function loadLayer(layerObj, callback) {
 				cellRenderer = getRasterCellRenderer(rendererOptions);
 			}
 			
-			var data = unPackData(result['data']);
+			var packedData = result['data'];
+			var data = unPackData(packedData);
+			
+			var formula = layerObj['formula'];
+			$("#domainValue").html("");
+			if(formula) {
+				$("#domainAnalysis").show();
+				$("#runDomainButton").click(function() {
+					var val = getSummaryValueForIndicator(data, formula);
+					val = Math.round(val * 100) / 100;
+					val = val.toFixed(2);
+					val = addCommas(val);
+					$("#domainValue").html(val);
+				});
+			}
+			else {
+				$("#domainAnalysis").hide();
+			}
+			
 			var options = {
 				'renderer':cellRenderer,
 				'data':data,
@@ -78,6 +108,8 @@ function loadLayer(layerObj, callback) {
 			};
 			var rasterCanvasLayer = new L.RasterCanvasLayer(options);
 			layerObj['layer'] = rasterCanvasLayer;
+			layerObj['layer'].addTo(map);
+			layerObj['active'] = 1;
 			
 			var rangeSliderControls = $("#rangeSliderControls");
 			
@@ -130,6 +162,30 @@ function loadLayer(layerObj, callback) {
 	});
 }
 
+function getSummaryValueForIndicator(data, formula) {
+	
+	if(formula === "SUM" || formula === "AVG") {
+		var sum = 0;
+		var totalValues = 0;
+		for(var i=0,ll=data.length;i<ll;i++) {		
+			var rows = data[i];
+			for(var j=0,rl=rows.length;j<rl;j++) {
+				var value = rows[j];
+				if(value !== '') {
+					sum += parseFloat(value); 
+					totalValues++;
+				}
+	 		}
+		}
+		if(formula === "AVG") {
+			return sum/totalValues;
+		}
+		else {
+			return sum;
+		}
+	}
+}
+
 function addLegend(isCategorized, valueClasses, valueColors, valueClassLabels, onClickCallback) {
 	
 	var activeClassValues = [];
@@ -174,7 +230,7 @@ function addLegend(isCategorized, valueClasses, valueColors, valueClassLabels, o
 		onClickCallback(activeClassValues);
 	}
 }
-
+var activeLayer = null;
 $(document).ready(function() {
 			
 	var northEast = L.latLng(11.759814674441921, 4.592285156249999);
@@ -190,10 +246,10 @@ $(document).ready(function() {
 	var controlsNode = $("#controls");
 	
 	var layers = [];
-	layers.push({prefix:'KEN_', indicator_code:'TT_50K', label:'Travel time (50K)'});
+	layers.push({prefix:'GHA_', indicator_code:'TT_50K', label:'Travel time (50K)', formula:'AVG'});
 	layers.push({prefix:'GHA_', indicator_code:'AEZ5_CLAS', label:'AEZ-5 Class'});
-	layers.push({prefix:'KEN_', indicator_code:'BMI', label:'Body Mass Index'});
-	layers.push({prefix:'KEN_', indicator_code:'PN05_RUR', label:'Rural Population 2005'});
+	layers.push({prefix:'GHA_', indicator_code:'BMI', label:'Body Mass Index'});
+	layers.push({prefix:'GHA_', indicator_code:'PN05_RUR', label:'Rural Population 2005',formula:'SUM'});
 
 	layers.forEach(function(layerObj) {
 		
@@ -209,10 +265,18 @@ $(document).ready(function() {
 			}
 			else {
 				
+				if(activeLayer) {
+					$(this).removeClass("checkBoxSelected");
+					map.removeLayer(activeLayer['layer']);
+					activeLayer['active'] = 0;
+					controlsNode.hide();
+				}
+				activeLayer = layerObj;
+				
+				$(".checkBoxSelected").removeClass("checkBoxSelected");
 				$(this).addClass("checkBoxSelected");
 				loadLayer(layerObj, function() {
-					layerObj['layer'].addTo(map);
-					layerObj['active'] = 1;
+
 					controlsNode.show();
 				});
 			}
