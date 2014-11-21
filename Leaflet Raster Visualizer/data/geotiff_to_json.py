@@ -9,7 +9,7 @@ input_raster_directory = 'output/rasters/'
 list_of_rasters = [r for r in os.listdir(input_raster_directory) if r.endswith('tif')]
 output_json_directory =   'output/json/'
 
-categorizedRasters = []
+categorizedRasters = ['gha_AEZ8_CLAS.tif', 'gha_FS_2012.tif', 'gha_FS_2012_TX.tif']
 
 for tiff_name in list_of_rasters:
     
@@ -76,11 +76,12 @@ for tiff_name in list_of_rasters:
         result_str = result_str.replace(str(int(no_data_value)), '""')
         
     else:
-        
         raster_values_array = raster_values_array[numpy.where(raster_values_array > no_data_value)]
         min_value = numpy.min(raster_values_array)
         max_value = numpy.max(raster_values_array)
-                
+        
+        print numpy.unique(raster_values_array)        
+        
         result['min_value'] = min_value
         result['max_value'] = max_value
         

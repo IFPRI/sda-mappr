@@ -2,10 +2,10 @@
 var fs = require("fs");
 var path = require('path');
 
-var domainJSONFullpath = __dirname + "/gha_FS_2012.json";
+var domainJSONFullpath = __dirname + "/NGA_msh_50k_id.json";
 var domainJSON = (JSON.parse(fs.readFileSync(domainJSONFullpath, "utf8")));
 
-var indicatorJSONFullpath = __dirname + "/GHA_PN05_RUR.json";
+var indicatorJSONFullpath = __dirname + "/NGA_pn05_rur.json";
 var indicatorJSON = (JSON.parse(fs.readFileSync(indicatorJSONFullpath, "utf8")));
 
 // DOMAIN 1 ==============================
@@ -20,19 +20,22 @@ var domain1Obj = {};
 domain1Obj['id'] = Domain1ID;
 domain1Obj['data'] = Domain1Data;
 domain1Obj['classToIdx'] = {};
-domain1Obj['uniqueClasses'] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-domain1Obj['uniqueClasses'].forEach(function(value){
-	if(value !== D1ND) {
-		domain1Obj['classToIdx'][value] = [];
-	}
-});
+
+var uniqueValues = {};
 domain1Obj['data'].forEach(function(row, y) {
 	row.forEach(function(value, x) {
 		if(value !== D1ND && !isNaN(parseFloat(value))) {
+			
+			if(!domain1Obj['classToIdx'][value]) {
+				domain1Obj['classToIdx'][value] = [];
+			}
 			domain1Obj['classToIdx'][value].push([x, y]);
+			uniqueValues[value] = 1;
 		}
 	});
 });
+domain1Obj['uniqueClasses'] = Object.keys(uniqueValues);
+
 
 //DOMAIN 2 ==============================
 //var Domain2ID = 'D2';
@@ -173,8 +176,9 @@ indicatorObjs.forEach(function(indicatorObj) {
 		
 		domainCrossProductToIdxMap[key].forEach(function(xy) {
 			var val = indicatorData[xy[1]][xy[0]];
-			if(!isNaN(parseFloat(val)))
-			sum += parseFloat(val);
+			if(!isNaN(parseFloat(val))) {
+				sum += parseFloat(val);
+			}
 		});
 
 		if(formula === 'SUM') {
