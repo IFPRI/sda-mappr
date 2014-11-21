@@ -16,7 +16,7 @@ var _gaq = []; // dev purposes only
 
 (function() {
 
-var serverRootURL = "dev.harvestchoice.org";
+var serverRootURL = "apps.harvestchoice.org";
 var mapServiceRootURL = "dev.harvestchoice.org";
 
 var AppURL = serverRootURL + "/mappr/";
