@@ -2,91 +2,62 @@
 var fs = require("fs");
 var path = require('path');
 
-var domainJSONFullpath = __dirname + "/NGA_msh_50k_id.json";
-var domainJSON = (JSON.parse(fs.readFileSync(domainJSONFullpath, "utf8")));
+var domainObjs = [];
+//domainObjs.push(getDomainObj('GHA_msh_50k_id'));
+//domainObjs.push(getDomainObj('gha_AEZ8_CLAS'));
+domainObjs.push(getDomainObj('GHA_adm2_code'));
+var domainCrossProductToIdxMap = getDomainIdxCrossProuctsMap(domainObjs);
 
-var indicatorJSONFullpath = __dirname + "/NGA_pn05_rur.json";
-var indicatorJSON = (JSON.parse(fs.readFileSync(indicatorJSONFullpath, "utf8")));
+var indicatorObjs = [];
+indicatorObjs.push(getIndicatorObj('GHA_PN05_RUR'));
+indicatorObjs.push(getIndicatorObj('GHA_BMI'));
+indicatorObjs.push(getIndicatorObj('GHA_TT_50K'));
 
-// DOMAIN 1 ==============================
-var Domain1ID = 'AEZ-8 Class';
-var D1ND = "";
-var Domain1Data = domainJSON['data'];
-//Domain1Data.push(["D1C1", "D1C2", "D1C2", "D1C2"]);
-//Domain1Data.push(["D1C1", 'D1C2', "D1C2", "D1C2"]);
-//Domain1Data.push(["D1C1", "D1C1", "D1C1", "D1C2"]);
-//Domain1Data.push(["D1C1", "D1C1", "D1C1", 'D1C2']);
-var domain1Obj = {};
-domain1Obj['id'] = Domain1ID;
-domain1Obj['data'] = Domain1Data;
-domain1Obj['classToIdx'] = {};
+processDomainSummary(domainCrossProductToIdxMap, indicatorObjs);
 
-var uniqueValues = {};
-domain1Obj['data'].forEach(function(row, y) {
-	row.forEach(function(value, x) {
-		if(value !== D1ND && !isNaN(parseFloat(value))) {
-			
-			if(!domain1Obj['classToIdx'][value]) {
-				domain1Obj['classToIdx'][value] = [];
+function getIndicatorObj(id) {
+	
+	var indicatorJSONFullpath = __dirname + "/"+id+".json";
+	var indicatorJSON = JSON.parse(fs.readFileSync(indicatorJSONFullpath, "utf8"));
+	
+	var IndicatorObj = {};
+	IndicatorObj['id'] = id;
+	IndicatorObj['data'] = indicatorJSON['data'];
+	IndicatorObj['formula'] = "SUM";
+
+	return IndicatorObj;
+}
+
+function getDomainObj(id) {
+	
+	var domainJSONFullpath = __dirname + "/"+id+".json";
+	var domainJSON = JSON.parse(fs.readFileSync(domainJSONFullpath, "utf8"));
+	
+	var domainObj = {};
+	domainObj['id'] = id;
+	domainObj['data'] = domainJSON['data'];
+	domainObj['classToIdx'] = {};
+	var uniqueValues = {};
+	domainObj['data'].forEach(function(row, y) {
+		row.forEach(function(value, x) {
+			if(value !== id && !isNaN(parseFloat(value))) {
+				if(!domainObj['classToIdx'][value]) {
+					domainObj['classToIdx'][value] = [];
+				}
+				domainObj['classToIdx'][value].push([x, y]);
+				uniqueValues[value] = 1;
 			}
-			domain1Obj['classToIdx'][value].push([x, y]);
-			uniqueValues[value] = 1;
-		}
+		});
 	});
-});
-domain1Obj['uniqueClasses'] = Object.keys(uniqueValues);
+	domainObj['uniqueClasses'] = Object.keys(uniqueValues);
 
-
-//DOMAIN 2 ==============================
-//var Domain2ID = 'D2';
-//var D2ND = '-999';
-//var Domain2Data = [];
-//Domain2Data.push(["D2C1", "D2C1", "D2C1", "D2C1"]);
-//Domain2Data.push(["D2C1", 'D2C1', 'D2C1', "D2C1"]);
-//Domain2Data.push(["D2C2", 'D2C2', 'D2C2', "D2C2"]);
-//Domain2Data.push(["D2C2", "D2C2", "D2C2", "D2C2"]);
-//var domain2Obj = {};
-//domain2Obj['id'] = Domain2ID;
-//domain2Obj['data'] = Domain2Data;
-//domain2Obj['noDataValue'] = D2ND;
-//domain2Obj['classToIdx'] = {};
-//domain2Obj['uniqueClasses'] = ["D2C1", "D2C2"];
-//domain2Obj['uniqueClasses'].forEach(function(value) {
-//	domain2Obj['classToIdx'][value] = [];
-//});
-//domain2Obj['data'].forEach(function(row, y) {
-//	row.forEach(function(value, x) {
-//		if(value !== D2ND) {
-//			domain2Obj['classToIdx'][value].push([x, y]);
-//		}
-//	});
-//});
-
-//INDICATOR 1 ==============================
-var Indicator1Obj = {};
-Indicator1Obj['id'] = "Rural Population 2005";
-Indicator1Obj['data'] = indicatorJSON['data'];
-Indicator1Obj['formula'] = "SUM";
-//Indicator1Obj['data'].push([3, 1, 1, 1]);
-//Indicator1Obj['data'].push([2, 1, 1, 1]);
-//Indicator1Obj['data'].push([1, 1, 1, 1]);
-//Indicator1Obj['data'].push([1, 1, 1, 1]);
-
-//INDICATOR 2 ==============================
-//var Indicator2Obj = {};
-//Indicator2Obj['id'] = "I2";
-//Indicator2Obj['formula'] = "AVG";
-//Indicator2Obj['data'] = [];
-//Indicator2Obj['data'].push([1, 1, 1, 1]);
-//Indicator2Obj['data'].push([1, 1, 1, 1]);
-//Indicator2Obj['data'].push([1, 1, 1, 1]);
-//Indicator2Obj['data'].push([1, 1, 1, 1]);
-
-var domainObjs = [domain1Obj];
-var indicatorObjs = [Indicator1Obj];
+	return domainObj
+}
 
 function getDomainIdxCrossProuctsMap(domainObjs) {
 	
+	console.time('getDomainIdxCrossProuctsMap');
+		
 	if(domainObjs.length === 1) {
 		
 		var domainObj1 = domainObjs[0];
@@ -105,7 +76,7 @@ function getDomainIdxCrossProuctsMap(domainObjs) {
 				domainClassesToIdxObj[classUID].push(xyD1);
 			});
 		}
-		
+		console.timeEnd('getDomainIdxCrossProuctsMap');
 		return domainClassesToIdxObj;
 	}
 	
@@ -154,40 +125,44 @@ function getDomainIdxCrossProuctsMap(domainObjs) {
 		});
 	});
 	
+	console.timeEnd('getDomainIdxCrossProuctsMap');
 	return domainClassesToIdxObj;
 }
 
-var domainCrossProductToIdxMap = getDomainIdxCrossProuctsMap(domainObjs);
-
-var result = {};
-
-indicatorObjs.forEach(function(indicatorObj) {
+function processDomainSummary(domainCrossProductToIdxMap, indicatorObjs) {
 	
-	var indicatorID = indicatorObj['id'];
-	var formula = indicatorObj['formula'];
-	var indicatorData = indicatorObj['data'];
+	console.time('processDomainSummary');
 	
-	result[indicatorID] = {};
+	var result = {};
+	indicatorObjs.forEach(function(indicatorObj) {
+		
+		var indicatorID = indicatorObj['id'];
+		var formula = indicatorObj['formula'];
+		var indicatorData = indicatorObj['data'];
+		
+		result[indicatorID] = {};
 
-	for(var key in domainCrossProductToIdxMap) {		
-		
-		var sum = 0;
-		result[indicatorID][key] = 0;
-		
-		domainCrossProductToIdxMap[key].forEach(function(xy) {
-			var val = indicatorData[xy[1]][xy[0]];
-			if(!isNaN(parseFloat(val))) {
-				sum += parseFloat(val);
+		for(var key in domainCrossProductToIdxMap) {		
+			
+			var sum = 0;
+			result[indicatorID][key] = 0;
+			domainCrossProductToIdxMap[key].forEach(function(xy) {
+				if(indicatorData[xy[1]]) {
+					var val = indicatorData[xy[1]][xy[0]];
+					if(!isNaN(parseFloat(val))) {
+						sum += parseFloat(val);
+					}	
+				}
+			});
+
+			if(formula === 'SUM') {
+				result[indicatorID][key] = sum;
 			}
-		});
-
-		if(formula === 'SUM') {
-			result[indicatorID][key] = sum;
+			else if(formula === 'AVG') {
+				result[indicatorID][key] = sum / idxs.length;
+			}
 		}
-		else if(formula === 'AVG') {
-			result[indicatorID][key] = sum / idxs.length;
-		}
-	}
-});
-
-console.log(result)
+	});
+	console.log(result)
+	console.timeEnd('processDomainSummary');
+}

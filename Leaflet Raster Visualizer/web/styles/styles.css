@@ -124,22 +124,35 @@ canvas {
 	padding: 14px 4px;
 }
 
-#domainValue {
+.domainValueResult {
 	margin-left: 12px;
 	font-weight:bold;
 }
 
-#analysisTitle {
-	margin-bottom:12px;
+.analysisTitle {
+	margin:12px 0;
 }
 
 .noUi-connect {
 	background: #e1a100 !important;
 }
 
-#runDomainButton {
+.domainButton {
 	background: #e1a100;
 	padding: 6px 22px;
 	color: #fff;
 	cursor: pointer;
+}
+
+#analysisResults {
+	padding:12px;
+	position:absolute;
+	width: 300px;
+	height:400px;
+	background:#fff;
+	z-index:100;
+	left:24px;
+	bottom:50px;
+	border: 1px solid;
+	display:none;
 }
