@@ -3,8 +3,8 @@ var fs = require("fs");
 var path = require('path');
 
 var domainObjs = [];
-//domainObjs.push(getDomainObj('GHA_msh_50k_id'));
-//domainObjs.push(getDomainObj('gha_AEZ8_CLAS'));
+domainObjs.push(getDomainObj('GHA_msh_50k_id'));
+domainObjs.push(getDomainObj('gha_AEZ8_CLAS'));
 domainObjs.push(getDomainObj('GHA_adm2_code'));
 var domainCrossProductToIdxMap = getDomainIdxCrossProuctsMap(domainObjs);
 
@@ -63,18 +63,17 @@ function getDomainIdxCrossProuctsMap(domainObjs) {
 		var domainObj1 = domainObjs[0];
 		var domainClassesToIdxObj = {};
 		
-		for(var domain1Class in domainObj1['classToIdx']) {
-			
+		for(var domain1Class in domainObj1['classToIdx']) {			
 			var listOfListsOfXYsD1 = domainObj1['classToIdx'][domain1Class];
-			
-			listOfListsOfXYsD1.forEach(function(xyD1) {
-				
-				var classUID = domain1Class;
-				if(!domainClassesToIdxObj[classUID]) {
-					domainClassesToIdxObj[classUID] = [];
+			for(var i=0,len=listOfListsOfXYsD1.length;i<len;i++) {
+				if(domainClassesToIdxObj[domain1Class]) {
+					domainClassesToIdxObj[domain1Class].push(listOfListsOfXYsD1[i]);
 				}	
-				domainClassesToIdxObj[classUID].push(xyD1);
-			});
+				else {
+					domainClassesToIdxObj[domain1Class] = [];
+					domainClassesToIdxObj[domain1Class].push(listOfListsOfXYsD1[i]);
+				}
+			}
 		}
 		console.timeEnd('getDomainIdxCrossProuctsMap');
 		return domainClassesToIdxObj;
@@ -86,45 +85,51 @@ function getDomainIdxCrossProuctsMap(domainObjs) {
 	var domainCombonationsAlreadyProcessed = {};
 	var domainClassesToIdxObj = {};
 	
-	domainObjs.forEach(function(domainObj1) {
+	for(var i=0; i<domainObjs.length; i++) {
 		
-		var domain1ID = domainObj1['id'];
-		reverseCopy.forEach(function(domainObj2) {
+		var domainObj1 = domainObjs[i];
+		var domain1ID = domainObjs['id'];
+		
+		for(var j=0; j<reverseCopy.length; j++) {
 			
+			var domainObj2 = domainObjs[j];
 			var domain2ID = domainObj2['id'];
-			var domainComboUIDs = [domain1ID, domain2ID];
-			domainComboUIDs.sort();
-			domainComboUID = domainComboUIDs.join("");
+			var domainComboUID = [domain1ID, domain2ID].sort().join("");
 			
 			if(domain1ID !== domain2ID && !domainCombonationsAlreadyProcessed[domainComboUID]) {
 
 				domainCombonationsAlreadyProcessed[domainComboUID] = true;
+				
 				for(var domain1Class in domainObj1['classToIdx']) {
 					
 					var listOfListsOfXYsD1 = domainObj1['classToIdx'][domain1Class];										
 					for(var domain2Class in domainObj2['classToIdx']) {
 					
 						var listOfListsOfXYsD2 = domainObj2['classToIdx'][domain2Class];
-						listOfListsOfXYsD1.forEach(function(xyD1) {
+						for(var k=0, len=listOfListsOfXYsD1.length; k<len; k++) {
 							
-							listOfListsOfXYsD2.forEach(function(xyD2) {
+							var xyD1 = listOfListsOfXYsD1[k];
+							for(var h=0, hLen=listOfListsOfXYsD2.length; h<hLen; h++) {
 								
-								if(xyD1.join("") === xyD2.join("")) {
+								var xyD2 = listOfListsOfXYsD2[h];
+								if((xyD1[0] + "" + xyD1[1]) === (xyD2[0] + "" + xyD2[1])) {
 									
 									var classUID = domain1Class + "_" + domain2Class;
-									if(!domainClassesToIdxObj[classUID]) {
+									if(domainClassesToIdxObj[classUID]) {
+										domainClassesToIdxObj[classUID].push(xyD1);
+									}					
+									else {
 										domainClassesToIdxObj[classUID] = [];
-									}									
-									domainClassesToIdxObj[classUID].push(xyD1);
+										domainClassesToIdxObj[classUID].push(xyD1);
+									}
 								}
-							});
-						});
+							}
+						}
 					}
 				}
-			}
-		});
-	});
-	
+			}	
+		}
+	}
 	console.timeEnd('getDomainIdxCrossProuctsMap');
 	return domainClassesToIdxObj;
 }
@@ -163,6 +168,5 @@ function processDomainSummary(domainCrossProductToIdxMap, indicatorObjs) {
 			}
 		}
 	});
-	console.log(result)
 	console.timeEnd('processDomainSummary');
 }
