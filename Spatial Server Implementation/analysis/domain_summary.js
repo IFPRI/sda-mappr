@@ -4,17 +4,20 @@ var path = require('path');
 
 //AD05_CATT
 //"#ffffff|#fcdd5d|#f7ba3e|#d68522|#9e4410|#6b0601";
-//"0|10|50|100|500";
-//"none|under 10|11-50|51-100|101-500|over 500"
+//"";
+//""
+
+//http://apps.harvestchoice.org/HarvestChoiceApi/0.3/api/cellvalues?indicatorIds=70&domainIds=25&domainIds=30&domainIds=27&countryIds=GHA
 
 function main() {
 	
 	var prefix = 'GHA';
 
 	var domainObjs = [];
-//	domainObjs.push(getDomainObj(prefix, 'MSH_50K_ID'));
-	domainObjs.push(getDomainObj(prefix, 'AEZ8_CLAS'));
-//	domainObjs.push(getDomainObj(prefix, 'ADM2_CODE'));
+	domainObjs.push(getDomainObj(prefix, 'MSH_50K_ID'));
+//	domainObjs.push(getDomainObj(prefix, 'AEZ8_CLAS'));
+//	domainObjs.push(getDomainObj(prefix, 'PSH_ID'));
+	domainObjs.push(getDomainObj(prefix, 'ADM2_CODE'));
 	
 	console.time('getDomainIdxCrossProuctsMap');
 	var domainCrossProductToIdxMap = getDomainIdxCrossProuctsMap(domainObjs);
@@ -25,7 +28,7 @@ function main() {
 //	indicatorObjs.push(getIndicatorObj(prefix, 'BMI', 'SUM'));
 //	indicatorObjs.push(getIndicatorObj(prefix, 'TT_50K', 'AVG'));
 //	indicatorObjs.push(getIndicatorObj(prefix, 'AREA_TOTAL', 'SUM'));
-	indicatorObjs.push(getIndicatorObj(prefix, 'AD05_CATT', 'SUM(AN05_CATT)/SUM(AREA_TOTAL)*100', [getIndicatorObj(prefix, 'AREA_TOTAL', 'SUM')]));
+	indicatorObjs.push(getIndicatorObj(prefix, 'AN05_CATT', 'SUM(AN05_CATT)/SUM(AREA_TOTAL)*100', [getIndicatorObj(prefix, 'AREA_TOTAL', 'SUM')]));
 
 	console.time('processDomainSummary');
 	var result = getDomainSummaryResult(domainCrossProductToIdxMap, indicatorObjs);
@@ -80,6 +83,31 @@ function getDomainObj(prefix, id) {
 	return domainObj
 }
 
+function cartProd(paramArray) {
+
+	function addTo(curr, args) {
+
+		var i, copy, rest = args.slice(1), last = !rest.length, result = [];
+
+		for(i = 0; i < args[0].length; i++) {
+
+			copy = curr.slice();
+			copy.push(args[0][i]);
+
+			if(last) {
+				result.push(copy);
+
+			} else {
+				result = result.concat(addTo(copy, rest));
+			}
+		}
+
+		return result;
+	}
+
+	return addTo([], Array.prototype.slice.call(arguments));
+}
+
 function getDomainIdxCrossProuctsMap(domainObjs) {
 	
 	if(domainObjs.length === 1) {
@@ -101,58 +129,133 @@ function getDomainIdxCrossProuctsMap(domainObjs) {
 		}
 		return domainClassesToIdxObj;
 	}
-	
-	var reverseCopy = domainObjs.slice(0);
-	reverseCopy.reverse();
-	
-	var domainCombonationsAlreadyProcessed = {};
-	var domainClassesToIdxObj = {};
-	
-	for(var i=0; i<domainObjs.length; i++) {
+	else if(domainObjs.length === 2) {
 		
-		var domainObj1 = domainObjs[i];
-		var domain1ID = domainObjs['id'];
-		
-		for(var j=0; j<reverseCopy.length; j++) {
-			
-			var domainObj2 = domainObjs[j];
-			var domain2ID = domainObj2['id'];
-			var domainComboUID = [domain1ID, domain2ID].sort().join("");
-			
-			if(domain1ID !== domain2ID && !domainCombonationsAlreadyProcessed[domainComboUID]) {
-
-				domainCombonationsAlreadyProcessed[domainComboUID] = true;
+		var reverseCopy = domainObjs.slice(0);
+		reverseCopy.reverse();
 				
-				for(var domain1Class in domainObj1['classToIdx']) {
+		var domainCombonationsAlreadyProcessed = {};
+		var domainClassesToIdxObj = {};
+		
+		for(var i=0; i<domainObjs.length; i++) {
+			
+			var domainObj1 = domainObjs[i];
+			var domain1ID = domainObj1['id'];
+			
+			for(var j=0; j<reverseCopy.length; j++) {
+				
+				var domainObj2 = reverseCopy[j];
+				var domain2ID = domainObj2['id'];
+				var domainComboUID = [domain1ID, domain2ID].sort().join("");
+
+				if(domain1ID !== domain2ID && !domainCombonationsAlreadyProcessed[domainComboUID]) {
+
+					domainCombonationsAlreadyProcessed[domainComboUID] = true;
 					
-					var listOfListsOfXYsD1 = domainObj1['classToIdx'][domain1Class];										
-					for(var domain2Class in domainObj2['classToIdx']) {
-					
-						var listOfListsOfXYsD2 = domainObj2['classToIdx'][domain2Class];
-						for(var k=0, len=listOfListsOfXYsD1.length; k<len; k++) {
-							
-							var xyD1 = listOfListsOfXYsD1[k];
-							for(var h=0, hLen=listOfListsOfXYsD2.length; h<hLen; h++) {
+					for(var domain1Class in domainObj1['classToIdx']) {
+						
+						var listOfListsOfXYsD1 = domainObj1['classToIdx'][domain1Class];										
+						for(var domain2Class in domainObj2['classToIdx']) {
+						
+							var listOfListsOfXYsD2 = domainObj2['classToIdx'][domain2Class];
+							for(var k=0, len=listOfListsOfXYsD1.length; k<len; k++) {
 								
-								var xyD2 = listOfListsOfXYsD2[h];
-								if((xyD1[0] + "" + xyD1[1]) === (xyD2[0] + "" + xyD2[1])) {
+								var xyD1 = listOfListsOfXYsD1[k];
+								for(var h=0, hLen=listOfListsOfXYsD2.length; h<hLen; h++) {
 									
-									var classUID = domain1Class + "_" + domain2Class;
-									if(domainClassesToIdxObj[classUID]) {
-										domainClassesToIdxObj[classUID].push(xyD1);
-									}					
-									else {
-										domainClassesToIdxObj[classUID] = [];
-										domainClassesToIdxObj[classUID].push(xyD1);
+									var xyD2 = listOfListsOfXYsD2[h];
+									if((xyD1[0] + "" + xyD1[1]) === (xyD2[0] + "" + xyD2[1])) {
+										
+										var classUID = domain1Class + "_" + domain2Class;
+										if(domainClassesToIdxObj[classUID]) {
+											domainClassesToIdxObj[classUID].push(xyD1);
+										}
+										else {
+											domainClassesToIdxObj[classUID] = [];
+											domainClassesToIdxObj[classUID].push(xyD1);
+										}
 									}
 								}
 							}
 						}
 					}
-				}
-			}	
+				}	
+			}
 		}
 	}
+	
+	else if(domainObjs.length === 3) {
+		
+		var reverseCopy = domainObjs.slice(0);
+		reverseCopy.reverse();
+		
+		var domainCombonationsAlreadyProcessed = {};
+		var domainClassesToIdxObj = {};
+		
+		for(var i=0; i<domainObjs.length; i++) {
+			
+			var domainObj1 = domainObjs[i];
+			var domain1ID = domainObj1['id'];
+			
+			for(var j=0; j<reverseCopy.length; j++) {
+				
+				var domainObj2 = reverseCopy[j];
+				var domain2ID = domainObj2['id'];
+				
+				for(var z=0; z<domainObjs.length; z++) {
+					
+					var domainObj3 = domainObjs[z];
+					var domain3ID = domainObj3['id'];
+					
+					var domainComboUID = [domain1ID, domain2ID, domainObj3].sort().join("");
+
+					if(domain1ID !== domain2ID && domain1ID !== domain3ID && domain2ID !== domain3ID && !domainCombonationsAlreadyProcessed[domainComboUID]) {
+
+						domainCombonationsAlreadyProcessed[domainComboUID] = true;
+						
+						for(var domain1Class in domainObj1['classToIdx']) {
+							var listOfListsOfXYsD1 = domainObj1['classToIdx'][domain1Class];		
+							
+							for(var domain2Class in domainObj2['classToIdx']) {							
+								var listOfListsOfXYsD2 = domainObj2['classToIdx'][domain2Class];
+								
+								for(var domain3Class in domainObj3['classToIdx']) {
+									var listOfListsOfXYsD3 = domainObj3['classToIdx'][domain3Class];	
+									
+									for(var k=0, len=listOfListsOfXYsD1.length; k<len; k++) {
+										var xyD1 = listOfListsOfXYsD1[k];
+										
+										for(var h=0, hLen=listOfListsOfXYsD2.length; h<hLen; h++) {											
+											var xyD2 = listOfListsOfXYsD2[h];
+											
+											for(var y=0, yLen=listOfListsOfXYsD3.length; y<yLen; y++) {
+												var xyD3 = listOfListsOfXYsD3[y];
+												
+												if((xyD1[0] + "" + xyD1[1]) === (xyD2[0] + "" + xyD2[1]) && (xyD1[0] + "" + xyD1[1]) === (xyD3[0] + "" + xyD3[1])) {
+													
+													var classUID = domain1Class + "_" + domain2Class + "_" + domain3Class;
+													console.log(classUID)
+													
+													if(domainClassesToIdxObj[classUID]) {
+														domainClassesToIdxObj[classUID].push(xyD1);
+													}					
+													else {
+														domainClassesToIdxObj[classUID] = [];
+														domainClassesToIdxObj[classUID].push(xyD1);
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}	
+				}
+			}
+		}		
+	}
+
 	return domainClassesToIdxObj;
 }
 
