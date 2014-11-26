@@ -5,30 +5,30 @@ var path = require('path');
 //http://apps.harvestchoice.org/HarvestChoiceApi/0.3/api/cellvalues?indicatorIds=70&domainIds=25&domainIds=30&domainIds=27&countryIds=GHA
 
 function main() {
-	
+		
 	var prefix = 'GHA';
 
 	var domainObjs = [];
 	domainObjs.push(getDomainObj(prefix, 'MSH_50K_ID'));
 	domainObjs.push(getDomainObj(prefix, 'AEZ8_CLAS'));
 //	domainObjs.push(getDomainObj(prefix, 'PSH_ID'));
-	domainObjs.push(getDomainObj(prefix, 'ADM2_CODE'));
+//	domainObjs.push(getDomainObj(prefix, 'ADM2_CODE'));
 //	
-//	console.time('getDomainIdxCrossProuctsMap');
-//	var domainCrossProductToIdxMap = getDomainIdxCrossProuctsMap(domainObjs);
-//	console.timeEnd('getDomainIdxCrossProuctsMap');
+	console.time('getDomainIdxCrossProuctsMap');
+	var domainCrossProductToIdxMap = getDomainIdxCrossProuctsMap(domainObjs);
+	console.timeEnd('getDomainIdxCrossProuctsMap');
 
 	var indicatorObjs = [];
-	indicatorObjs.push(getIndicatorObj(prefix, 'PN05_RUR', 'SUM'));
+//	indicatorObjs.push(getIndicatorObj(prefix, 'PN05_RUR', 'SUM'));
 //	indicatorObjs.push(getIndicatorObj(prefix, 'BMI', 'SUM'));
 //	indicatorObjs.push(getIndicatorObj(prefix, 'TT_50K', 'AVG'));
 //	indicatorObjs.push(getIndicatorObj(prefix, 'AREA_TOTAL', 'SUM'));
-//	indicatorObjs.push(getIndicatorObj(prefix, 'AN05_CATT', 'SUM(AN05_CATT)/SUM(AREA_TOTAL)*100', [getIndicatorObj(prefix, 'AREA_TOTAL', 'SUM')]));
+	indicatorObjs.push(getIndicatorObj(prefix, 'AN05_CATT', 'SUM(AN05_CATT)/SUM(AREA_TOTAL)*100', [getIndicatorObj(prefix, 'AREA_TOTAL', 'SUM')]));
 
-//	console.time('getDomainSummaryResultMethodA');
-//	var resultA = getDomainSummaryResultMethodA(domainCrossProductToIdxMap, indicatorObjs);
-//	console.log(resultA);
-//	console.timeEnd('getDomainSummaryResultMethodA');
+	console.time('getDomainSummaryResultMethodA');
+	var resultA = getDomainSummaryResultMethodA(domainCrossProductToIdxMap, indicatorObjs);
+	console.log(resultA);
+	console.timeEnd('getDomainSummaryResultMethodA');
 
 	console.time('getDomainSummaryResultMethodB');
 	var resultB = getDomainSummaryResultMethodB(domainObjs, indicatorObjs);
@@ -39,43 +39,9 @@ main();
 
 function getDomainSummaryResultMethodB(domainObjs, indicatorObjs) {
 	
-	var d1 = domainObjs[0];
-	var d2 = domainObjs[1];
-	var d3 = domainObjs[2];
+	var domainFunc = getDynamicDomainFunction(domainObjs);
+	var classToIdxs = domainFunc(domainObjs);
 	
-	var dd1 = d1['data'];
-	var dd2 = d2['data'];
-	var dd3 = d3['data'];
-	
-	var d1c = d1['uniqueClasses'];
-	var d2c = d2['uniqueClasses'];
-	var d3c = d3['uniqueClasses'];
-	
-	var domainClassPermutations = cartesianProductOf([d1c, d2c, d3c]);
-	
-	var classToIdxs = {};
-	domainClassPermutations.forEach(function(perm) {
-		
-		var d1cv = +perm[0];
-		var d2cv = +perm[1];
-		var d3cv = +perm[2];
-		
-		for(var y=0,len=dd1.length;y<len;y++) {
-			var row = dd1[y];
-			for(var x=0,rLen=row.length;x<rLen;x++) {
-				if(d1cv === dd1[y][x] && d2cv === dd2[y][x] && d3cv === dd3[y][x]) {
-					var k = d1cv + "_" + d2cv + "_" + d3cv;
-					if(classToIdxs[k]) {
-						classToIdxs[k].push([x, y]);
-					}
-					else {
-						classToIdxs[k] = [[x, y]];
-					}
-				}
-			}
-		}
-	});
-		
 	var indicatorToClassResult = {};
 	indicatorObjs.forEach(function(indicatorObj) {
 		
@@ -114,16 +80,66 @@ function getDomainSummaryResultMethodB(domainObjs, indicatorObjs) {
 	return indicatorToClassResult;
 }
 
-function cartesianProductOf(arrayOfElements) {
-	return Array.prototype.reduce.call(arrayOfElements, function(a, b) {
-		var ret = [];
-		a.forEach(function(a) {
-			b.forEach(function(b) {
-				ret.push(a.concat([b]));
-			});
-		});
-		return ret;
-	}, [[]]);
+function getDynamicDomainFunction(domainObjs) {
+	
+	var domainParamName = "domainObjs";
+	var classToIdxs = "classToIdxs";
+	var cartesianProductOfFunc = "cartesianProductOf";
+	var domainClassPermutations = "domainClassPermutations";
+	
+	var funcBody = "var "+cartesianProductOfFunc+" = function(arrayOfElements) {";
+	funcBody += "		return Array.prototype.reduce.call(arrayOfElements, function(a, b) {";
+	funcBody +=	"			var ret = [];";
+	funcBody += "			a.forEach(function(a) {";
+	funcBody += "				b.forEach(function(b) {";
+	funcBody +=	"					ret.push(a.concat([b]));";
+	funcBody +=	"				});";
+	funcBody +=				"});";
+	funcBody +=	"			return ret;";
+	funcBody +=	"		}, [[]]);";
+	funcBody +=	"	};";
+	
+	var domainClassVars = [];
+	domainObjs.forEach(function(d, idx) {
+		var domain = "domain"+idx;
+		var domainClass = "domainClasses"+idx;
+		funcBody += "var "+domain+" = "+domainParamName+"["+idx+"];";
+		funcBody += "var domainData"+idx+" = "+domain+"['data'];";
+		funcBody += "var "+domainClass+" = "+domain+"['uniqueClasses'];";
+		domainClassVars.push(domainClass);
+	});
+	
+	funcBody += "var "+domainClassPermutations+" = "+cartesianProductOfFunc+"(["+domainClassVars.join(",")+"]);";	
+	funcBody += "var "+classToIdxs+" = {};";
+	funcBody += "for(var p=0,pLen="+domainClassPermutations+".length;p<pLen;p++) {";
+	funcBody += "	var perm = "+domainClassPermutations+"[p];";
+	
+	var boolClauses = [];
+	var keyValues = [];
+	domainObjs.forEach(function(d, idx) {
+		var domainClassValue = "domainClassValue"+idx;
+		funcBody += "var "+domainClassValue+" = +perm["+idx+"];";
+		boolClauses.push(domainClassValue + " === domainData"+idx+"[y][x]");
+		keyValues.push(domainClassValue);
+	});
+	funcBody += "for(var y=0,len=domainData0.length;y<len;y++) {";
+	funcBody += "	var row = domainData0[y];";
+	funcBody += "	for(var x=0,rLen=row.length;x<rLen;x++) {";
+	funcBody += "		if("+boolClauses.join(" && ")+") {";
+	funcBody += "			var k = " + keyValues.join(" + '_' + ") + ";";
+	funcBody += "			if("+classToIdxs+"[k]) {";
+	funcBody += "				"+classToIdxs+"[k].push([x, y]);";
+	funcBody += "			}";
+	funcBody += "			else {";
+	funcBody += "				"+classToIdxs+"[k] = [[x, y]];";
+	funcBody += "			}";
+	funcBody += "		}";
+	funcBody += "	}";
+	funcBody += "}";
+	funcBody += "}";
+	funcBody += "return "+classToIdxs+";";
+	
+	return new Function(domainParamName, funcBody);
 }
 
 function getIndicatorObj(prefix, id, formula, referenceIndicators) {
@@ -144,6 +160,56 @@ function getIndicatorObj(prefix, id, formula, referenceIndicators) {
 
 	return IndicatorObj;
 }
+
+
+function cartesianProductOf(arrayOfElements) {
+	return Array.prototype.reduce.call(arrayOfElements, function(a, b) {
+		var ret = [];
+		a.forEach(function(a) {
+			b.forEach(function(b) {
+				ret.push(a.concat([b]));
+			});
+		});
+		return ret;
+	}, [[]]);
+}
+
+//var d1 = domainObjs[0];
+//var d2 = domainObjs[1];
+//var d3 = domainObjs[2];
+//
+//var dd1 = d1['data'];
+//var dd2 = d2['data'];
+//var dd3 = d3['data'];
+//
+//var d1c = d1['uniqueClasses'];
+//var d2c = d2['uniqueClasses'];
+//var d3c = d3['uniqueClasses'];
+//
+//var domainClassPermutations = cartesianProductOf([d1c, d2c, d3c]);
+//
+//var classToIdxs = {};
+//domainClassPermutations.forEach(function(perm) {
+//	
+//	var d1cv = +perm[0];
+//	var d2cv = +perm[1];
+//	var d3cv = +perm[2];
+//	
+//	for(var y=0,len=dd1.length;y<len;y++) {
+//		var row = dd1[y];
+//		for(var x=0,rLen=row.length;x<rLen;x++) {
+//			if(d1cv === dd1[y][x] && d2cv === dd2[y][x] && d3cv === dd3[y][x]) {
+//				var k = d1cv + "_" + d2cv + "_" + d3cv;
+//				if(classToIdxs[k]) {
+//					classToIdxs[k].push([x, y]);
+//				}
+//				else {
+//					classToIdxs[k] = [[x, y]];
+//				}
+//			}
+//		}
+//	}
+//});
 
 function getDomainObj(prefix, id) {
 	
@@ -375,3 +441,12 @@ function getDomainSummaryResultMethodA(domainCrossProductToIdxMap, indicatorObjs
 	});
 	return result;
 }
+
+
+
+
+
+
+
+
+
