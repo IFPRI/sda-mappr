@@ -2,11 +2,6 @@
 var fs = require("fs");
 var path = require('path');
 
-//AD05_CATT
-//"#ffffff|#fcdd5d|#f7ba3e|#d68522|#9e4410|#6b0601";
-//"";
-//""
-
 //http://apps.harvestchoice.org/HarvestChoiceApi/0.3/api/cellvalues?indicatorIds=70&domainIds=25&domainIds=30&domainIds=27&countryIds=GHA
 
 function main() {
@@ -15,28 +10,121 @@ function main() {
 
 	var domainObjs = [];
 	domainObjs.push(getDomainObj(prefix, 'MSH_50K_ID'));
-//	domainObjs.push(getDomainObj(prefix, 'AEZ8_CLAS'));
+	domainObjs.push(getDomainObj(prefix, 'AEZ8_CLAS'));
 //	domainObjs.push(getDomainObj(prefix, 'PSH_ID'));
 	domainObjs.push(getDomainObj(prefix, 'ADM2_CODE'));
-	
-	console.time('getDomainIdxCrossProuctsMap');
-	var domainCrossProductToIdxMap = getDomainIdxCrossProuctsMap(domainObjs);
-	console.timeEnd('getDomainIdxCrossProuctsMap');
+//	
+//	console.time('getDomainIdxCrossProuctsMap');
+//	var domainCrossProductToIdxMap = getDomainIdxCrossProuctsMap(domainObjs);
+//	console.timeEnd('getDomainIdxCrossProuctsMap');
 
 	var indicatorObjs = [];
-//	indicatorObjs.push(getIndicatorObj(prefix, 'PN05_RUR', 'SUM'));
+	indicatorObjs.push(getIndicatorObj(prefix, 'PN05_RUR', 'SUM'));
 //	indicatorObjs.push(getIndicatorObj(prefix, 'BMI', 'SUM'));
 //	indicatorObjs.push(getIndicatorObj(prefix, 'TT_50K', 'AVG'));
 //	indicatorObjs.push(getIndicatorObj(prefix, 'AREA_TOTAL', 'SUM'));
-	indicatorObjs.push(getIndicatorObj(prefix, 'AN05_CATT', 'SUM(AN05_CATT)/SUM(AREA_TOTAL)*100', [getIndicatorObj(prefix, 'AREA_TOTAL', 'SUM')]));
+//	indicatorObjs.push(getIndicatorObj(prefix, 'AN05_CATT', 'SUM(AN05_CATT)/SUM(AREA_TOTAL)*100', [getIndicatorObj(prefix, 'AREA_TOTAL', 'SUM')]));
 
-	console.time('processDomainSummary');
-	var result = getDomainSummaryResult(domainCrossProductToIdxMap, indicatorObjs);
-	console.timeEnd('processDomainSummary');
-	
-	console.log(result);
+//	console.time('getDomainSummaryResultMethodA');
+//	var resultA = getDomainSummaryResultMethodA(domainCrossProductToIdxMap, indicatorObjs);
+//	console.log(resultA);
+//	console.timeEnd('getDomainSummaryResultMethodA');
+
+	console.time('getDomainSummaryResultMethodB');
+	var resultB = getDomainSummaryResultMethodB(domainObjs, indicatorObjs);
+	console.log(resultB)
+	console.timeEnd('getDomainSummaryResultMethodB');
 }
 main();
+
+function getDomainSummaryResultMethodB(domainObjs, indicatorObjs) {
+	
+	var d1 = domainObjs[0];
+	var d2 = domainObjs[1];
+	var d3 = domainObjs[2];
+	
+	var dd1 = d1['data'];
+	var dd2 = d2['data'];
+	var dd3 = d3['data'];
+	
+	var d1c = d1['uniqueClasses'];
+	var d2c = d2['uniqueClasses'];
+	var d3c = d3['uniqueClasses'];
+	
+	var domainClassPermutations = cartesianProductOf([d1c, d2c, d3c]);
+	
+	var classToIdxs = {};
+	domainClassPermutations.forEach(function(perm) {
+		
+		var d1cv = +perm[0];
+		var d2cv = +perm[1];
+		var d3cv = +perm[2];
+		
+		for(var y=0,len=dd1.length;y<len;y++) {
+			var row = dd1[y];
+			for(var x=0,rLen=row.length;x<rLen;x++) {
+				if(d1cv === dd1[y][x] && d2cv === dd2[y][x] && d3cv === dd3[y][x]) {
+					var k = d1cv + "_" + d2cv + "_" + d3cv;
+					if(classToIdxs[k]) {
+						classToIdxs[k].push([x, y]);
+					}
+					else {
+						classToIdxs[k] = [[x, y]];
+					}
+				}
+			}
+		}
+	});
+		
+	var indicatorToClassResult = {};
+	indicatorObjs.forEach(function(indicatorObj) {
+		
+		var indicatorData = indicatorObj['data'];
+		var formula = indicatorObj['formula'];
+		var referenceData = indicatorObj['referenceIndicatorData'];
+		var dClassToResult = {};
+		
+		for(var dClass in classToIdxs) {
+			
+			var xyValues = classToIdxs[dClass];
+			
+			dClassToResult[dClass] = 0;
+			
+			if(formula === 'SUM') {
+				dClassToResult[dClass] = getSum(indicatorData, xyValues);
+			}
+			
+			else if(formula === 'AVG') {
+				
+				var sum = getSum(indicatorData, xyValues);
+				dClassToResult[dClass] = sum / xyValues.length;
+			}
+			
+			else if(formula === 'SUM(AN05_CATT)/SUM(AREA_TOTAL)*100') {
+				
+				var sum = getSum(indicatorData, xyValues);
+				var areaTotalSum = getSum(referenceData['AREA_TOTAL'], xyValues);
+				var rVal = (sum / areaTotalSum) * 100;
+				dClassToResult[dClass] = rVal;
+			}			
+		}
+		indicatorToClassResult[indicatorObj['id']] = dClassToResult;
+	});
+
+	return indicatorToClassResult;
+}
+
+function cartesianProductOf(arrayOfElements) {
+	return Array.prototype.reduce.call(arrayOfElements, function(a, b) {
+		var ret = [];
+		a.forEach(function(a) {
+			b.forEach(function(b) {
+				ret.push(a.concat([b]));
+			});
+		});
+		return ret;
+	}, [[]]);
+}
 
 function getIndicatorObj(prefix, id, formula, referenceIndicators) {
 	
@@ -81,31 +169,6 @@ function getDomainObj(prefix, id) {
 	domainObj['uniqueClasses'] = Object.keys(uniqueValues);
 
 	return domainObj
-}
-
-function cartProd(paramArray) {
-
-	function addTo(curr, args) {
-
-		var i, copy, rest = args.slice(1), last = !rest.length, result = [];
-
-		for(i = 0; i < args[0].length; i++) {
-
-			copy = curr.slice();
-			copy.push(args[0][i]);
-
-			if(last) {
-				result.push(copy);
-
-			} else {
-				result = result.concat(addTo(copy, rest));
-			}
-		}
-
-		return result;
-	}
-
-	return addTo([], Array.prototype.slice.call(arguments));
 }
 
 function getDomainIdxCrossProuctsMap(domainObjs) {
@@ -274,7 +337,7 @@ function getSum(indicatorData, xyValues) {
 	return sum;
 }
 
-function getDomainSummaryResult(domainCrossProductToIdxMap, indicatorObjs) {
+function getDomainSummaryResultMethodA(domainCrossProductToIdxMap, indicatorObjs) {
 	
 	var result = {};
 	indicatorObjs.forEach(function(indicatorObj) {
