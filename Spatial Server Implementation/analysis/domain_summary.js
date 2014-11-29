@@ -9,14 +9,11 @@ function main() {
 	var prefix = 'GHA';
 
 	var domainObjs = [];
-	domainObjs.push(getDomainObj(prefix, 'MSH_50K_ID'));
-	domainObjs.push(getDomainObj(prefix, 'AEZ8_CLAS'));
+//	domainObjs.push(getDomainObj(prefix, 'MSH_50K_ID'));
+//	domainObjs.push(getDomainObj(prefix, 'AEZ8_CLAS'));
 //	domainObjs.push(getDomainObj(prefix, 'PSH_ID'));
-//	domainObjs.push(getDomainObj(prefix, 'ADM2_CODE'));
+	domainObjs.push(getDomainObj(prefix, 'ADM2_CODE'));
 //	
-	console.time('getDomainIdxCrossProuctsMap');
-	var domainCrossProductToIdxMap = getDomainIdxCrossProuctsMap(domainObjs);
-	console.timeEnd('getDomainIdxCrossProuctsMap');
 
 	var indicatorObjs = [];
 //	indicatorObjs.push(getIndicatorObj(prefix, 'PN05_RUR', 'SUM'));
@@ -25,10 +22,11 @@ function main() {
 //	indicatorObjs.push(getIndicatorObj(prefix, 'AREA_TOTAL', 'SUM'));
 	indicatorObjs.push(getIndicatorObj(prefix, 'AN05_CATT', 'SUM(AN05_CATT)/SUM(AREA_TOTAL)*100', [getIndicatorObj(prefix, 'AREA_TOTAL', 'SUM')]));
 
-	console.time('getDomainSummaryResultMethodA');
-	var resultA = getDomainSummaryResultMethodA(domainCrossProductToIdxMap, indicatorObjs);
-	console.log(resultA);
-	console.timeEnd('getDomainSummaryResultMethodA');
+//	console.time('getDomainSummaryResultMethodA');
+//	var domainCrossProductToIdxMap = getDomainIdxCrossProuctsMap(domainObjs);
+//	var resultA = getDomainSummaryResultMethodA(domainCrossProductToIdxMap, indicatorObjs);
+//	console.log(resultA);
+//	console.timeEnd('getDomainSummaryResultMethodA');
 
 	console.time('getDomainSummaryResultMethodB');
 	var resultB = getDomainSummaryResultMethodB(domainObjs, indicatorObjs);
