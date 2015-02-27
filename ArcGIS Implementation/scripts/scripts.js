@@ -16,13 +16,14 @@ var _gaq = []; // dev purposes only
 
 (function() {
 
-var serverRootURL = "apps.harvestchoice.org";
+var serverRootURL = "dev.harvestchoice.org";
 var mapServiceRootURL = "dev.harvestchoice.org";
 
 var AppURL = serverRootURL + "/mappr/";
 
 var HCAPIRootURL = "http://"+serverRootURL+"/HarvestChoiceApi/0.3/api";
 var HCAPIProdRootURL = "http://"+serverRootURL+"/HarvestChoiceApi/0.3/api";
+var G_LabelToDivID = {};
 
 var AppGlobals = {
 
@@ -1048,6 +1049,8 @@ function createSQLOrClause(columnName, listOfValue) {
 	return sqlList.join(" OR ");
 }
 
+var divToTopicMap = {};
+
 function initLayerMenu() {
 	
 	var layerSlideOutDivId = "layerMenuSlideOutDiv";
@@ -1062,38 +1065,40 @@ function initLayerMenu() {
 	});
 	var layerContainerDivNode = dojo.byId(layerContainerDivID);
 	
-	addLayerMenuOpenEvent("institutionsIconDiv", "Administrative", layerContainerDivNode);
-	addLayerMenuOpenEvent("investmentsIconDiv", "Productivity", layerContainerDivNode);
-	addLayerMenuOpenEvent("agroecologyIconDiv", "Agroecology", layerContainerDivNode);
-	addLayerMenuOpenEvent("demographicsIconDiv", "Demographics", layerContainerDivNode);
-	addLayerMenuOpenEvent("farmingSystemsIconDiv", "Farming Systems", layerContainerDivNode);
-	addLayerMenuOpenEvent("marketsIconDiv", "Markets", layerContainerDivNode);
+	var uid = 0;
+	var layerGroupIconsParent = $("#layerGroupIcons");
+	for(var categoryName in AppGlobals['MenuCategoryArray']) {
+		
+		var divID = (uid++) + "_layerGroupIcon"; 
+		divToTopicMap[categoryName] = divID;
+		var layerGroupIcon = $("<div>").attr("id", divID).addClass("layerGroupIcon").appendTo(layerGroupIconsParent);
+		var imageURL = "images/"+categoryName+"_icon.png";
+		$("<img>").addClass("layerGroupIconImage").attr("src", imageURL).appendTo(layerGroupIcon);
+		$("<div>").addClass("layerGroupIconLabel").html(categoryName).appendTo(layerGroupIcon);
+		
+		addLayerMenuOpenEvent(divID, categoryName, layerContainerDivNode);
+	}
 }
 
 function openTopicFromQueryString(layerMenuCategory, topics) {
 	
-	var divToTopicMap = {
-		"Agroecology":"agroecologyIconDiv",
-		"Demographics":"demographicsIconDiv",
-		"Farming System":"farmingSystemsIconDiv",
-		"Markets":"marketsIconDiv"
-	};
 	var layerGroupIconDiv = divToTopicMap[layerMenuCategory];	
-	dojo.byId(layerGroupIconDiv).click();
 	
+	if(!layerGroupIconDiv) {
+		return;
+	}
+	dojo.byId(layerGroupIconDiv).click();
+
 	if(!topics) {
 		return;
 	}
 	else {
 		setTimeout(function() {
-			if(topics === "BananaPlantain") {
-				topics = "Banana/Plantain";
+			var buttonID = G_LabelToDivID[topics];
+			var buttonNode = dojo.byId(buttonID);
+			if(buttonNode) {
+				buttonNode.click();
 			}
-			else if(topics === "Sweet PotatoYam") {
-				topics = "Sweet Potato/Yam";
-			}
-			var buttonID = layerMenuCategory + replaceSpecialCharactersForHTMLDivID(topics) + "_row";
-			dojo.byId(buttonID).click();
 		}, 400);
 	}
 }
@@ -1101,7 +1106,7 @@ function openTopicFromQueryString(layerMenuCategory, topics) {
 function replaceSpecialCharactersForHTMLDivID(s) {
 	
 	s = s.replace(/'/g,"").replace(/,/g,"").replace(/\"/g,"").replace("$","");
-	s = s.replace("  ", ' ').replace(/\r\n/g, "").replace(/&/g, "");
+	s = s.replace("  ", '').replace(/\r\n/g, "").replace(/&/g, "");
 	s = s.replace('(',"").replace(')',"").replace('.',"");
 	
 	return s;
@@ -1188,15 +1193,13 @@ function createMenuHTMLForCategory(categoryName, parentDivId) {
 		
 		var subCategoryName = subcatObj['Name'];	
 		
-		var uniqueId = categoryName + subCategoryName;
-		uniqueId = uniqueId.replace(/\//g, '');		
+		var uniqueId = "id1_" + getUniqueID();
 		var subCategoryNode = addSubMenuHTMLAndGetLayerNode(uniqueId, subCategoryName, categoryDivNode, "topLevelLayerMenuGroup", "topLevelLayerMenuGroupTitle");
 
 		dojo.forEach(subcatObj['Aggregates'], function(aggregateObj, j) {
 			
 			var aggregateName = aggregateObj['Name'];
-			uniqueId = categoryName + subCategoryName + aggregateName;
-			uniqueId = uniqueId.replace(/\//g, '');		
+			uniqueId = "id2_" + getUniqueID();
 			var aggregateNode = addSubMenuHTMLAndGetLayerNode(uniqueId, aggregateName, subCategoryNode, "childLayerMenuGroup", "childLayerMenuGroupTitle");
 
 			dojo.forEach(aggregateObj['Indicators'], function(indicatorObj) {
@@ -1204,6 +1207,7 @@ function createMenuHTMLForCategory(categoryName, parentDivId) {
 				var ColumnName = indicatorObj['ColumnName'];
 				
 				if(!AppGlobals['MapServiceLayers'][ColumnName]) {
+					console.log("ColumnName not in map service layers", ColumnName, categoryName, subCategoryName, aggregateName);
 					return;
 				}
 				
@@ -1706,7 +1710,7 @@ function activeLayersVisible() {
 
 function reorderMapLayers() {
 	
-	var activeLayers = getActiveLayers(true);
+	var activeLayers = getActiveLayers();
 	dojo.forEach(activeLayers, function(layer, idx) {
 		var newIndex = activeLayers.length - idx;
 		AppGlobals['Map'].reorderLayer(layer['dmsl'], newIndex);	
@@ -1729,15 +1733,24 @@ function getListFromActiveLayers(property) {
 	
 	var propList = [];
 	dojo.forEach(getActiveLayers(), function(obj) {
-		propList.push(obj[property]);
+		if(obj['indicatorInfo']['IsDomain'] === false) {
+			propList.push(obj[property]);
+		}
 	});
 	return propList;
 }
 
-function getActiveLayers() {
-	return getLayerListFromLayerGroup(getActiveLayerDNDNodes(), 'Layers', function(n) {
+function getActiveLayers(onlySummarizable) {
+	
+	var res = getLayerListFromLayerGroup(getActiveLayerDNDNodes(), 'Layers', function(n) {
 		return n.children[0].id.split("|")[0];
 	});
+	
+	if(onlySummarizable) {
+		res = res.filter(function(obj) {return obj['indicatorInfo']['IsDomain'] === false;});
+	}
+	
+	return res;
 }
 
 function getActiveInertLayers() {
@@ -1952,16 +1965,28 @@ function handleActiveToolMapClick(activeTool, mapPoint) {
 	if(AppGlobals['ActiveToolExecuting'] || !activeLayersVisible()) {
 		return;
 	}
+	
+	if(atLeastOneSummarizableLayerIsVisible()) {
 		
-	if(activeTool === "summarizeLocation") {
-		onToolExecute();
-		executeSummarizeLocationTool(mapPoint);
-	}
-	else if(activeTool === "summarizeMarket") {
-		
-		onToolExecute();
-		executeMarketShedTool(mapPoint);
-	}
+		if(activeTool === "summarizeLocation") {
+			onToolExecute();
+			executeSummarizeLocationTool(mapPoint);
+		}
+		else if(activeTool === "summarizeMarket") {
+			
+			onToolExecute();
+			executeMarketShedTool(mapPoint);
+		}
+	}	
+}
+
+function atLeastOneSummarizableLayerIsVisible() {
+	
+	var atLeastOneSummarizableIndicator = getActiveLayers().some(function(obj) {
+		return obj['indicatorInfo']['IsDomain'] === false;
+	});	
+	
+	return atLeastOneSummarizableIndicator;
 }
 
 function updateWarningMessagesForMissingLayers() {
@@ -1976,7 +2001,7 @@ function updateWarningMessagesForMissingLayers() {
 		dojo.style(dojo.byId(buttonID), "opacity", opacity);
 	}
 	
-	if(activeLayersVisible()) {
+	if(atLeastOneSummarizableLayerIsVisible()) {
 		
 		updateNodeDisplay('summarizeLocationMessage', 'none');
 		updateNodeDisplay('summarizeDomainMessage', 'none');
@@ -2215,21 +2240,19 @@ function setActiveToolDisabled() {
 	dojo.style(dojo.byId("map_container"), "cursor", "default");
 }
 
+var G_AnalysisCount = 0;
+
 function getNextAnalysisTitle(dontIncrement) {
 	
-	if(!this.count) {
-		this.count = 0;
-	}
-	
 	if(!dontIncrement) {
-		this.count++;
+		G_AnalysisCount++;
 	}
 	
-	if(this.count === 0) {
-		this.count = 1;
+	if(G_AnalysisCount === 0) {
+		G_AnalysisCount = 1;
 	}
 	
-	return "Analysis " + this.count;
+	return "Analysis " + G_AnalysisCount;
 }
 
 function addMarketShedResultTableRow(uniqueID, columnName, value, hourKey) {
@@ -2852,7 +2875,7 @@ function createMarketShedTable(tableDiv, uniqueID) {
     tableHTML += '<th></th>';
     tableHTML += '<th>Travel Time</th>';
     
-    dojo.forEach(getActiveLayers(), function(indicator) {
+    dojo.forEach(getActiveLayers(true), function(indicator) {
     	
 		var indicatorObj = indicator['indicatorInfo'];
 		tableHTML += '<th>'+createIndicatorLabel(indicatorObj, '<br>')+'</th>';
@@ -3281,7 +3304,8 @@ function toolCanExecute() {
 	if(AppGlobals['ActiveToolExecuting'] || !activeLayersVisible()) {
 		return false;
 	}
-	return true;
+	
+	return atLeastOneSummarizableLayerIsVisible();
 }
 
 
@@ -3643,7 +3667,7 @@ function createDomainCountryRows(tableResultObj, countryResults, uniqueID) {
 
 	var tempTableRows = createDomainsTableObject(countryResults, uniqueID, true);
 	var countryRowsObj = {};
-	var numberOfActiveIndicators = getActiveLayers().length;
+	var numberOfActiveIndicators = getActiveLayers(true).length;
 	
 	dojo.forEach(tempTableRows['rows'], function(obj) {
 		var indicatorValues = obj['indicatorValues'];		
@@ -3681,7 +3705,7 @@ function createDomainsTableAccordianGroup(tablesDiv, uniqueID, domainNamesList, 
 	
 	var countryNameList = [];
 	var countryToTableID = {};
-	
+
 	dojo.forEach(domainCountryTableRows, function(rowObj, idx) {
 		
 		var rowID = uniqueID + idx;
@@ -3831,7 +3855,7 @@ function OnResultSelect(select, deselect, onUpdate) {
 function createAccordianTitle(dontReturnIndicatorNames) {
 	
 	var currentRegion = AppGlobals['RegionMegaDropDown']['SelectedRegionName'];
-	var indicatorNames = getStringFromListOfValuesWithKeySeparatedBy(getActiveLayers(), "label", ", ");
+	var indicatorNames = getStringFromListOfValuesWithKeySeparatedBy(getActiveLayers(true), "label", ", ");
 	
 	var titleElementsList = [];
 	if(currentRegion) {
@@ -3850,7 +3874,7 @@ function getIndicatorValueForTableDisplay(columnName, indicatorValue) {
 
 function getCorrectDecimalFormattedIndicatorValue(columnName, indicatorValue) {
 	
-	dojo.forEach(getActiveLayers(), function(indicator) {
+	dojo.forEach(getActiveLayers(true), function(indicator) {
 		if(columnName === indicator['name']) {
     		var decimalPlaces = indicator['indicatorInfo']['DecimalPlaces'] || 0;
     		return parseFloat(indicatorValue).toFixed(decimalPlaces);	
@@ -3963,7 +3987,6 @@ function createDomainsTableObject(result, uniqueID, hasCountryResults) {
 			domainColumnIndicies[columnName] = columnIndex;
 			domainNamesList.push(columnName);
 		}
-		
 		if(columnName.indexOf("ISO3") !== -1) {
 			ISO3ColumnIndex = columnIndex;
 		}
@@ -4225,7 +4248,6 @@ function createDomainsTable(tableDiv, uniqueID, domainNamesList, rows, justTable
 	};
 	
 	var colorPickerIDsList = [];
-	
 	var isCountries = domainNamesList.length === 1 && domainNamesList[0] == "ISO3";
 	 
 	var createTableRowsFunc = function() {
@@ -4244,13 +4266,15 @@ function createDomainsTable(tableDiv, uniqueID, domainNamesList, rows, justTable
 			colorPickerIDsList.push(colorSwatchID);
 			
 			html += '<td id="'+colorSwatchID+'" class="colorSwatch" style="background:'+hexColorString+'"></td>';
-			
 			dojo.forEach(obj['domainValues'], function(domainObj) {
 				var value = domainObj['value'];
 				if(isCountries) {
 					value = AppGlobals['ISO3CountryMap'][value];
+					html += '<td>'+value+'</td>'; 
 				}
-				html += '<td>'+value+'</td>'; 
+				else if(!AppGlobals['ISO3CountryMap'][value]) {
+					html += '<td>'+value+'</td>'; 
+				}
 			});
 			
 			dojo.forEach(obj['indicatorValues'], function(valueObj) {
@@ -4268,7 +4292,7 @@ function createDomainsTable(tableDiv, uniqueID, domainNamesList, rows, justTable
 	}
 	
 	var tableID = "Domain" + uniqueID;
-	createSummarizeGeometryTable(tableID, tableDiv, getActiveLayers(), createTableHeaderFunc, createTableRowsFunc, csvFirstRowValue, "Advizer", justTable);
+	createSummarizeGeometryTable(tableID, tableDiv, getActiveLayers(true), createTableHeaderFunc, createTableRowsFunc, csvFirstRowValue, "Advizer", justTable);
 	
 	if(!justTable) {
 		addColorPickerOnClickEvents(colorPickerIDsList);
@@ -4473,13 +4497,16 @@ function initDomainsDropDown(dropDownValues) {
 				return;
 			}
 			
-			AppGlobals['ActiveTool'] = "summarizeDomain";
-					
-			hideActiveToolNub();
-			onToolExecute();
-			deactivateESRIDrawingToolBar();
-			executeDomainsTool(domain);
-			closeToolsNubMenu();
+			if(toolCanExecute()) {
+				
+				AppGlobals['ActiveTool'] = "summarizeDomain";
+						
+				hideActiveToolNub();
+				onToolExecute();
+				deactivateESRIDrawingToolBar();
+				executeDomainsTool(domain);
+				closeToolsNubMenu();
+			}
 		});
 	});
 }
@@ -4709,7 +4736,7 @@ function executeSummarizeCustomAreaToolMain() {
 	    
 	    var webMercatorGeom = esri.geometry.webMercatorToGeographic(geometry);
 		var wktGeom = geomToWKT(webMercatorGeom);
-		var activeIndicators = getActiveLayers();
+		var activeIndicators = getActiveLayers(true);
 		var indicatorIdsList = getListFromActiveLayers("indicatorId");
 				
 		_gaq.push(['_trackEvent', 'Tools', 'Polygon tool executed', wktGeom]);
@@ -4825,7 +4852,7 @@ function executeSummarizeLocationTool(mapPoint) {
 		AppGlobals['CustomLocationTool']['Rows'].push({'cell5m':cell5mID, 'x':x, 'y':y, 'markerNumber':markerNumber});
 		
 		var accordianTitleBottom = createAccordianTitle();		
-		var activeIndicators = getActiveLayers();
+		var activeIndicators = getActiveLayers(true);
 		
 		onToolResult("DropperTool", accordianTitleTop, accordianTitleBottom, onToolResultCloseFunction, function(tablesDiv, chartsDiv, callback) {
 			
@@ -5292,9 +5319,11 @@ function flattenArrayIntoObjUsingKey(arr, key) {
 	return o;
 }
 
+
 function addSubMenuHTMLAndGetLayerNode(uniqueId, layerName, parentNode, cssClass, titleCssClass) {
 	
-	var layerNameRowDivId = replaceSpecialCharactersForHTMLDivID(uniqueId) + "_row";
+	var layerNameRowDivId = "group_" + getUniqueID() + "_row";
+	G_LabelToDivID[layerName] = layerNameRowDivId;
 	var layerTitleDiv = uniqueId + "_div";
 	var layerMenuDiv = uniqueId + "_menu";
 	var layerMenuArrowImgId = uniqueId + "_arrow";
@@ -5655,6 +5684,7 @@ function onToolResult(uniqueID, accordianTitleTop, accordianTitleBottom, onToolC
 		dojo.destroy(accordianResultsContainerID);
 		onToolClose();
 		onAnalyticsContainerUpdate();
+		G_AnalysisCount--;
 	});
 	
 	var accordianExpandToggleNode = dojo.byId(accordianExpandToggleImgID);

@@ -297,34 +297,7 @@
   	</div>
   	<div id="wrapper" class="ui-resizable-s" data-dojo-type="dijit.layout.BorderContainer" data-dojo-props="gutters:false,design:'headline'">
   		<div id="layers" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'left', splitter:false, gutter:false,layoutPriority:2">
-  			<div id="layerGroupIcons">
-  				
-				<div id="institutionsIconDiv" class="layerGroupIcon">
-    				<img id="institutionsIconImg" height=37 width=40 src="images/institutions.png"/>
-    			  	<div class="layerGroupIconLabel">ADMINISTRATIVE</div>
-    			</div>
-  				
-  				<div id="agroecologyIconDiv" class="layerGroupIcon">
-  					<img id="agroecologyIconImg" height=44 width=37 src="images/agroecology.png"/>
-  					<div class="layerGroupIconLabel">AGROECOLOGY</div>
-  				</div>
-  				<div id="demographicsIconDiv" class="layerGroupIcon">
-  					<img id="demographicsIconImg" height=38 width=35 src="images/demographics.png"/>
-  				  	<div class="layerGroupIconLabel">DEMOGRAPHICS</div>
-  				</div>
-  				<div id="marketsIconDiv" class="layerGroupIcon">
-    				<img id="marketsIconImg" height=35 width=34 src="images/markets.png"/>
-    			    <div class="layerGroupIconLabel">MARKETS</div>
-    			</div>
-    			<div id="farmingSystemsIconDiv" class="layerGroupIcon">
-    				<img id="farmingSystemsIconImg" height=46 width=32 src="images/farming_systems.png"/>
-    			  	<div class="layerGroupIconLabel">FARMING SYSTEM</div>
-    			</div>
-    			<div id="investmentsIconDiv" class="layerGroupIcon">
-    				<img id="investmentsIconImg" height=33 width=32 src="images/investments.png"/>
-    			  	<div class="layerGroupIconLabel">PRODUCTIVITY</div>
-    			</div>
-	 		</div>
+  			<div id="layerGroupIcons"></div>
   			<div id="floatingDivDocks">
   			    <div id="floatingSelectedLayersDivDock"></div>
   			</div>
@@ -564,14 +537,15 @@
  				
  				<div id="summarizeTopCropContainer" class="nubMenuContainerItem toolsNubMenuContainer">
  					<div class="menuItemContent">
-	  					<div id="summarizeLocationTitle">This tool returns the top/bottom 5 commodities ranked by harvested area and production value (over your chosen study area).</div>
+	  					<div id="summarizeLocationTitle">This tool returns the top 5 commodities ranked by harvested area and production value (over your chosen study area).
+Production estimates are circa 2005.</div>
 	  					
 	  					<div id="summarizeByAdminUnitDiv" class="summarizeLocDiv">
 	  						<div class="sumLocBlock">
 	  							<img class="sumLocIcon" height=22 width=15 src="images/summarize_point.png"/>
 	  						  	<div class="sumLocText">
 	  								<div class="sumLocTitle">SUMMARIZE BY REGION SELECTED</div>
-	  								<div class="sumLocDesc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+	  								<div class="sumLocDesc">Select a study area (region or country) from the top navigation menu and click Go to view the top 5 agricultural commodities produced in this area.</div>
 	  								<div id="executeCropTOPPRAdminButton" class="sumLocButton">GO</div>
 	  							</div>
 	  						</div>
@@ -582,7 +556,7 @@
 	  							<img class="sumLocIcon" height=22 width=23 src="images/summarize_custom_area.png"/>
 	  						  	<div class="sumLocText">
 	  								<div class="sumLocTitle">SUMMARIZE BY POLYGON</div>
-	  								<div class="sumLocDesc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua..</div>
+	  								<div class="sumLocDesc">Draw a polygon on the map to view the top 5 commodities produced over this specific area.</div>
 	  								<div id="executeCropTOPPRCustomAreaButton" class="sumLocButton">DRAW ON MAP</div>
 	  							</div>
 	  						</div>
@@ -632,7 +606,7 @@
 	    <input type="hidden" name="s" id="s" value="" />
     </form>
     
-<!-- 	<script type="text/javascript">
+<script type="text/javascript">
 
 	 Êvar _gaq = _gaq || [];
 	 Ê_gaq.push(['_setAccount', 'UA-5299684-10']);
@@ -645,7 +619,7 @@
 	 Ê Êvar s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	 Ê})();
 
-	</script> -->
+	</script> 
   	
   </body>
 </html>
