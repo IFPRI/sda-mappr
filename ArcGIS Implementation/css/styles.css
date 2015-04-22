@@ -909,12 +909,14 @@ font-weight:bold;
 }
 
 .layerGroupIconLabel {
-	font-size:9px;
-	color:#fff;
-	position:absolute;
-	bottom:12px;
+ 	font-size: 10px;
+	color: #fff;
+	position: absolute;
+	bottom: 12px;
 	width: 99px;
-	letter-spacing: 1px;
+	letter-spacing: 0.1ex;
+	text-transform: uppercase;
+	font-weight: bold;
 }
 
 .verticalCenter {

@@ -12,7 +12,7 @@ dojo.require("dojo.dnd.move");
 dojo.require("dojo.dnd.Source");
 dojo.require("dijit.form.HorizontalSlider");
 
-var _gaq = []; // dev purposes only
+//var _gaq = []; // dev purposes only
 
 (function() {
 
@@ -1202,6 +1202,10 @@ function createMenuHTMLForCategory(categoryName, parentDivId) {
 			uniqueId = "id2_" + getUniqueID();
 			var aggregateNode = addSubMenuHTMLAndGetLayerNode(uniqueId, aggregateName, subCategoryNode, "childLayerMenuGroup", "childLayerMenuGroupTitle");
 
+			aggregateObj['Indicators'] = aggregateObj['Indicators'].sort(function(a, b) {
+				return a['MicroLabel'].localeCompare(b['MicroLabel']);
+			});
+			
 			dojo.forEach(aggregateObj['Indicators'], function(indicatorObj) {
 						
 				var ColumnName = indicatorObj['ColumnName'];
@@ -1323,9 +1327,9 @@ function createIndicatorLabel(indicatorObj, joinChar) {
 		
 	var labelParts = [indicatorObj['MicroLabel']];
 	var secondLineParts = "";
-	if(year) {
-		secondLineParts += year;
-	}
+//	if(year) {
+//		secondLineParts += year;
+//	}
 	if(unit) {
 		secondLineParts += " " + unit;
 	}
