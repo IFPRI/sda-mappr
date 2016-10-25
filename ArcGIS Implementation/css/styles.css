@@ -2634,3 +2634,29 @@ height: 13px;
 .claro .dijitSelectMenu .dijitMenuItem td, .claro .dijitComboBoxMenu .dijitMenuItem {
 	border:0;
 }
+
+.construction {
+	height: 100%;
+	width: 100%;
+	background-color: rgb(70,64,54);
+}
+
+.construction .left-column {
+	color: white;
+	padding: 25px;
+}
+
+.construction .left-column .text {
+	margin: 0px 0 -10px 0;
+	font-size: 24px;
+	font-weight: 800;
+	position: relative;
+	top: 20px;
+}
+
+.construction .container {
+	text-align: center;
+	padding: 43px 0;
+	background-color: rgb(70,64,54);
+}
+

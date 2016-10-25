@@ -20,606 +20,622 @@
 	</style>
 	<link rel="stylesheet" href="css/styles.css"/> 
   </head>
-  <body class="claro">
-  	<div id="loadingAppDiv"></div>
-  	<div id="colorPickerContentDiv">
-  		<div id="colorPickerDiv">
-  			<div id="colorPickerDijit" data-dojo-type="dojox.widget.ColorPicker"></div>
-  			<div id="colorPickerButtonsDiv">
-  				<div id="colorPickerCancel" class="colorPickerButton">Cancel</div>
-  				<div id="colorPickerSubmit" class="colorPickerButton">OK</div>
-  			</div>
-  		</div>
-  	</div>
-  	<div id="instructionLandingPage">
-  	
-  		<img id="step1Img" class="stepImg" src="images/step_1_arrow.png" height=78 width=56/>
-  		<img id="step2Img" class="stepImg" src="images/step_2_arrow.png" height=21 width=86/>
-  		<img id="step3Img" class="stepImg" src="images/step_3_arrow.png" height=113 width=106/>
-  		<img id="step4Img" class="stepImg" src="images/step_4_arrow.png" height=105 width=21/>
-  		
-  		<div id="step1Div" class="instructionDiv">
-  			<div>STEP 1:</div>
-  			<div>SELECT THE GEOGRAPHIC EXTENT &nbsp;OF</div>
-  			<div>THE AREA YOU'D LIKE TO EXPLORE.</div>
-  		</div>
-  		<div id="step2Div" class="instructionDiv">
-  			<div>STEP 2:</div>
-			<div>SELECT &nbsp;THE SPECIFIC</div>
-			<div>INDICATORS YOU'D LIKE</div>
-			<div>TO EXPLORE, SUMMARIZE</div>
-			<div>AND DOWNLOAD.</div>
-  		</div>
-  		<div id="step3Div" class="instructionDiv">
-			<div>SUMMARIZE YOUR SELECTED INDICATORS</div>
-			<div>FOR POINTS OR AREAS YOU DEFINE USING</div>
-			<div>ONE OF THE ANALYSIS TOOLS.</div> 
-  		</div>
-  		<div id="step4Div" class="instructionDiv">
-  			<div>THE SUMMARIES (TABLES AND CHARTS)</div>
-			<div>WILL APPEAR BELOW THE MAP.</div>
-  		</div>
-  		<div id="instructionPageExitButton" class="instructionDiv">
-  			<img id="instructionPageExitImg" class="stepImg" src="images/close_instruction.png" height=45 width=49/>
-  			<div id="closeButtonText">CLOSE</div>
-  		</div>
-  	</div>
-  	<div id="fullscreenContentDiv">
-  		<div id="fullscreenContentContainer">
-  			<div id="fullscreenContentContainerCloseButton"></div>
-  			<div id="errorMessageContainer" class="contentContainer"></div>
-  			
-  			<div id="pdfExportContainer" class="contentContainer">
-  				<div class="exportTitle">EXPORT MAP RESULT</div>
-  				<img id="exportPreview" class="exportThumb" width=440 height=330 src="" />
-  				<div id="openExportResultButton" class="exportButton">OPEN EXPORT NOW</div>
-  			</div>
-  			
-  			<div id="permalinkContainer" class="contentContainer"></div>
-  			<div id="tableMakerExportContainer" class="contentContainer"></div>
-  		</div>
-  	</div>
-  	<div id="aboutAppFullScreenContainer">
-  		<div id="aboutAppContent">
-  			<div id="exitAboutApp"><img id="exitAboutAppImg" src="images/exit_app_info.png" height=18 width=19/></div>
-  			<div id="aboutAppAccordian">
-  				<div id="aboutAppAccordianHeader">
-  					<div id="aboutAppAccordianTitle">MAPPR HELP</div>
-  					<a id="feedbackURL" class="feedbackURLLink" target="_blank">FEEDBACK</a>
-  				</div>
-   				<div id="aboutAppRow" class="aboutAppAccordianRowHeader">
-  					<div class="aboutAppAccordianRowTitle">ABOUT</div>
-  					<div class="aboutAppAccordianRowButton"><img class="infoAccordianImg" id="aboutAccordianImg" src="images/open_about_accordian.png" height=18 width=19/></div>
-  				</div>
-  				<div id="aboutMapprText" class="aboutAppAccordianRowContent">
-					<p>
-						MAPPR is a spatial visualization and analysis tool offering easy
-						access to <strong>over four hundred layers of
-							spatially-explicit, agriculture-related indicators for
-							sub-Saharan Africa</strong>.
-					</p>
-					<p>
-						Use the drawers to the right to explore HarvestChoice's
-						collections of <strong>bio-physical</strong>, <strong>crop</strong>
-						and <strong>livestock production</strong>, <strong>socio-economic</strong>,
-						<strong>markets</strong>, and <strong>agricultural R&D
-							investment</strong> data. Each layer consists of about 300,000 10km x 10km
-						gridcells covering the whole of the sub-Saharan African region.
-					</p>
-					<p>
-						Layers of data may be overlaid and exported to PNG for re-use in
-						reports and presentations. Each layer is also available for
-						download in <strong>raw ASCII raster</strong> format for use in
-						desktop GIS. Maps may be <strong>embedded in external
-							websites</strong> using a simple HTML snippet. The basemaps are
-						interchangeable using the toolbox to the right.
-					</p>
-					<p>A number of spatial querying and analysis tools are built
-						into the application:</p>
-					<ul>
-						<li><strong>Point and polygon statistics</strong> will return
-							a table of values for the selected indicators at the selected
-							locations (or aggregated over a specific hand-drawn area).</li>
-						<li>Domain statistics will produce a summary table and graphs
-							of indicators aggregated across the selected <strong>geographic
-								domains</strong> (e.g. agro-ecological zones, farming systems, etc.).
-						</li>
-						<li>A <strong>marketshed analysis</strong> produces layer statistics aggregated to<strong> 2hr, 4hr, 6hr and 8hr time-to-market zones</strong> for any selected point on the map.
-						</li>
-					</ul>
-					<p>By design, MAPPR targets the needs of investors, policy
-						makers, program managers, analysts and technical specialists.</p>
-				</div>
-  				<div id="tutorialAppRow" class="aboutAppAccordianRowHeader">
-  					<div class="aboutAppAccordianRowTitle">TUTORIAL</div>
-  					<div class="aboutAppAccordianRowButton"><img class="infoAccordianImg" id="tutorialAccordianImg" src="images/open_about_accordian.png" height=18 width=19/></div>
-  				</div>
-  				<div id="tutorialAboutText" class="aboutAppAccordianRowContent">
-					<div>STEP 1) SELECT THE GEOGRAPHIC EXTENT OF THE AREA YOU'D LIKE TO EXPLORE.</div>
-					<div>STEP 2) SELECT THE SPECIFIC INDICATORS YOU'D LIKE TO EXPLORE, SUMMARIZE AND DOWNLOAD.</div>
-					<div>OPTIONAL: SUMMARIZE YOUR SELECTED INDICATORS FOR POINTS OR AREAS YOU DEFINE USING ONE OF THE ANALYSIS TOOLS.</div>
-					<div>NOTE: THE SUMMARIES (TABLES AND CHARTS) WILL APPEAR BELOW THE MAP.</div>
-  				</div>
-  				<div id="contactAppRow" class="aboutAppAccordianRowHeader">
-  					<div class="aboutAppAccordianRowTitle">CONTACT US</div>
-  					<div class="aboutAppAccordianRowButton"><img class="infoAccordianImg" id="contactAccordianImg" src="images/open_about_accordian.png" height=18 width=19/></div>
-  				</div>
-  				<div id="contactUsText" class="aboutAppAccordianRowContent">
-					MAPPR is under active development. If you have any comment, 
-					suggestion or feedback about this application or any of the data layers, 
-					please <a href="http://harvestchoice.org/contact" target="_blank">contact us</a> or use our <a class="feedbackURLLink"  target="_blank">feedback form</a>.
-  				</div>
-  				<div id="termsOfUseRow" class="aboutAppAccordianRowHeader">
-  					<div class="aboutAppAccordianRowTitle">TERMS OF USE</div>
-  					<div class="aboutAppAccordianRowButton"><img class="infoAccordianImg" id="termsOfUseAccordianImg" src="images/open_about_accordian.png" height=18 width=19/></div>
-  				</div>
-  				<div style="height:300px;overflow-y:scroll;" class="aboutAppAccordianRowContent">
-  					<p>
-	  				================================================================================
-					HARVESTCHOICE DATA README
-					May 9, 2013
-					================================================================================
-					</p>
-					<p>
-					This dataset was obtained from HarvestChoice at http://www.harvestchoice.org/data on?
-					May 9, 2013.
-					</p>
-					<p>
-					PLEASE CITE ORIGINAL SOURCES
-					</p>
-					<p>
-					Guo, Zhe, Jawoo Koo, Ulrike Wood-Sichra, Carlo Azzarri, Melanie Bacou. Agroecology,
-					Demographics, Markets, Farming Systems, Agricultural R&D: HarvestChoice 5-Arc-Minute
-					Spatial Layers for sub-Saharan Africa Release {version}, HarvestChoice, IFPRI,
-					University of Minnesota. Available on-line at http://www.harvestchoice.org/data/
-					</p>
-					<p>
-					You, Liang, Zhe Guo, Jawoo Koo, W. Ojo, Kate Sebastian, Maria Theresa Tenorio, Stanley
-					Wood, U. Wood-Sichra. Spatial Production Allocation Model (SPAM) 2000 Version 3
-					Release 1. http://MapSPAM.info/.
-					?</p>
-					<p>
-					USE TERMS FOR ENCLOSED DATA FILES
-					?</p>
-					<p>
-					The Data and any Related Materials are the property of HarvestChoice and its
-					Contributors and are protected by United States copyright laws and applicable
-					international copyright treaties and conventions. HarvestChoice reserves rights for
-					the enclosed data file(s) and distributes data under the following license. In order
-					to view or use the data, you must accept this license. If you do not accept this
-					license, please return all files and do not retain a copy. By keeping the files, you
-					have agreed to the following terms.
-  					</p>
-  					<p>
-					================================================================================
-					HARVESTCHOICE USER LICENSE
-					Version 2008-01, April 16, 2008
-					================================================================================
-					</p>
-  					<p>
-					1. Data files are for your own, non-commercial use only
-					</p>
-					<p>
-					2. Any and all derived products (e.g., tables, figures, maps) generated using the
-					enclosed data must be given due attribution according to the suggested citation
-					supplied or, in its absence, refer to the guidelines obtained from
-					<a href="http://harvestchoice.org/about/intellect" target="_blank"></a>
-					?</p>
-					<p>
-					3. None of the data may be distributed in digital or print form to third parties,
-					including on User's web sites, without explicit permission from HarvestChoice or
-					relevant Contributors to the HarvestChoice web site (contact hallaway@umn.edu).
-					?</p>
-					<p>
-					================================ Definitions =====================================
-					?</p>
-					<p>
-					Attribution: Attribute downloaded data and derived products using the suggested
-					citation details distributed as metadata with the downloaded file. If attribution
-					guidelines are absent in the metadata, refer to
-					 <a style="color:#000;" href="http://harvestchoice.org/about/intellect" target="_blank"></a>
-					</p>
-					<p>
-					"Data" include all databases, tables, graphics, figures, GIS files, bibliographic
-					references, and content obtained from HarvestChoice.
-					?</p>
-					<p>
-					"Non-commercial use" means that User may not sell or redistribute data or its
-					derivatives for commercial gain (e.g., selling or charging a fee for maps generated
-					using these data).
-					?</p>
-					<p>
-					Any of the above conditions can be waived if you get permission from HarvestChoice.
-					?</p>
-					<p>
-					THE MATERIAL IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-					INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-					PARTICULAR PURPOSE AND NON-INFRINGEMENT.
-					?</p>
-					<p>
-					IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE MATERIAL OR THE USE OR OTHER DEALINGS IN THE MATERIAL.
-					?</p>
-					<p>
-					Exclusive Remedy and Limitation of Liability: The entire liability of HarvestChoice
-					and User's exclusive remedy shall be to terminate the Agreement upon User returning
-					the Data and Related Materials to HarvestChoice.
-					</p>
-  				</div>
-  			</div>
-  		</div>
-  	</div>
-  	<div id="header">
-  		<div id="logo">
-  			<img id="logoImg" height=33 width=90 src="images/logo.png"/>
-  		</div>
-  		<div id="regionMegaDropDownButton">
-  			<div id="regionDropDownTitle">Select a Region</div>
-  			<div id="regionDropDownArrow">
-  				<img id="regionDropDownArrowImg" height=9 width=14 src="images/down_arrow.png"/>
-  			</div>
-  		</div>
-  		<div id="headerButtons">
-  			<div id="tableMakerButton" class="headerButton">
-  				<img id="tableMakerButtonImg" height=23 width=24 src="images/tablemaker.png"/>
-  			</div>
-  			<div id="exportButton" class="headerButton">
-  				<img id="exportButtonImg" height=23 width=22 src="images/export_png.png"/>
-  			</div>
-  			<div id="permalinkButton" class="headerButton">
-  				<img id="permalinkButtonImg" height=17 width=22 src="images/permalink.png"/>
-  			</div>
-			<div id="infoButton" class="headerButton">
-				<img id="infoButtonImg" height=19 width=20 src="images/info.png"/>
-			</div>
-  		</div>
-  	</div>
-  	<div id="regionMegaDropDownDiv">
-  		<div id="regionSelectButtons">
-  		
-  			<div class="regionSelectButton regionButtonSelected" id="regionButton">Select a Region</div>
-  			<div class="regionSelectButton" id="countryButton">Select a Country</div>
-  			
-			<div id="regionSelectButtonArrow" class="regionSelectButtonArrow">
-				<img id="regionDropDownSelectArrowImg" height=6 width=26 src="images/select_region_arrow.png"/>
-			</div>
 
-  		</div>
-  		<div id="regionDropDownMenuContainer">
-  			<div id="regionDropDownDiv">
-  			  	<div id="regionDropDownTitles" class="regionDropDownTitles countryDropDownSubContainer"></div>
-  				<div id="regionDropDownValues" class="regionDropDownValues countryDropDownSubContainer"></div>
-  			</div>
-  			<div id="countryDropDownDiv" class="invisible">
-  				<div id="countryDropDownTitles" class="regionDropDownTitles countryDropDownSubContainer"></div>
-  				<div id="countryDropDownValues" class="regionDropDownValues countryDropDownSubContainer"></div>
-  			</div>
-  		</div>
-  	</div>
-  	<div id="wrapper" class="ui-resizable-s" data-dojo-type="dijit.layout.BorderContainer" data-dojo-props="gutters:false,design:'headline'">
-  		<div id="layers" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'left', splitter:false, gutter:false,layoutPriority:2">
-  			<div id="layerGroupIcons"></div>
-  			<div id="floatingDivDocks">
-  			    <div id="floatingSelectedLayersDivDock"></div>
-  			</div>
-  		</div>
-  		<div id="map" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'center', splitter:false, gutter:false">
-  		
-  			<div id="outOfBoundsMessageDiv">
-  				<div id="outOfBoundsMessage">You are now browsing outside the HarvestChoice data coverage area.</div>
-  				<div id="returnToOutOfBoundsButton">Click to zoom to the HarvestChoice Service Area</div>
-  			</div>
-  		
-  			<div id="optionsNubIcon" class="nub nubIcon">
-  				<div class="nubImageContainer">
-  					<img id="optionsNubImg" width=25 height=25 src="images/options_nub.png">
-  					<div id="optionLabelTextTop" class="nubLabelText">BASE</div>
-  					<div class="nubLabelText">LAYERS</div>
-  				</div>
-  			</div>
-  			
-  			<div id="optionsNubArrowDiv" class="nub nubArrowContainer">
-  	  			<img class="nubArrowImg" width=7 height=51 src="images/nub_arrow.png">
-  			</div>	
-  			
-  			<div id="optionsNubMenu" class="nub nubMenu">
-  			  	<div id="optionsNubMenuContainer" class="nubMenuContainer">
-	  				<div class="nubMenuItem optionsNubMenuItem">
-	  					<div id="basemapsButton" class="nubMenuItemButton">
-	  						<div class="nubMenuItemTitle optionsMenuItemTitle">BASEMAPS</div>
-	  					</div>
-	  					<div id="basemapsContainerArrow"></div>
-	  				</div>
-  			  		<div class="nubLeftBorder"></div>
-			   		<div class="nubMenuItem optionsNubMenuItem">			   			
-			   			<div id="boundriesButton" class="nubMenuItemButton">
-	  						<div class="nubMenuItemTitle optionsMenuItemTitle">BOUNDARIES</div>
-	  					</div>
-  						<div id="boundriesContainerArrow"></div>
-			   		</div>
-		  		</div>
-				
-				<div id="basemapsContainer" class="nubMenuContainerItem optionsNubMenuContainer">
-  					
-  					<div class="basemapIconRow">
-  						<div class="basemapIcon">
-  							<div class="basemapImg"><img width=75 height=50 id="national-geographic" src="images/natgeo.jpg"/></div>
-	  						<div class="basemapLabel">National Geographic</div>
-  						</div>
-  						<div class="basemapIcon">
-	  						<div class="basemapImg"><img width=75 height=50 id="gray" src="images/gray.png"/></div>
-	  						<div class="basemapLabel">Gray</div>
-  						</div>
-  					</div>
-  					
-  					<div class="basemapIconRow">
-	  					<div class="basemapIcon">
-	  						<div class="basemapImg"><img width=75 height=50 id="streets" src="images/streets.jpg"/></div>
-	  						<div class="basemapLabel">Streets</div>
-  						</div>
-  						<div class="basemapIcon">
-	  						<div class="basemapImg"><img width=75 height=50 id="satellite" src="images/world.jpg"/></div>
-	  						<div class="basemapLabel">Satellite</div>
-  							</div>
-  					</div>
-  								
- 					<div class="basemapIconRow">
-  						<div class="basemapIcon">
-	  						<div class="basemapImg"><img width=75 height=50 id="topo" src="images/topo.png"/></div>
-	  						<div class="basemapLabel">Topo</div>
-  						</div>
-  						<div class="basemapIcon">
-	  						<div class="basemapImg"><img width=75 height=50 id="hybrid" src="images/hybrid.png"/></div>
-	  						<div class="basemapLabel">Hybrid</div>
-  						</div>
-  					</div>
-  				</div>
-			
-			
-				<div id="boundriesContainer" class="nubMenuContainerItem optionsNubMenuContainer">
-					
-					<div id="boundryCheckboxes">
-					
-						<div class="boundryRow">
-							<div class="boundryItem">
-								<div id="admin0CheckboxDiv" class="boundryCheckboxDiv"></div>
-								<div class="boundryLabel">Country</div>
-							</div>
-							
-							<div class="boundryItem boundryItemRight">
-								<div id="admin1CheckboxDiv" class="boundryCheckboxDiv"></div>
-								<div class="boundryLabel">Province</div>
-							</div>
-						</div>
-						<div class="boundryRow">
-							<div class="boundryItem">
-								<div id="admin2CheckboxDiv" class="boundryCheckboxDiv"></div>
-								<div class="boundryLabel">District</div>
-							</div>
-							
-							<div class="boundryItem boundryItemRight">
-								<div id="cell5mCheckboxDiv" class="boundryCheckboxDiv"></div>
-								<div class="boundryLabel">Cell5M Grid</div>
-							</div>
-						</div>
-					</div>					
-		   		</div>
-		  	</div>	
-		  		  	
-  			<div id="rasterMaskToggleButton" class="mapControlButton">MASK (OFF)</div>
-  			<div id="coordsDiv" class="mapControlButton"></div>
-  			<div id="mapResetButton">RESET MAP</div>
-  			
-  			<div id="toolsNubIcon" class="nub nubIcon">
-  			  	<div class="nubImageContainer">
-					<img id="toolsNubImg" height=21 width=29 src="images/tools_nub.png">
-					<div class="nubLabelText">SPATIAL</div>
-					<div class="nubLabelText">ANALYSIS</div>
-  				</div>  	
-  			</div>	
-  			<div id="toolsNubArrowDiv" class="nub nubArrowContainer">
-  	  			<img class="nubArrowImg" width=7 height=51 src="images/nub_arrow.png">
-  			</div>	
-  			<div id="toolsNubMenu" class="nub nubMenu">
-  			
-  			  	<div id="toolsNubMenuContainer" class="nubMenuContainer">
-			  		<div class="nubMenuItem">
-			  			<div id="summarizeLocationButton" class="nubMenuItemButton">
-	  						<img id="summarizeLocationImg" class="nubMenuItemIcon" height=26 width=28 src="images/summarize_location.png">
-	  						<div class="nubMenuItemTitle toolsMenuItemTitle">POINT AND AREA SUMMARY</div>
-	  					</div>
-	  					<div id="summarizeLocationContainerArrow"></div>
-			  		</div>
-  			  		<div class="nubLeftBorder"></div>
-			  		<div class="nubMenuItem">			  		 	
-			  		 	<div id="summarizeDomainButton" class="nubMenuItemButton">
-			  		 		<img  class="nubMenuItemIcon" id="summarizeDomainImg" height=26 width=27 src="images/summarize_domain.png">
-	  						<div id="domainMenuItemTitle" class="nubMenuItemTitle toolsMenuItemTitle">DOMAIN SUMMARY</div>
-	  					</div>
- 						<div id="summarizeDomainContainerArrow"></div>
-			  		</div>
-  			  		<div class="nubLeftBorder"></div>
-			  		<div class="nubMenuItem">			  		 	
-			  		 	<div id="summarizeMarketButton" class="nubMenuItemButton">
-	  						<img  class="nubMenuItemIcon" id="summarizeMarketImg" height=26 width=34 src="images/summarize_market.png">
-	  						<div id="marketShedMenuItemTitle" class="nubMenuItemTitle toolsMenuItemTitle">MARKET SHED SUMMARY</div>
-	  					</div>
- 						<div id="summarizeMarketContainerArrow"></div>
-			  		</div>		
-			  		
-			  		
-			  		<div class="nubLeftBorder"></div>
-			  		<div class="nubMenuItem">			  		 	
-			  		 	<div id="summarizeTopAdminButton" class="nubMenuItemButton">
-	  						<img  class="nubMenuItemIcon" id="topAdminImg" height=26 width=34 src="images/summarize_admin.png">
-	  						<div id="topAdminMenuItemTitle" class="nubMenuItemTitle toolsMenuItemTitle">TOP 5 AREAS</div>
-	  					</div>
- 						<div id="summarizeTopAdminContainerArrow"></div>
-			  		</div>	
-			  		
-			  		<div class="nubLeftBorder"></div>
-			  		<div class="nubMenuItem">			  		 	
-			  		 	<div id="summarizeTopCropButton" class="nubMenuItemButton">
-	  						<img  class="nubMenuItemIcon" id="topCropImg" height=26 width=34 src="images/summarize_crop.png">
-	  						<div id="topCropMenuItemTitle" class="nubMenuItemTitle toolsMenuItemTitle">TOP 5 CROPS</div>
-	  					</div>
- 						<div id="summarizeTopCropContainerArrow"></div>
-			  		</div>	
-			  		
-			  	</div>
-			  				  	
-			  	<div id="summarizeLocationContainer" class="nubMenuContainerItem toolsNubMenuContainer">
-	  				<div class="menuItemContent">
-	  				
-	  					<div id="summarizeLocationTitle">Please choose a point or area summary.</div>
-	  					
-	  					<div id="summarizeLocationDiv" class="summarizeLocDiv">
-	  						<div class="sumLocBlock">
-	  							<img id="sumLocImg" class="sumLocIcon" height=22 width=15 src="images/summarize_point.png"/>
-	  						  	<div class="sumLocText">
-	  								<div class="sumLocTitle">SUMMARIZE BY POINTS</div>
-	  								<div class="sumLocDesc">Click on any location. A table summarizing your selected indicators for that location will appear. You can compare up to 10 locations.</div>
-	  								<div id="executeSummarizeLocationsButton" class="sumLocButton">DROP A POINT</div>
-	  							</div>
-	  						</div>
-	  					</div>
-	  					
-	  					<div id="summarizeAreaDiv" class="summarizeLocDiv">
-	  						<div class="sumLocBlock">
-	  							<img id="sumPolyImg" class="sumLocIcon" height=22 width=23 src="images/summarize_custom_area.png"/>
-	  						  	<div class="sumLocText">
-	  								<div class="sumLocTitle">SUMMARIZE BY POLYGONS</div>
-	  								<div class="sumLocDesc">Left click to begin drawing your own area and double click to complete. A table summarizing the indicators you previously selected will appear grouped by your custom area.</div>
-	  								<div id="executeSummarizeCustomAreaButton" class="sumLocButton">DRAW ON MAP</div>
-	  							</div>
-	  						</div>
-	  					</div>
-	  					<div id="summarizeLocationMessage" class="errorMessage"></div>
-	  				</div>
-	  			</div>
+  <div class="construction">
 
-	  					
- 				<div id="summarizeDomainContainer" class="nubMenuContainerItem toolsNubMenuContainer">
- 					<div class="menuItemContent">
-						<div id="summarizeDomainTopDesc">
-							Select one of the categorical (domain) layers below across which to produce zonal statistics for the selected indicators.
-						</div>
-						<div id="summarizeDomainThumbContainer"></div>
- 						<div id="summarizeDomainDropdownDiv">
-							<div id="summarizeDomainDropdownDijitDiv"></div>
-						</div>
-						<div id="summarizeDomainBottomDesc"></div>
-	 					<div id="executeSummarizeDomainButton" class="sumLocButton">GO</div>
-	 					<div id="summarizeDomainMessage" class="errorMessage"></div>
-					</div>
- 				</div>
- 					
- 				<div id="summarizeMarketContainer" class="nubMenuContainerItem toolsNubMenuContainer">
- 					<div id="marketShedDescription" class="menuItemContent">
- 						<div id="marketShedDesc">Select a point on the map from which to
-							generate travel time zones. Zonal statistics are shown for the
-							selected indicators within areas under 2 hours travel time to the
-							nearest market, between 2 to 4 hours, 4 to 6 hours, and 6 to 8
-							hours. Visit the <a id="agMarketFinderLink" target="_blank" href="http://www.marketfinder.info/">AgMarketFinder</a> website to further explore the
-							capabilities of this tool.</div>
-	 					<div id="executeSummarizeMarketButton" class="sumLocButton">GO</div>
-	 					<div id="summarizeMarketShedMessage" class="errorMessage"></div>
-					</div>
- 				</div>
- 				
- 				
- 				 <div id="summarizeTopAdminContainer" class="nubMenuContainerItem toolsNubMenuContainer">
- 					<div class="menuItemContent">
- 						<div class="toolDescription">This tool returns the top/bottom 5 countries, or provinces within countries, for each of the selected indicators (over your chosen study area).</div>
-	 					<div id="executeAdminTOPPRButton" class="sumLocButton">GO</div>
-	  					<div id="summarizeTopAdminMessage" class="errorMessage"></div>
-					</div>
- 				</div>
- 				
- 				<div id="summarizeTopCropContainer" class="nubMenuContainerItem toolsNubMenuContainer">
- 					<div class="menuItemContent">
-	  					<div id="summarizeLocationTitle">This tool returns the top 5 commodities ranked by harvested area and production value (over your chosen study area).
-Production estimates are circa 2005.</div>
-	  					
-	  					<div id="summarizeByAdminUnitDiv" class="summarizeLocDiv">
-	  						<div class="sumLocBlock">
-	  							<img class="sumLocIcon" height=22 width=15 src="images/summarize_point.png"/>
-	  						  	<div class="sumLocText">
-	  								<div class="sumLocTitle">SUMMARIZE BY REGION SELECTED</div>
-	  								<div class="sumLocDesc">Select a study area (region or country) from the top navigation menu and click Go to view the top 5 agricultural commodities produced in this area.</div>
-	  								<div id="executeCropTOPPRAdminButton" class="sumLocButton">GO</div>
-	  							</div>
-	  						</div>
-	  					</div>
-	  					
-	  					<div id="summarizeAreaDiv" class="summarizeLocDiv">
-	  						<div class="sumLocBlock">
-	  							<img class="sumLocIcon" height=22 width=23 src="images/summarize_custom_area.png"/>
-	  						  	<div class="sumLocText">
-	  								<div class="sumLocTitle">SUMMARIZE BY POLYGON</div>
-	  								<div class="sumLocDesc">Draw a polygon on the map to view the top 5 commodities produced over this specific area.</div>
-	  								<div id="executeCropTOPPRCustomAreaButton" class="sumLocButton">DRAW ON MAP</div>
-	  							</div>
-	  						</div>
-	  					</div>
-	 					<div id="" class="errorMessage"></div>
-					</div>
- 				</div>
- 				
-			  	
-  			</div>
-  			<div id="activeToolNub" class="nub">
-  				<img id="toolCircleImg" width=25 height=24 src="images/tool_circle.png" />
-  				<img id="activeToolSlider" width=30 height=13 src="images/tool_active.png" />
-  				<div id="activeToolCloseButton"><img id="activeToolCloseButtonImg" height=7 width=8 src="images/active_tool_nub_close.png" /></div>
-  			</div>
-  			<div id="legendsTabContainer">
-  				<div id="legendsButton">
-  					<div id="legendButtonTitle">LEGEND</div>
-  					<div id="legendArrow">
-						<img id="legendArrowImg" height=7 width=11 src="images/legend_up_arrow.png"/>
-					</div>
-  				</div>
-  				<div id="legendsContainer"></div>
-  			</div>
-  		</div>
-  		<img id="resizeWrapperNub" src="images/splitter.png" height=8 width=23 />
-  	</div>
-  	<div id="bottomWrapper">
-		<div id="analytics">
-			<div id="analyticsTitle">CHARTS AND TABLES</div>
-			<div id="analyticsResultsAccordian"></div>
-		</div>
-		<div id="footer">
-			<div id="copyrightDiv">&#169;</div>
-			<img id="HCLogoImg" height=34 width=136 src="images/hc_logo.png">
-		</div>
-	</div>
-	<script>var dojoConfig = { parseOnLoad: true };</script>
-  	<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/"></script>
-  	<script src="scripts/wiket.js"></script>
-  	<script src="scripts/d3.js"></script>
-  	<script src="scripts/scripts.js"></script>
-  	
-  	<form method="post" action="" style="display:none;" id="downloadform" target="_blank">
-	    <input type="hidden" name="report" id="reportinput" value="" />
-	    <input type="hidden" name="filename" id="filename" value="" />
-	    <input type="hidden" name="s" id="s" value="" />
-    </form>
-    
-<script type="text/javascript">
+	  <div class="container">
+		  <div>
+			  <div class="left-column">
+				  <span><img class="hero-image" src="images/logo_yellow.png"></span>
+				  <div class="text">COMING SOON</div>
+			  </div>
 
-	 Êvar _gaq = _gaq || [];
-	 Ê_gaq.push(['_setAccount', 'UA-5299684-10']);
-	 Ê_gaq.push(['_trackPageview']);
-	 Ê_gaq.push(['_trackEvent']);
-	
-	 Ê(function() {
-	 Ê Êvar ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	 Ê Êga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	 Ê Êvar s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	 Ê})();
+			  <img src="images/hero_large.png">
+		  </div>
+	  </div>
 
-	</script> 
-  	
-  </body>
+  </div>
+
+  <!--<body class="claro">-->
+  	<!--<div id="loadingAppDiv"></div>-->
+  	<!--<div id="colorPickerContentDiv">-->
+  		<!--<div id="colorPickerDiv">-->
+  			<!--<div id="colorPickerDijit" data-dojo-type="dojox.widget.ColorPicker"></div>-->
+  			<!--<div id="colorPickerButtonsDiv">-->
+  				<!--<div id="colorPickerCancel" class="colorPickerButton">Cancel</div>-->
+  				<!--<div id="colorPickerSubmit" class="colorPickerButton">OK</div>-->
+  			<!--</div>-->
+  		<!--</div>-->
+  	<!--</div>-->
+  	<!--<div id="instructionLandingPage">-->
+  	<!-- -->
+  		<!--<img id="step1Img" class="stepImg" src="images/step_1_arrow.png" height=78 width=56/>-->
+  		<!--<img id="step2Img" class="stepImg" src="images/step_2_arrow.png" height=21 width=86/>-->
+  		<!--<img id="step3Img" class="stepImg" src="images/step_3_arrow.png" height=113 width=106/>-->
+  		<!--<img id="step4Img" class="stepImg" src="images/step_4_arrow.png" height=105 width=21/>-->
+  		<!-- -->
+  		<!--<div id="step1Div" class="instructionDiv">-->
+  			<!--<div>STEP 1:</div>-->
+  			<!--<div>SELECT THE GEOGRAPHIC EXTENT &nbsp;OF</div>-->
+  			<!--<div>THE AREA YOU'D LIKE TO EXPLORE.</div>-->
+  		<!--</div>-->
+  		<!--<div id="step2Div" class="instructionDiv">-->
+  			<!--<div>STEP 2:</div>-->
+			<!--<div>SELECT &nbsp;THE SPECIFIC</div>-->
+			<!--<div>INDICATORS YOU'D LIKE</div>-->
+			<!--<div>TO EXPLORE, SUMMARIZE</div>-->
+			<!--<div>AND DOWNLOAD.</div>-->
+  		<!--</div>-->
+  		<!--<div id="step3Div" class="instructionDiv">-->
+			<!--<div>SUMMARIZE YOUR SELECTED INDICATORS</div>-->
+			<!--<div>FOR POINTS OR AREAS YOU DEFINE USING</div>-->
+			<!--<div>ONE OF THE ANALYSIS TOOLS.</div> -->
+  		<!--</div>-->
+  		<!--<div id="step4Div" class="instructionDiv">-->
+  			<!--<div>THE SUMMARIES (TABLES AND CHARTS)</div>-->
+			<!--<div>WILL APPEAR BELOW THE MAP.</div>-->
+  		<!--</div>-->
+  		<!--<div id="instructionPageExitButton" class="instructionDiv">-->
+  			<!--<img id="instructionPageExitImg" class="stepImg" src="images/close_instruction.png" height=45 width=49/>-->
+  			<!--<div id="closeButtonText">CLOSE</div>-->
+  		<!--</div>-->
+  	<!--</div>-->
+  	<!--<div id="fullscreenContentDiv">-->
+  		<!--<div id="fullscreenContentContainer">-->
+  			<!--<div id="fullscreenContentContainerCloseButton"></div>-->
+  			<!--<div id="errorMessageContainer" class="contentContainer"></div>-->
+  			<!-- -->
+  			<!--<div id="pdfExportContainer" class="contentContainer">-->
+  				<!--<div class="exportTitle">EXPORT MAP RESULT</div>-->
+  				<!--<img id="exportPreview" class="exportThumb" width=440 height=330 src="" />-->
+  				<!--<div id="openExportResultButton" class="exportButton">OPEN EXPORT NOW</div>-->
+  			<!--</div>-->
+  			<!-- -->
+  			<!--<div id="permalinkContainer" class="contentContainer"></div>-->
+  			<!--<div id="tableMakerExportContainer" class="contentContainer"></div>-->
+  		<!--</div>-->
+  	<!--</div>-->
+  	<!--<div id="aboutAppFullScreenContainer">-->
+  		<!--<div id="aboutAppContent">-->
+  			<!--<div id="exitAboutApp"><img id="exitAboutAppImg" src="images/exit_app_info.png" height=18 width=19/></div>-->
+  			<!--<div id="aboutAppAccordian">-->
+  				<!--<div id="aboutAppAccordianHeader">-->
+  					<!--<div id="aboutAppAccordianTitle">MAPPR HELP</div>-->
+  					<!--<a id="feedbackURL" class="feedbackURLLink" target="_blank">FEEDBACK</a>-->
+  				<!--</div>-->
+   				<!--<div id="aboutAppRow" class="aboutAppAccordianRowHeader">-->
+  					<!--<div class="aboutAppAccordianRowTitle">ABOUT</div>-->
+  					<!--<div class="aboutAppAccordianRowButton"><img class="infoAccordianImg" id="aboutAccordianImg" src="images/open_about_accordian.png" height=18 width=19/></div>-->
+  				<!--</div>-->
+  				<!--<div id="aboutMapprText" class="aboutAppAccordianRowContent">-->
+					<!--<p>-->
+						<!--MAPPR is a spatial visualization and analysis tool offering easy-->
+						<!--access to <strong>over four hundred layers of-->
+							<!--spatially-explicit, agriculture-related indicators for-->
+							<!--sub-Saharan Africa</strong>.-->
+					<!--</p>-->
+					<!--<p>-->
+						<!--Use the drawers to the right to explore HarvestChoice's-->
+						<!--collections of <strong>bio-physical</strong>, <strong>crop</strong>-->
+						<!--and <strong>livestock production</strong>, <strong>socio-economic</strong>,-->
+						<!--<strong>markets</strong>, and <strong>agricultural R&D-->
+							<!--investment</strong> data. Each layer consists of about 300,000 10km x 10km-->
+						<!--gridcells covering the whole of the sub-Saharan African region.-->
+					<!--</p>-->
+					<!--<p>-->
+						<!--Layers of data may be overlaid and exported to PNG for re-use in-->
+						<!--reports and presentations. Each layer is also available for-->
+						<!--download in <strong>raw ASCII raster</strong> format for use in-->
+						<!--desktop GIS. Maps may be <strong>embedded in external-->
+							<!--websites</strong> using a simple HTML snippet. The basemaps are-->
+						<!--interchangeable using the toolbox to the right.-->
+					<!--</p>-->
+					<!--<p>A number of spatial querying and analysis tools are built-->
+						<!--into the application:</p>-->
+					<!--<ul>-->
+						<!--<li><strong>Point and polygon statistics</strong> will return-->
+							<!--a table of values for the selected indicators at the selected-->
+							<!--locations (or aggregated over a specific hand-drawn area).</li>-->
+						<!--<li>Domain statistics will produce a summary table and graphs-->
+							<!--of indicators aggregated across the selected <strong>geographic-->
+								<!--domains</strong> (e.g. agro-ecological zones, farming systems, etc.).-->
+						<!--</li>-->
+						<!--<li>A <strong>marketshed analysis</strong> produces layer statistics aggregated to<strong> 2hr, 4hr, 6hr and 8hr time-to-market zones</strong> for any selected point on the map.-->
+						<!--</li>-->
+					<!--</ul>-->
+					<!--<p>By design, MAPPR targets the needs of investors, policy-->
+						<!--makers, program managers, analysts and technical specialists.</p>-->
+				<!--</div>-->
+  				<!--<div id="tutorialAppRow" class="aboutAppAccordianRowHeader">-->
+  					<!--<div class="aboutAppAccordianRowTitle">TUTORIAL</div>-->
+  					<!--<div class="aboutAppAccordianRowButton"><img class="infoAccordianImg" id="tutorialAccordianImg" src="images/open_about_accordian.png" height=18 width=19/></div>-->
+  				<!--</div>-->
+  				<!--<div id="tutorialAboutText" class="aboutAppAccordianRowContent">-->
+					<!--<div>STEP 1) SELECT THE GEOGRAPHIC EXTENT OF THE AREA YOU'D LIKE TO EXPLORE.</div>-->
+					<!--<div>STEP 2) SELECT THE SPECIFIC INDICATORS YOU'D LIKE TO EXPLORE, SUMMARIZE AND DOWNLOAD.</div>-->
+					<!--<div>OPTIONAL: SUMMARIZE YOUR SELECTED INDICATORS FOR POINTS OR AREAS YOU DEFINE USING ONE OF THE ANALYSIS TOOLS.</div>-->
+					<!--<div>NOTE: THE SUMMARIES (TABLES AND CHARTS) WILL APPEAR BELOW THE MAP.</div>-->
+  				<!--</div>-->
+  				<!--<div id="contactAppRow" class="aboutAppAccordianRowHeader">-->
+  					<!--<div class="aboutAppAccordianRowTitle">CONTACT US</div>-->
+  					<!--<div class="aboutAppAccordianRowButton"><img class="infoAccordianImg" id="contactAccordianImg" src="images/open_about_accordian.png" height=18 width=19/></div>-->
+  				<!--</div>-->
+  				<!--<div id="contactUsText" class="aboutAppAccordianRowContent">-->
+					<!--MAPPR is under active development. If you have any comment, -->
+					<!--suggestion or feedback about this application or any of the data layers, -->
+					<!--please <a href="http://harvestchoice.org/contact" target="_blank">contact us</a> or use our <a class="feedbackURLLink"  target="_blank">feedback form</a>.-->
+  				<!--</div>-->
+  				<!--<div id="termsOfUseRow" class="aboutAppAccordianRowHeader">-->
+  					<!--<div class="aboutAppAccordianRowTitle">TERMS OF USE</div>-->
+  					<!--<div class="aboutAppAccordianRowButton"><img class="infoAccordianImg" id="termsOfUseAccordianImg" src="images/open_about_accordian.png" height=18 width=19/></div>-->
+  				<!--</div>-->
+  				<!--<div style="height:300px;overflow-y:scroll;" class="aboutAppAccordianRowContent">-->
+  					<!--<p>-->
+	  				<!--================================================================================-->
+					<!--HARVESTCHOICE DATA README-->
+					<!--May 9, 2013-->
+					<!--================================================================================-->
+					<!--</p>-->
+					<!--<p>-->
+					<!--This dataset was obtained from HarvestChoice at http://www.harvestchoice.org/data on?-->
+					<!--May 9, 2013.-->
+					<!--</p>-->
+					<!--<p>-->
+					<!--PLEASE CITE ORIGINAL SOURCES-->
+					<!--</p>-->
+					<!--<p>-->
+					<!--Guo, Zhe, Jawoo Koo, Ulrike Wood-Sichra, Carlo Azzarri, Melanie Bacou. Agroecology,-->
+					<!--Demographics, Markets, Farming Systems, Agricultural R&D: HarvestChoice 5-Arc-Minute-->
+					<!--Spatial Layers for sub-Saharan Africa Release {version}, HarvestChoice, IFPRI,-->
+					<!--University of Minnesota. Available on-line at http://www.harvestchoice.org/data/-->
+					<!--</p>-->
+					<!--<p>-->
+					<!--You, Liang, Zhe Guo, Jawoo Koo, W. Ojo, Kate Sebastian, Maria Theresa Tenorio, Stanley-->
+					<!--Wood, U. Wood-Sichra. Spatial Production Allocation Model (SPAM) 2000 Version 3-->
+					<!--Release 1. http://MapSPAM.info/.-->
+					<!--?</p>-->
+					<!--<p>-->
+					<!--USE TERMS FOR ENCLOSED DATA FILES-->
+					<!--?</p>-->
+					<!--<p>-->
+					<!--The Data and any Related Materials are the property of HarvestChoice and its-->
+					<!--Contributors and are protected by United States copyright laws and applicable-->
+					<!--international copyright treaties and conventions. HarvestChoice reserves rights for-->
+					<!--the enclosed data file(s) and distributes data under the following license. In order-->
+					<!--to view or use the data, you must accept this license. If you do not accept this-->
+					<!--license, please return all files and do not retain a copy. By keeping the files, you-->
+					<!--have agreed to the following terms.-->
+  					<!--</p>-->
+  					<!--<p>-->
+					<!--================================================================================-->
+					<!--HARVESTCHOICE USER LICENSE-->
+					<!--Version 2008-01, April 16, 2008-->
+					<!--================================================================================-->
+					<!--</p>-->
+  					<!--<p>-->
+					<!--1. Data files are for your own, non-commercial use only-->
+					<!--</p>-->
+					<!--<p>-->
+					<!--2. Any and all derived products (e.g., tables, figures, maps) generated using the-->
+					<!--enclosed data must be given due attribution according to the suggested citation-->
+					<!--supplied or, in its absence, refer to the guidelines obtained from-->
+					<!--<a href="http://harvestchoice.org/about/intellect" target="_blank"></a>-->
+					<!--?</p>-->
+					<!--<p>-->
+					<!--3. None of the data may be distributed in digital or print form to third parties,-->
+					<!--including on User's web sites, without explicit permission from HarvestChoice or-->
+					<!--relevant Contributors to the HarvestChoice web site (contact hallaway@umn.edu).-->
+					<!--?</p>-->
+					<!--<p>-->
+					<!--================================ Definitions =====================================-->
+					<!--?</p>-->
+					<!--<p>-->
+					<!--Attribution: Attribute downloaded data and derived products using the suggested-->
+					<!--citation details distributed as metadata with the downloaded file. If attribution-->
+					<!--guidelines are absent in the metadata, refer to-->
+					 <!--<a style="color:#000;" href="http://harvestchoice.org/about/intellect" target="_blank"></a>-->
+					<!--</p>-->
+					<!--<p>-->
+					<!--"Data" include all databases, tables, graphics, figures, GIS files, bibliographic-->
+					<!--references, and content obtained from HarvestChoice.-->
+					<!--?</p>-->
+					<!--<p>-->
+					<!--"Non-commercial use" means that User may not sell or redistribute data or its-->
+					<!--derivatives for commercial gain (e.g., selling or charging a fee for maps generated-->
+					<!--using these data).-->
+					<!--?</p>-->
+					<!--<p>-->
+					<!--Any of the above conditions can be waived if you get permission from HarvestChoice.-->
+					<!--?</p>-->
+					<!--<p>-->
+					<!--THE MATERIAL IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,-->
+					<!--INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A-->
+					<!--PARTICULAR PURPOSE AND NON-INFRINGEMENT.-->
+					<!--?</p>-->
+					<!--<p>-->
+					<!--IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE MATERIAL OR THE USE OR OTHER DEALINGS IN THE MATERIAL.-->
+					<!--?</p>-->
+					<!--<p>-->
+					<!--Exclusive Remedy and Limitation of Liability: The entire liability of HarvestChoice-->
+					<!--and User's exclusive remedy shall be to terminate the Agreement upon User returning-->
+					<!--the Data and Related Materials to HarvestChoice.-->
+					<!--</p>-->
+  				<!--</div>-->
+  			<!--</div>-->
+  		<!--</div>-->
+  	<!--</div>-->
+  	<!--<div id="header">-->
+  		<!--<div id="logo">-->
+  			<!--<img id="logoImg" height=33 width=90 src="images/logo.png"/>-->
+  		<!--</div>-->
+  		<!--<div id="regionMegaDropDownButton">-->
+  			<!--<div id="regionDropDownTitle">Select a Region</div>-->
+  			<!--<div id="regionDropDownArrow">-->
+  				<!--<img id="regionDropDownArrowImg" height=9 width=14 src="images/down_arrow.png"/>-->
+  			<!--</div>-->
+  		<!--</div>-->
+  		<!--<div id="headerButtons">-->
+  			<!--<div id="tableMakerButton" class="headerButton">-->
+  				<!--<img id="tableMakerButtonImg" height=23 width=24 src="images/tablemaker.png"/>-->
+  			<!--</div>-->
+  			<!--<div id="exportButton" class="headerButton">-->
+  				<!--<img id="exportButtonImg" height=23 width=22 src="images/export_png.png"/>-->
+  			<!--</div>-->
+  			<!--<div id="permalinkButton" class="headerButton">-->
+  				<!--<img id="permalinkButtonImg" height=17 width=22 src="images/permalink.png"/>-->
+  			<!--</div>-->
+			<!--<div id="infoButton" class="headerButton">-->
+				<!--<img id="infoButtonImg" height=19 width=20 src="images/info.png"/>-->
+			<!--</div>-->
+  		<!--</div>-->
+  	<!--</div>-->
+  	<!--<div id="regionMegaDropDownDiv">-->
+  		<!--<div id="regionSelectButtons">-->
+  		<!-- -->
+  			<!--<div class="regionSelectButton regionButtonSelected" id="regionButton">Select a Region</div>-->
+  			<!--<div class="regionSelectButton" id="countryButton">Select a Country</div>-->
+  			<!-- -->
+			<!--<div id="regionSelectButtonArrow" class="regionSelectButtonArrow">-->
+				<!--<img id="regionDropDownSelectArrowImg" height=6 width=26 src="images/select_region_arrow.png"/>-->
+			<!--</div>-->
+
+  		<!--</div>-->
+  		<!--<div id="regionDropDownMenuContainer">-->
+  			<!--<div id="regionDropDownDiv">-->
+  			  	<!--<div id="regionDropDownTitles" class="regionDropDownTitles countryDropDownSubContainer"></div>-->
+  				<!--<div id="regionDropDownValues" class="regionDropDownValues countryDropDownSubContainer"></div>-->
+  			<!--</div>-->
+  			<!--<div id="countryDropDownDiv" class="invisible">-->
+  				<!--<div id="countryDropDownTitles" class="regionDropDownTitles countryDropDownSubContainer"></div>-->
+  				<!--<div id="countryDropDownValues" class="regionDropDownValues countryDropDownSubContainer"></div>-->
+  			<!--</div>-->
+  		<!--</div>-->
+  	<!--</div>-->
+  	<!--<div id="wrapper" class="ui-resizable-s" data-dojo-type="dijit.layout.BorderContainer" data-dojo-props="gutters:false,design:'headline'">-->
+  		<!--<div id="layers" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'left', splitter:false, gutter:false,layoutPriority:2">-->
+  			<!--<div id="layerGroupIcons"></div>-->
+  			<!--<div id="floatingDivDocks">-->
+  			    <!--<div id="floatingSelectedLayersDivDock"></div>-->
+  			<!--</div>-->
+  		<!--</div>-->
+  		<!--<div id="map" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'center', splitter:false, gutter:false">-->
+  		<!-- -->
+  			<!--<div id="outOfBoundsMessageDiv">-->
+  				<!--<div id="outOfBoundsMessage">You are now browsing outside the HarvestChoice data coverage area.</div>-->
+  				<!--<div id="returnToOutOfBoundsButton">Click to zoom to the HarvestChoice Service Area</div>-->
+  			<!--</div>-->
+  		<!-- -->
+  			<!--<div id="optionsNubIcon" class="nub nubIcon">-->
+  				<!--<div class="nubImageContainer">-->
+  					<!--<img id="optionsNubImg" width=25 height=25 src="images/options_nub.png">-->
+  					<!--<div id="optionLabelTextTop" class="nubLabelText">BASE</div>-->
+  					<!--<div class="nubLabelText">LAYERS</div>-->
+  				<!--</div>-->
+  			<!--</div>-->
+  			<!-- -->
+  			<!--<div id="optionsNubArrowDiv" class="nub nubArrowContainer">-->
+  	  			<!--<img class="nubArrowImg" width=7 height=51 src="images/nub_arrow.png">-->
+  			<!--</div>	-->
+  			<!-- -->
+  			<!--<div id="optionsNubMenu" class="nub nubMenu">-->
+  			  	<!--<div id="optionsNubMenuContainer" class="nubMenuContainer">-->
+	  				<!--<div class="nubMenuItem optionsNubMenuItem">-->
+	  					<!--<div id="basemapsButton" class="nubMenuItemButton">-->
+	  						<!--<div class="nubMenuItemTitle optionsMenuItemTitle">BASEMAPS</div>-->
+	  					<!--</div>-->
+	  					<!--<div id="basemapsContainerArrow"></div>-->
+	  				<!--</div>-->
+  			  		<!--<div class="nubLeftBorder"></div>-->
+			   		<!--<div class="nubMenuItem optionsNubMenuItem">			   			-->
+			   			<!--<div id="boundriesButton" class="nubMenuItemButton">-->
+	  						<!--<div class="nubMenuItemTitle optionsMenuItemTitle">BOUNDARIES</div>-->
+	  					<!--</div>-->
+  						<!--<div id="boundriesContainerArrow"></div>-->
+			   		<!--</div>-->
+		  		<!--</div>-->
+				<!-- -->
+				<!--<div id="basemapsContainer" class="nubMenuContainerItem optionsNubMenuContainer">-->
+  					<!-- -->
+  					<!--<div class="basemapIconRow">-->
+  						<!--<div class="basemapIcon">-->
+  							<!--<div class="basemapImg"><img width=75 height=50 id="national-geographic" src="images/natgeo.jpg"/></div>-->
+	  						<!--<div class="basemapLabel">National Geographic</div>-->
+  						<!--</div>-->
+  						<!--<div class="basemapIcon">-->
+	  						<!--<div class="basemapImg"><img width=75 height=50 id="gray" src="images/gray.png"/></div>-->
+	  						<!--<div class="basemapLabel">Gray</div>-->
+  						<!--</div>-->
+  					<!--</div>-->
+  					<!-- -->
+  					<!--<div class="basemapIconRow">-->
+	  					<!--<div class="basemapIcon">-->
+	  						<!--<div class="basemapImg"><img width=75 height=50 id="streets" src="images/streets.jpg"/></div>-->
+	  						<!--<div class="basemapLabel">Streets</div>-->
+  						<!--</div>-->
+  						<!--<div class="basemapIcon">-->
+	  						<!--<div class="basemapImg"><img width=75 height=50 id="satellite" src="images/world.jpg"/></div>-->
+	  						<!--<div class="basemapLabel">Satellite</div>-->
+  							<!--</div>-->
+  					<!--</div>-->
+  								<!-- -->
+ 					<!--<div class="basemapIconRow">-->
+  						<!--<div class="basemapIcon">-->
+	  						<!--<div class="basemapImg"><img width=75 height=50 id="topo" src="images/topo.png"/></div>-->
+	  						<!--<div class="basemapLabel">Topo</div>-->
+  						<!--</div>-->
+  						<!--<div class="basemapIcon">-->
+	  						<!--<div class="basemapImg"><img width=75 height=50 id="hybrid" src="images/hybrid.png"/></div>-->
+	  						<!--<div class="basemapLabel">Hybrid</div>-->
+  						<!--</div>-->
+  					<!--</div>-->
+  				<!--</div>-->
+			<!-- -->
+			<!-- -->
+				<!--<div id="boundriesContainer" class="nubMenuContainerItem optionsNubMenuContainer">-->
+					<!-- -->
+					<!--<div id="boundryCheckboxes">-->
+					<!-- -->
+						<!--<div class="boundryRow">-->
+							<!--<div class="boundryItem">-->
+								<!--<div id="admin0CheckboxDiv" class="boundryCheckboxDiv"></div>-->
+								<!--<div class="boundryLabel">Country</div>-->
+							<!--</div>-->
+							<!-- -->
+							<!--<div class="boundryItem boundryItemRight">-->
+								<!--<div id="admin1CheckboxDiv" class="boundryCheckboxDiv"></div>-->
+								<!--<div class="boundryLabel">Province</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="boundryRow">-->
+							<!--<div class="boundryItem">-->
+								<!--<div id="admin2CheckboxDiv" class="boundryCheckboxDiv"></div>-->
+								<!--<div class="boundryLabel">District</div>-->
+							<!--</div>-->
+							<!-- -->
+							<!--<div class="boundryItem boundryItemRight">-->
+								<!--<div id="cell5mCheckboxDiv" class="boundryCheckboxDiv"></div>-->
+								<!--<div class="boundryLabel">Cell5M Grid</div>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>					-->
+		   		<!--</div>-->
+		  	<!--</div>	-->
+		  		  	<!-- -->
+  			<!--<div id="rasterMaskToggleButton" class="mapControlButton">MASK (OFF)</div>-->
+  			<!--<div id="coordsDiv" class="mapControlButton"></div>-->
+  			<!--<div id="mapResetButton">RESET MAP</div>-->
+  			<!-- -->
+  			<!--<div id="toolsNubIcon" class="nub nubIcon">-->
+  			  	<!--<div class="nubImageContainer">-->
+					<!--<img id="toolsNubImg" height=21 width=29 src="images/tools_nub.png">-->
+					<!--<div class="nubLabelText">SPATIAL</div>-->
+					<!--<div class="nubLabelText">ANALYSIS</div>-->
+  				<!--</div>  	-->
+  			<!--</div>	-->
+  			<!--<div id="toolsNubArrowDiv" class="nub nubArrowContainer">-->
+  	  			<!--<img class="nubArrowImg" width=7 height=51 src="images/nub_arrow.png">-->
+  			<!--</div>	-->
+  			<!--<div id="toolsNubMenu" class="nub nubMenu">-->
+  			<!-- -->
+  			  	<!--<div id="toolsNubMenuContainer" class="nubMenuContainer">-->
+			  		<!--<div class="nubMenuItem">-->
+			  			<!--<div id="summarizeLocationButton" class="nubMenuItemButton">-->
+	  						<!--<img id="summarizeLocationImg" class="nubMenuItemIcon" height=26 width=28 src="images/summarize_location.png">-->
+	  						<!--<div class="nubMenuItemTitle toolsMenuItemTitle">POINT AND AREA SUMMARY</div>-->
+	  					<!--</div>-->
+	  					<!--<div id="summarizeLocationContainerArrow"></div>-->
+			  		<!--</div>-->
+  			  		<!--<div class="nubLeftBorder"></div>-->
+			  		<!--<div class="nubMenuItem">			  		 	-->
+			  		 	<!--<div id="summarizeDomainButton" class="nubMenuItemButton">-->
+			  		 		<!--<img  class="nubMenuItemIcon" id="summarizeDomainImg" height=26 width=27 src="images/summarize_domain.png">-->
+	  						<!--<div id="domainMenuItemTitle" class="nubMenuItemTitle toolsMenuItemTitle">DOMAIN SUMMARY</div>-->
+	  					<!--</div>-->
+ 						<!--<div id="summarizeDomainContainerArrow"></div>-->
+			  		<!--</div>-->
+  			  		<!--<div class="nubLeftBorder"></div>-->
+			  		<!--<div class="nubMenuItem">			  		 	-->
+			  		 	<!--<div id="summarizeMarketButton" class="nubMenuItemButton">-->
+	  						<!--<img  class="nubMenuItemIcon" id="summarizeMarketImg" height=26 width=34 src="images/summarize_market.png">-->
+	  						<!--<div id="marketShedMenuItemTitle" class="nubMenuItemTitle toolsMenuItemTitle">MARKET SHED SUMMARY</div>-->
+	  					<!--</div>-->
+ 						<!--<div id="summarizeMarketContainerArrow"></div>-->
+			  		<!--</div>		-->
+			  		<!-- -->
+			  		<!-- -->
+			  		<!--<div class="nubLeftBorder"></div>-->
+			  		<!--<div class="nubMenuItem">			  		 	-->
+			  		 	<!--<div id="summarizeTopAdminButton" class="nubMenuItemButton">-->
+	  						<!--<img  class="nubMenuItemIcon" id="topAdminImg" height=26 width=34 src="images/summarize_admin.png">-->
+	  						<!--<div id="topAdminMenuItemTitle" class="nubMenuItemTitle toolsMenuItemTitle">TOP 5 AREAS</div>-->
+	  					<!--</div>-->
+ 						<!--<div id="summarizeTopAdminContainerArrow"></div>-->
+			  		<!--</div>	-->
+			  		<!-- -->
+			  		<!--<div class="nubLeftBorder"></div>-->
+			  		<!--<div class="nubMenuItem">			  		 	-->
+			  		 	<!--<div id="summarizeTopCropButton" class="nubMenuItemButton">-->
+	  						<!--<img  class="nubMenuItemIcon" id="topCropImg" height=26 width=34 src="images/summarize_crop.png">-->
+	  						<!--<div id="topCropMenuItemTitle" class="nubMenuItemTitle toolsMenuItemTitle">TOP 5 CROPS</div>-->
+	  					<!--</div>-->
+ 						<!--<div id="summarizeTopCropContainerArrow"></div>-->
+			  		<!--</div>	-->
+			  		<!-- -->
+			  	<!--</div>-->
+			  				  	<!-- -->
+			  	<!--<div id="summarizeLocationContainer" class="nubMenuContainerItem toolsNubMenuContainer">-->
+	  				<!--<div class="menuItemContent">-->
+	  				<!-- -->
+	  					<!--<div id="summarizeLocationTitle">Please choose a point or area summary.</div>-->
+	  					<!-- -->
+	  					<!--<div id="summarizeLocationDiv" class="summarizeLocDiv">-->
+	  						<!--<div class="sumLocBlock">-->
+	  							<!--<img id="sumLocImg" class="sumLocIcon" height=22 width=15 src="images/summarize_point.png"/>-->
+	  						  	<!--<div class="sumLocText">-->
+	  								<!--<div class="sumLocTitle">SUMMARIZE BY POINTS</div>-->
+	  								<!--<div class="sumLocDesc">Click on any location. A table summarizing your selected indicators for that location will appear. You can compare up to 10 locations.</div>-->
+	  								<!--<div id="executeSummarizeLocationsButton" class="sumLocButton">DROP A POINT</div>-->
+	  							<!--</div>-->
+	  						<!--</div>-->
+	  					<!--</div>-->
+	  					<!-- -->
+	  					<!--<div id="summarizeAreaDiv" class="summarizeLocDiv">-->
+	  						<!--<div class="sumLocBlock">-->
+	  							<!--<img id="sumPolyImg" class="sumLocIcon" height=22 width=23 src="images/summarize_custom_area.png"/>-->
+	  						  	<!--<div class="sumLocText">-->
+	  								<!--<div class="sumLocTitle">SUMMARIZE BY POLYGONS</div>-->
+	  								<!--<div class="sumLocDesc">Left click to begin drawing your own area and double click to complete. A table summarizing the indicators you previously selected will appear grouped by your custom area.</div>-->
+	  								<!--<div id="executeSummarizeCustomAreaButton" class="sumLocButton">DRAW ON MAP</div>-->
+	  							<!--</div>-->
+	  						<!--</div>-->
+	  					<!--</div>-->
+	  					<!--<div id="summarizeLocationMessage" class="errorMessage"></div>-->
+	  				<!--</div>-->
+	  			<!--</div>-->
+
+	  					<!-- -->
+ 				<!--<div id="summarizeDomainContainer" class="nubMenuContainerItem toolsNubMenuContainer">-->
+ 					<!--<div class="menuItemContent">-->
+						<!--<div id="summarizeDomainTopDesc">-->
+							<!--Select one of the categorical (domain) layers below across which to produce zonal statistics for the selected indicators.-->
+						<!--</div>-->
+						<!--<div id="summarizeDomainThumbContainer"></div>-->
+ 						<!--<div id="summarizeDomainDropdownDiv">-->
+							<!--<div id="summarizeDomainDropdownDijitDiv"></div>-->
+						<!--</div>-->
+						<!--<div id="summarizeDomainBottomDesc"></div>-->
+	 					<!--<div id="executeSummarizeDomainButton" class="sumLocButton">GO</div>-->
+	 					<!--<div id="summarizeDomainMessage" class="errorMessage"></div>-->
+					<!--</div>-->
+ 				<!--</div>-->
+ 					<!-- -->
+ 				<!--<div id="summarizeMarketContainer" class="nubMenuContainerItem toolsNubMenuContainer">-->
+ 					<!--<div id="marketShedDescription" class="menuItemContent">-->
+ 						<!--<div id="marketShedDesc">Select a point on the map from which to-->
+							<!--generate travel time zones. Zonal statistics are shown for the-->
+							<!--selected indicators within areas under 2 hours travel time to the-->
+							<!--nearest market, between 2 to 4 hours, 4 to 6 hours, and 6 to 8-->
+							<!--hours. Visit the <a id="agMarketFinderLink" target="_blank" href="http://www.marketfinder.info/">AgMarketFinder</a> website to further explore the-->
+							<!--capabilities of this tool.</div>-->
+	 					<!--<div id="executeSummarizeMarketButton" class="sumLocButton">GO</div>-->
+	 					<!--<div id="summarizeMarketShedMessage" class="errorMessage"></div>-->
+					<!--</div>-->
+ 				<!--</div>-->
+ 				<!-- -->
+ 				<!-- -->
+ 				 <!--<div id="summarizeTopAdminContainer" class="nubMenuContainerItem toolsNubMenuContainer">-->
+ 					<!--<div class="menuItemContent">-->
+ 						<!--<div class="toolDescription">This tool returns the top/bottom 5 countries, or provinces within countries, for each of the selected indicators (over your chosen study area).</div>-->
+	 					<!--<div id="executeAdminTOPPRButton" class="sumLocButton">GO</div>-->
+	  					<!--<div id="summarizeTopAdminMessage" class="errorMessage"></div>-->
+					<!--</div>-->
+ 				<!--</div>-->
+ 				<!-- -->
+ 				<!--<div id="summarizeTopCropContainer" class="nubMenuContainerItem toolsNubMenuContainer">-->
+ 					<!--<div class="menuItemContent">-->
+	  					<!--<div id="summarizeLocationTitle">This tool returns the top 5 commodities ranked by harvested area and production value (over your chosen study area).-->
+<!--Production estimates are circa 2005.</div>-->
+	  					<!-- -->
+	  					<!--<div id="summarizeByAdminUnitDiv" class="summarizeLocDiv">-->
+	  						<!--<div class="sumLocBlock">-->
+	  							<!--<img class="sumLocIcon" height=22 width=15 src="images/summarize_point.png"/>-->
+	  						  	<!--<div class="sumLocText">-->
+	  								<!--<div class="sumLocTitle">SUMMARIZE BY REGION SELECTED</div>-->
+	  								<!--<div class="sumLocDesc">Select a study area (region or country) from the top navigation menu and click Go to view the top 5 agricultural commodities produced in this area.</div>-->
+	  								<!--<div id="executeCropTOPPRAdminButton" class="sumLocButton">GO</div>-->
+	  							<!--</div>-->
+	  						<!--</div>-->
+	  					<!--</div>-->
+	  					<!-- -->
+	  					<!--<div id="summarizeAreaDiv" class="summarizeLocDiv">-->
+	  						<!--<div class="sumLocBlock">-->
+	  							<!--<img class="sumLocIcon" height=22 width=23 src="images/summarize_custom_area.png"/>-->
+	  						  	<!--<div class="sumLocText">-->
+	  								<!--<div class="sumLocTitle">SUMMARIZE BY POLYGON</div>-->
+	  								<!--<div class="sumLocDesc">Draw a polygon on the map to view the top 5 commodities produced over this specific area.</div>-->
+	  								<!--<div id="executeCropTOPPRCustomAreaButton" class="sumLocButton">DRAW ON MAP</div>-->
+	  							<!--</div>-->
+	  						<!--</div>-->
+	  					<!--</div>-->
+	 					<!--<div id="" class="errorMessage"></div>-->
+					<!--</div>-->
+ 				<!--</div>-->
+ 				<!-- -->
+			  	<!-- -->
+  			<!--</div>-->
+  			<!--<div id="activeToolNub" class="nub">-->
+  				<!--<img id="toolCircleImg" width=25 height=24 src="images/tool_circle.png" />-->
+  				<!--<img id="activeToolSlider" width=30 height=13 src="images/tool_active.png" />-->
+  				<!--<div id="activeToolCloseButton"><img id="activeToolCloseButtonImg" height=7 width=8 src="images/active_tool_nub_close.png" /></div>-->
+  			<!--</div>-->
+  			<!--<div id="legendsTabContainer">-->
+  				<!--<div id="legendsButton">-->
+  					<!--<div id="legendButtonTitle">LEGEND</div>-->
+  					<!--<div id="legendArrow">-->
+						<!--<img id="legendArrowImg" height=7 width=11 src="images/legend_up_arrow.png"/>-->
+					<!--</div>-->
+  				<!--</div>-->
+  				<!--<div id="legendsContainer"></div>-->
+  			<!--</div>-->
+  		<!--</div>-->
+  		<!--<img id="resizeWrapperNub" src="images/splitter.png" height=8 width=23 />-->
+  	<!--</div>-->
+  	<!--<div id="bottomWrapper">-->
+		<!--<div id="analytics">-->
+			<!--<div id="analyticsTitle">CHARTS AND TABLES</div>-->
+			<!--<div id="analyticsResultsAccordian"></div>-->
+		<!--</div>-->
+		<!--<div id="footer">-->
+			<!--<div id="copyrightDiv">&#169;</div>-->
+			<!--<img id="HCLogoImg" height=34 width=136 src="images/hc_logo.png">-->
+		<!--</div>-->
+	<!--</div>-->
+	<!--<script>var dojoConfig = { parseOnLoad: true };</script>-->
+  	<!--<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/"></script>-->
+  	<!--<script src="scripts/wiket.js"></script>-->
+  	<!--<script src="scripts/d3.js"></script>-->
+  	<!--<script src="scripts/scripts.js"></script>-->
+  	<!-- -->
+  	<!--<form method="post" action="" style="display:none;" id="downloadform" target="_blank">-->
+	    <!--<input type="hidden" name="report" id="reportinput" value="" />-->
+	    <!--<input type="hidden" name="filename" id="filename" value="" />-->
+	    <!--<input type="hidden" name="s" id="s" value="" />-->
+    <!--</form>-->
+    <!-- -->
+<!--<script type="text/javascript">-->
+
+	 <!--ï¿½var _gaq = _gaq || [];-->
+	 <!--ï¿½_gaq.push(['_setAccount', 'UA-5299684-10']);-->
+	 <!--ï¿½_gaq.push(['_trackPageview']);-->
+	 <!--ï¿½_gaq.push(['_trackEvent']);-->
+	<!-- -->
+	 <!--ï¿½(function() {-->
+	 <!--ï¿½ ï¿½var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;-->
+	 <!--ï¿½ ï¿½ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';-->
+	 <!--ï¿½ ï¿½var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);-->
+	 <!--ï¿½})();-->
+
+	<!--</script> -->
+  	<!-- -->
+  <!--</body>-->
 </html>
