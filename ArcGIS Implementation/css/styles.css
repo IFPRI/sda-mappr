@@ -2641,12 +2641,14 @@ height: 13px;
 	background-color: rgb(70,64,54);
 }
 
-.construction .left-column {
+.construction .column {
 	color: white;
-	padding: 25px;
+	padding: 0px 25px 0px 25px;
+	position: relative;
+	bottom: 25px;
 }
 
-.construction .left-column .text {
+.construction .column .text {
 	margin: 0px 0 -10px 0;
 	font-size: 24px;
 	font-weight: 800;
@@ -2654,9 +2656,20 @@ height: 13px;
 	top: 20px;
 }
 
+.construction .column .link {
+	margin: 16px 0 0px 0;
+	font-size: 17px;
+	position: relative;
+	top: 20px;
+}
+
+.construction .column .link a{
+	color: rgb(240,190,0);
+}
+
 .construction .container {
 	text-align: center;
-	padding: 43px 0;
+	padding: 43px 0 0 0;
 	background-color: rgb(70,64,54);
 }
 
